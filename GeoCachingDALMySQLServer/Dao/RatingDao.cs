@@ -63,7 +63,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                       "WHERE cacheId = @cacheId) AS r;");                
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
 
-            return database.ExecuteScalarQuery<double>(cmd);
+            return database.ExecuteScalarDoubleQuery(cmd);
         }
 
         public bool Update(Rating rating) {
