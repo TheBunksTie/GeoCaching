@@ -30,14 +30,6 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return null;    
         }
 
-        public IDictionary<User, int> GetNrCreatedCachesForUsers() {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<User, int> GetNrFoundCachesForUsers() {
-            throw new NotImplementedException();
-        }
-
         public bool Insert(User user) {
             IDbCommand cmd = database.CreateCommand(
                 "INSERT INTO user (name, password, email, latitude, longitude, roleId, registrationDate) " +

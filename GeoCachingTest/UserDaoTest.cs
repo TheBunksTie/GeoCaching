@@ -55,26 +55,7 @@ namespace GeoCachingTest {
             Assert.AreEqual(registrationDate, actual.RegistrationDate);    
         }
 
-        [TestMethod]
-        public void GetNrCreatedCachesForUsersTest() {
-            IDatabase database = null; // TODO: Initialize to an appropriate value
-            var target = new UserDao(database); // TODO: Initialize to an appropriate value
-            IDictionary<User, int> expected = null; // TODO: Initialize to an appropriate value
-            IDictionary<User, int> actual;
-            actual = target.GetNrCreatedCachesForUsers();
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void GetNrFoundCachesForUsersTest() {
-            IDatabase database = null; // TODO: Initialize to an appropriate value
-            var target = new UserDao(database); // TODO: Initialize to an appropriate value
-            IDictionary<User, int> expected = null; // TODO: Initialize to an appropriate value
-            IDictionary<User, int> actual;
-            actual = target.GetNrFoundCachesForUsers();
-            Assert.AreEqual(expected, actual);
-        }
- 
+       
         [TestMethod]
         public void UpdateTest() {
             const string userName = "Rebecca419";

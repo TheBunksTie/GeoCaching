@@ -8,10 +8,6 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         IList<User> GetAll();
         User GetByName(string name);
 
-        // for stastistics
-        IDictionary<User, int> GetNrCreatedCachesForUsers();
-        IDictionary<User, int> GetNrFoundCachesForUsers();
-
         // write
         bool Insert(User user);
         bool Update(User user);
