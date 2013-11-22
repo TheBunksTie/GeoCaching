@@ -79,5 +79,18 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
                 ConnectionUtils.ReleaseConnection(conn);
             }
         }
+
+        public double ExecuteScalarDoubleQuery( IDbCommand cmd ) {
+            DbConnection conn = null;
+
+            try {
+                conn = GetOpenConnection();
+                cmd.Connection = conn;
+                return Double.Parse(cmd.ExecuteScalar().ToString());
+            }
+            finally {
+                ConnectionUtils.ReleaseConnection(conn);
+            }
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace Swk5.GeoCaching.DAL.Common {
         IDataReader ExecuteReader(IDbCommand cmd);      
         int ExecuteNonQuery(IDbCommand cmd);
         T ExecuteScalarQuery<T>(IDbCommand cmd);
+        double ExecuteScalarDoubleQuery(IDbCommand cmd);
     }
 }
