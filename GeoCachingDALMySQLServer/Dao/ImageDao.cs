@@ -33,8 +33,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public bool Delete(int cacheId, string fileName) {
             IDbCommand cmd = database.CreateCommand(
-             "DELETE FROM cache_image " +
-             "WHERE cacheId = @cacheId AND fileName = @fileName;");
+                "DELETE FROM cache_image " +
+                "WHERE cacheId = @cacheId AND fileName = @fileName;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
             database.DefineParameter(cmd, "fileName", DbType.String, fileName);
 

@@ -6,9 +6,14 @@ namespace Swk5.GeoCaching.DomainModel {
         Hider,
         FinderHider
     }
-    
+
     public class User {
-        public User(string name, string password, string email, GeoPosition position, int role, DateTime registrationDate) {
+        public User(string name,
+            string password,
+            string email,
+            GeoPosition position,
+            int role,
+            DateTime registrationDate) {
             Name = name;
             Password = password;
             Email = email;
@@ -27,10 +32,9 @@ namespace Swk5.GeoCaching.DomainModel {
         public int GetUserRoleAsId() {
             return ( int ) Role;
         }
-        
+
         private UserRole GetUserRolesById(int id) {
             return ( UserRole ) id;
         }
-    
     }
 }

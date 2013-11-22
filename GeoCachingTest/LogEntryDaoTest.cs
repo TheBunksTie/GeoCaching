@@ -11,7 +11,8 @@ using Swk5.GeoCaching.DomainModel;
 namespace GeoCachingTest {
     [TestClass]
     public class LogEntryDaoTest {
-        private const string ConnectionString = "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
+        private const string ConnectionString =
+            "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
 
         private IDatabase database;
         private ILogEntryDao target;
@@ -33,7 +34,7 @@ namespace GeoCachingTest {
         public void GetByPrimaryKeyTest() {
             const int cacheId = 260;
             const string creatorName = "Zelda553";
-            LogEntry expected = new LogEntry(cacheId, creatorName, new DateTime(2007, 1, 13), false, "einfach klasse");
+            var expected = new LogEntry(cacheId, creatorName, new DateTime(2007, 1, 13), false, "einfach klasse");
             LogEntry actual = target.GetByPrimaryKey(cacheId, creatorName);
             Assert.AreEqual(expected.CacheId, actual.CacheId);
             Assert.AreEqual(expected.Creator, actual.Creator);
@@ -46,23 +47,23 @@ namespace GeoCachingTest {
         public void GetLogEntriesForCacheTest() {
             const int cacheId = 117;
             IList<LogEntry> expected = new List<LogEntry>();
-            expected.Add(new LogEntry  {Creator = "Luke746"} );
-            expected.Add(new LogEntry  { Creator = "Konrad286" });
-            expected.Add(new LogEntry  { Creator = "John822" });
-            expected.Add(new LogEntry  { Creator = "Jimmy468" });
-            expected.Add(new LogEntry  { Creator = "Jason935" });
-            expected.Add(new LogEntry  { Creator = "Dominik372" });
-            expected.Add(new LogEntry  { Creator = "Charlie220" });
-            expected.Add(new LogEntry  { Creator = "Bunk417" });
-            expected.Add(new LogEntry  { Creator = "Benno235" });
-            expected.Add(new LogEntry  { Creator = "Benjamin699" });
-            expected.Add(new LogEntry  { Creator = "Bart467" });
-            expected.Add(new LogEntry  { Creator = "Arabella372" });
+            expected.Add(new LogEntry {Creator = "Luke746"});
+            expected.Add(new LogEntry {Creator = "Konrad286"});
+            expected.Add(new LogEntry {Creator = "John822"});
+            expected.Add(new LogEntry {Creator = "Jimmy468"});
+            expected.Add(new LogEntry {Creator = "Jason935"});
+            expected.Add(new LogEntry {Creator = "Dominik372"});
+            expected.Add(new LogEntry {Creator = "Charlie220"});
+            expected.Add(new LogEntry {Creator = "Bunk417"});
+            expected.Add(new LogEntry {Creator = "Benno235"});
+            expected.Add(new LogEntry {Creator = "Benjamin699"});
+            expected.Add(new LogEntry {Creator = "Bart467"});
+            expected.Add(new LogEntry {Creator = "Arabella372"});
 
             IList<LogEntry> actual = target.GetLogEntriesForCache(cacheId);
             Assert.AreEqual(expected.Count, actual.Count);
-            
-            foreach ( var entry in expected ) {
+
+            foreach (LogEntry entry in expected) {
                 entry.CacheId = cacheId;
                 Assert.IsTrue(actual.Contains(entry));
             }
@@ -72,29 +73,29 @@ namespace GeoCachingTest {
         public void GetLogentriesForUserTest() {
             const string userName = "Rosa334";
             IList<LogEntry> expected = new List<LogEntry>();
-            expected.Add(new LogEntry  { CacheId = 32 });
-            expected.Add(new LogEntry  { CacheId = 80 });
-            expected.Add(new LogEntry  { CacheId = 126 });
-            expected.Add(new LogEntry  { CacheId = 138 });
-            expected.Add(new LogEntry  { CacheId = 169 });
-            expected.Add(new LogEntry  { CacheId = 183 }); 
-            expected.Add(new LogEntry  { CacheId = 217 });
-            expected.Add(new LogEntry  { CacheId = 219 });
-            expected.Add(new LogEntry  { CacheId = 225 });
-            expected.Add(new LogEntry  { CacheId = 266 });
-            expected.Add(new LogEntry  { CacheId = 308 });
-            expected.Add(new LogEntry  { CacheId = 339 });
-            expected.Add(new LogEntry  { CacheId = 351 });
-            expected.Add(new LogEntry  { CacheId = 354 });
-            expected.Add(new LogEntry  { CacheId = 359 });
-            expected.Add(new LogEntry  { CacheId = 412 });
-            expected.Add(new LogEntry  { CacheId = 437 });
-            expected.Add(new LogEntry  { CacheId = 446 });
+            expected.Add(new LogEntry {CacheId = 32});
+            expected.Add(new LogEntry {CacheId = 80});
+            expected.Add(new LogEntry {CacheId = 126});
+            expected.Add(new LogEntry {CacheId = 138});
+            expected.Add(new LogEntry {CacheId = 169});
+            expected.Add(new LogEntry {CacheId = 183});
+            expected.Add(new LogEntry {CacheId = 217});
+            expected.Add(new LogEntry {CacheId = 219});
+            expected.Add(new LogEntry {CacheId = 225});
+            expected.Add(new LogEntry {CacheId = 266});
+            expected.Add(new LogEntry {CacheId = 308});
+            expected.Add(new LogEntry {CacheId = 339});
+            expected.Add(new LogEntry {CacheId = 351});
+            expected.Add(new LogEntry {CacheId = 354});
+            expected.Add(new LogEntry {CacheId = 359});
+            expected.Add(new LogEntry {CacheId = 412});
+            expected.Add(new LogEntry {CacheId = 437});
+            expected.Add(new LogEntry {CacheId = 446});
 
             IList<LogEntry> actual = target.GetLogentriesForUser(userName);
             Assert.AreEqual(expected.Count, actual.Count);
 
-            foreach ( var entry in expected ) {
+            foreach (LogEntry entry in expected) {
                 entry.Creator = userName;
                 Assert.IsTrue(actual.Contains(entry));
             }
@@ -104,7 +105,7 @@ namespace GeoCachingTest {
         public void InsertTest() {
             const int cacheId = 499;
             const string creatorName = "Bunk417";
-            LogEntry toInsert = new LogEntry(cacheId, creatorName, new DateTime(2009, 12, 6), false, "not so fantastic");
+            var toInsert = new LogEntry(cacheId, creatorName, new DateTime(2009, 12, 6), false, "not so fantastic");
 
             Assert.IsTrue(target.Insert(toInsert));
             LogEntry expected = target.GetByPrimaryKey(cacheId, creatorName);
@@ -123,7 +124,7 @@ namespace GeoCachingTest {
             string initialComment = entry.Comment;
             string updateComment = initialComment + " - some additional comment stuff";
             entry.Comment = updateComment;
-            
+
             Assert.IsTrue(target.Update(entry));
 
             entry = target.GetByPrimaryKey(cacheId, creatorName);
@@ -138,8 +139,8 @@ namespace GeoCachingTest {
 
         private bool DeleteLogEntry(int cacheId, string creatorName) {
             IDbCommand cmd = database.CreateCommand(
-           "DELETE FROM cache_log " +
-           "WHERE cacheId = @cacheId AND creatorName = @creatorName;");
+                "DELETE FROM cache_log " +
+                "WHERE cacheId = @cacheId AND creatorName = @creatorName;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
             database.DefineParameter(cmd, "creatorName", DbType.String, creatorName);
 

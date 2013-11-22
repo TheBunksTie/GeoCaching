@@ -10,8 +10,8 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         IList<Rating> GetRatingsForCache(int cacheId);
         IList<Rating> GetRatingsForUser(string userName);
 
-        double GetAverageCacheRating (int cacheId);
-        
+        double GetAverageCacheRating(int cacheId);
+
         // write
         bool Insert(Rating rating);
         bool Update(Rating rating);

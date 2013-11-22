@@ -3,7 +3,6 @@ using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
     public interface IUserDao {
-        
         // read
         IList<User> GetAll();
         User GetByName(string name);

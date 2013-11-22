@@ -7,8 +7,7 @@ using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
     public class RatingDao : AbstractDao, IRatingDao {
-        public RatingDao(IDatabase database) : base(database) {
-        }
+        public RatingDao(IDatabase database) : base(database) {}
 
         public IList<Rating> GetAll() {
             IDbCommand cmd = database.CreateCommand(
@@ -17,7 +16,6 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
             return GetRatingListFor(cmd);
         }
-        
 
         public Rating GetByPrimaryKey(int cacheId, string creatorName) {
             IDbCommand cmd = database.CreateCommand(
@@ -58,9 +56,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT r.grade " +
                 "FROM " +
-                      "(SELECT AVG(grade) AS grade " +
-                      "FROM cache_rating " +
-                      "WHERE cacheId = @cacheId) AS r;");                
+                "(SELECT AVG(grade) AS grade " +
+                "FROM cache_rating " +
+                "WHERE cacheId = @cacheId) AS r;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
 
             return database.ExecuteScalarDoubleQuery(cmd);
@@ -75,7 +73,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             // primary key
             database.DefineParameter(cmd, "cacheId", DbType.Int32, rating.CacheId);
             database.DefineParameter(cmd, "creatorName", DbType.String, rating.Creator);
-            
+
             return database.ExecuteNonQuery(cmd) == 1;
         }
 
@@ -87,15 +85,15 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             database.DefineParameter(cmd, "creatorName", DbType.String, rating.Creator);
             database.DefineParameter(cmd, "creationDate", DbType.Date, rating.CreationDate);
             database.DefineParameter(cmd, "grade", DbType.Int32, rating.Grade);
-            
+
             return database.ExecuteNonQuery(cmd) == 1;
         }
 
-        private IList<Rating> GetRatingListFor (IDbCommand cmd ) {
-            using ( IDataReader reader = database.ExecuteReader(cmd) ) {
+        private IList<Rating> GetRatingListFor(IDbCommand cmd) {
+            using (IDataReader reader = database.ExecuteReader(cmd)) {
                 IList<Rating> ratings = new List<Rating>();
 
-                while ( reader.Read() ) {
+                while (reader.Read()) {
                     ratings.Add(new Rating(
                         ( int ) reader["cacheId"],
                         ( string ) reader["creatorName"],

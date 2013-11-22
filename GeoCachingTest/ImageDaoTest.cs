@@ -8,7 +8,8 @@ using Swk5.GeoCaching.DAL.MySQLServer.Dao;
 namespace GeoCachingTest {
     [TestClass]
     public class ImageDaoTest {
-        private const string ConnectionString = "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
+        private const string ConnectionString =
+            "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
 
         private IDatabase database;
         private IImageDao target;
@@ -25,7 +26,7 @@ namespace GeoCachingTest {
             const string fileName = "./images/coolPic.pic";
             Assert.IsTrue(target.Insert(cacheId, fileName));
 
-            IList<string> list = target.GetAllForCache(cacheId);            
+            IList<string> list = target.GetAllForCache(cacheId);
             Assert.AreEqual(1, list.Count);
 
             Assert.IsTrue(target.Delete(cacheId, fileName));
@@ -44,7 +45,7 @@ namespace GeoCachingTest {
 
             Assert.AreEqual(expected.Count, actual.Count);
 
-            foreach (var image in expected) {
+            foreach (string image in expected) {
                 Assert.IsTrue(actual.Contains(image));
             }
         }

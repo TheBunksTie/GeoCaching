@@ -14,7 +14,15 @@ namespace Swk5.GeoCaching.DomainModel {
     public class Cache : IEquatable<Cache> {
         private readonly IList<string> assignedImages = new List<string>();
 
-        public Cache(int id, string name, DateTime creationDate, double difficultyCache, double difficultyTerrain, int size, string owner, GeoPosition position, string description) {
+        public Cache(int id,
+            string name,
+            DateTime creationDate,
+            double difficultyCache,
+            double difficultyTerrain,
+            int size,
+            string owner,
+            GeoPosition position,
+            string description) {
             Id = id;
             Name = name;
             CreationDate = creationDate;
@@ -26,13 +34,7 @@ namespace Swk5.GeoCaching.DomainModel {
             Description = description;
         }
 
-
-        public Cache() {
-        }
-
-        public override string ToString() {
-            return string.Format("Id: {0}, Name: {1}, Size: {2}", Id, Name, Size);
-        }
+        public Cache() {}
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -56,6 +58,10 @@ namespace Swk5.GeoCaching.DomainModel {
                 return true;
             }
             return Id == other.Id;
+        }
+
+        public override string ToString() {
+            return string.Format("Id: {0}, Name: {1}, Size: {2}", Id, Name, Size);
         }
 
         public void AddAssignedImage(string fileName) {

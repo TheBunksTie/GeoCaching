@@ -2,7 +2,6 @@
 
 namespace Swk5.GeoCaching.DomainModel {
     public class Rating : IEquatable<Rating> {
-        
         public Rating(int cacheId, string creator, DateTime creationDate, int grade) {
             CacheId = cacheId;
             Creator = creator;
@@ -10,8 +9,12 @@ namespace Swk5.GeoCaching.DomainModel {
             Grade = grade;
         }
 
-        public Rating ( ) {
-        }
+        public Rating() {}
+
+        public int CacheId { get; set; }
+        public string Creator { get; set; }
+        public DateTime CreationDate { get; set; }
+        public int Grade { get; set; }
 
         public bool Equals(Rating other) {
             if (ReferenceEquals(null, other)) {
@@ -30,7 +33,7 @@ namespace Swk5.GeoCaching.DomainModel {
             if (ReferenceEquals(this, obj)) {
                 return true;
             }
-            if (obj.GetType() != this.GetType()) {
+            if (obj.GetType() != GetType()) {
                 return false;
             }
             return Equals(( Rating ) obj);
@@ -41,11 +44,5 @@ namespace Swk5.GeoCaching.DomainModel {
                 return (CacheId*397) ^ (Creator != null ? Creator.GetHashCode() : 0);
             }
         }
-
-        public int CacheId { get; set; }
-        public string Creator { get; set; }
-        public DateTime CreationDate { get; set; }
-        public int Grade { get; set; }
-
     }
 }

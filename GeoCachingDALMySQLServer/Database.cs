@@ -6,13 +6,7 @@ using Swk5.GeoCaching.DAL.Common;
 
 namespace Swk5.GeoCaching.DAL.MySQLServer {
     public class Database : IDatabase {
-
-        private string connectionString;
-
-        protected DbConnection GetOpenConnection() {
-            // uses connection utils to manage connections
-            return ConnectionUtils.GetOpenConnection(connectionString);
-        }      
+        private readonly string connectionString;
 
         public Database(string connectionString) {
             this.connectionString = connectionString;
@@ -23,7 +17,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
         }
 
         public void DefineParameter(IDbCommand cmd, string name, DbType type, object value) {
-            if (cmd.Parameters.Contains(name) ) {
+            if (cmd.Parameters.Contains(name)) {
                 throw new ArgumentException(String.Format("Parameter {0} already declared.", name));
             }
 
@@ -40,14 +34,16 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
                 cmd.Connection = conn;
 
                 // let connection manager decide which behavior is required
-                CommandBehavior cmdBehavior = ConnectionUtils.ShouldCloseConnection() ? CommandBehavior.CloseConnection : CommandBehavior.Default;
+                CommandBehavior cmdBehavior = ConnectionUtils.ShouldCloseConnection()
+                    ? CommandBehavior.CloseConnection
+                    : CommandBehavior.Default;
 
                 return cmd.ExecuteReader(cmdBehavior);
             }
             catch {
                 // make sure connection will be released/closed
                 ConnectionUtils.ReleaseConnection(conn);
-                
+
                 // rethrow current exception
                 throw;
             }
@@ -61,10 +57,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
                 cmd.Connection = conn;
                 return cmd.ExecuteNonQuery();
             }
-            finally {             
+            finally {
                 ConnectionUtils.ReleaseConnection(conn);
             }
-
         }
 
         public T ExecuteScalarQuery<T>(IDbCommand cmd) {
@@ -80,7 +75,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
             }
         }
 
-        public double ExecuteScalarDoubleQuery( IDbCommand cmd ) {
+        public double ExecuteScalarDoubleQuery(IDbCommand cmd) {
             DbConnection conn = null;
 
             try {
@@ -91,6 +86,11 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
             finally {
                 ConnectionUtils.ReleaseConnection(conn);
             }
+        }
+
+        protected DbConnection GetOpenConnection() {
+            // uses connection utils to manage connections
+            return ConnectionUtils.GetOpenConnection(connectionString);
         }
     }
 }

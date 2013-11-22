@@ -4,15 +4,14 @@ using System.Reflection;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 
 namespace Swk5.GeoCaching.DAL.Common {
-    
     public static class DALFactory {
-        private static readonly string assemblyName;
         private const string DaoLocation = ".Dao.";
+        private static readonly string assemblyName;
         private static readonly Assembly dalAssembly;
 
         static DALFactory() {
             // TODO: add error handling
-           
+
             assemblyName = ConfigurationManager.AppSettings["DALAssembly"];
             dalAssembly = Assembly.Load(assemblyName);
         }
@@ -45,7 +44,7 @@ namespace Swk5.GeoCaching.DAL.Common {
 
         public static ILogEntryDao CreateLogEntryDao(IDatabase database) {
             Type logEntryType = dalAssembly.GetType(assemblyName + DaoLocation + "LogEntryDao");
-            return Activator.CreateInstance(logEntryType, new object[] { database })
+            return Activator.CreateInstance(logEntryType, new object[] {database})
                 as ILogEntryDao;
         }
 
@@ -55,7 +54,7 @@ namespace Swk5.GeoCaching.DAL.Common {
                 as IRatingDao;
         }
 
-        public static IImageDao CreateImageDao ( IDatabase database ) {
+        public static IImageDao CreateImageDao(IDatabase database) {
             Type imageType = dalAssembly.GetType(assemblyName + DaoLocation + "ImageDao");
             return Activator.CreateInstance(imageType, new object[] {database})
                 as IImageDao;

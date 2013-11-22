@@ -1,7 +1,23 @@
 ﻿using System;
 
 namespace Swk5.GeoCaching.DomainModel {
-    public  class LogEntry : IEquatable<LogEntry> {
+    public class LogEntry : IEquatable<LogEntry> {
+        public LogEntry() {}
+
+        public LogEntry(int cacheId, string creator, DateTime creationDate, bool isFound, string comment) {
+            CacheId = cacheId;
+            Creator = creator;
+            CreationDate = creationDate;
+            IsFound = isFound;
+            Comment = comment;
+        }
+
+        public int CacheId { get; set; }
+        public string Creator { get; set; }
+        public DateTime CreationDate { get; set; }
+        public bool IsFound { get; set; }
+        public string Comment { get; set; }
+
         public bool Equals(LogEntry other) {
             if (ReferenceEquals(null, other)) {
                 return false;
@@ -19,7 +35,7 @@ namespace Swk5.GeoCaching.DomainModel {
             if (ReferenceEquals(this, obj)) {
                 return true;
             }
-            if (obj.GetType() != this.GetType()) {
+            if (obj.GetType() != GetType()) {
                 return false;
             }
             return Equals(( LogEntry ) obj);
@@ -30,22 +46,5 @@ namespace Swk5.GeoCaching.DomainModel {
                 return (CacheId*397) ^ (Creator != null ? Creator.GetHashCode() : 0);
             }
         }
-
-        public LogEntry() {        
-        }
-
-        public LogEntry(int cacheId, string creator, DateTime creationDate, bool isFound, string comment) {
-            CacheId = cacheId;
-            Creator = creator;
-            CreationDate = creationDate;
-            IsFound = isFound;
-            Comment = comment;
-        }
-
-        public int CacheId { get; set; }
-        public string Creator { get; set; }
-        public DateTime CreationDate { get; set; }
-        public bool IsFound { get; set; }
-        public string Comment { get; set; }
     }
 }

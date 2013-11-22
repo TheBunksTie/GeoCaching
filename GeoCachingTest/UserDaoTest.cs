@@ -10,7 +10,8 @@ using Swk5.GeoCaching.DomainModel;
 namespace GeoCachingTest {
     [TestClass]
     public class UserDaoTest {
-        private const string ConnectionString = "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
+        private const string ConnectionString =
+            "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
 
         private IDatabase database;
         private IUserDao target;
@@ -24,7 +25,12 @@ namespace GeoCachingTest {
         [TestMethod]
         public void InsertAndDeleteTest() {
             const string userName = "SpecialTestUser";
-            User user = new User(userName, "top-secret", "top@secret.com", new GeoPosition(81.56, 14.56), 2, new DateTime(2013, 07, 09));
+            var user = new User(userName,
+                "top-secret",
+                "top@secret.com",
+                new GeoPosition(81.56, 14.56),
+                2,
+                new DateTime(2013, 07, 09));
             Assert.IsTrue(target.Insert(user));
 
             User newUser = target.GetByName(userName);
@@ -42,33 +48,32 @@ namespace GeoCachingTest {
             IList<User> actual = target.GetAll();
             Assert.AreEqual(expectedUserCount, actual.Count);
         }
-        
+
         [TestMethod]
         public void GetByNameTest() {
             const String userName = "Lukas557";
-            GeoPosition pos = new GeoPosition(47.425659, 13.825798);
-            DateTime registrationDate = new DateTime(2007, 05, 12);        
+            var pos = new GeoPosition(47.425659, 13.825798);
+            var registrationDate = new DateTime(2007, 05, 12);
             User actual = target.GetByName(userName);
 
             Assert.AreEqual(userName, actual.Name);
             Assert.AreEqual(pos, actual.Position);
-            Assert.AreEqual(registrationDate, actual.RegistrationDate);    
+            Assert.AreEqual(registrationDate, actual.RegistrationDate);
         }
 
-       
         [TestMethod]
         public void UpdateTest() {
             const string userName = "Rebecca419";
             User actual = target.GetByName(userName);
             String originalMail = actual.Email;
-            String expectedMail = actual.Email + "-~°gx,";            
+            String expectedMail = actual.Email + "-~°gx,";
             actual.Email = expectedMail;
 
             Assert.IsTrue(target.Update(actual));
             actual = target.GetByName(userName);
 
             Assert.AreEqual(expectedMail, actual.Email);
-            
+
             actual.Email = originalMail;
             Assert.IsTrue(target.Update(actual));
             actual = target.GetByName(userName);
