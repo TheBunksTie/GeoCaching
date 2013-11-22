@@ -1,7 +1,7 @@
 # built application files
 *.exe
 *.dll
-
+*.config
 
 # generated files
 bin/
