@@ -1,0 +1,25 @@
+# built application files
+*.exe
+*.dll
+
+
+# generated files
+bin/
+obj/
+Properties/
+
+
+# Local configuration file (sdk path, etc)
+*.sln
+*.user
+*.suo
+*.csproj
+
+# Eclipse project files
+.classpath
+.project
+
+# projects 
+GeoCachingDALConsoleClient/
+TestResults/
+.svn/
