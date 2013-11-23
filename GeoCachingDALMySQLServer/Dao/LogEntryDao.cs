@@ -7,8 +7,7 @@ using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
     public class LogEntryDao : AbstractDao, ILogEntryDao {
-        public LogEntryDao(IDatabase database) : base(database) {        
-        }
+        public LogEntryDao(IDatabase database) : base(database) {}
 
         public IList<LogEntry> GetAll() {
             return GetLogEntryListFor(database.CreateCommand(
@@ -31,13 +30,13 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return null;
         }
 
-        public IList<LogEntry> GetLogEntriesForCacheAndUser ( int cacheId, string creator ) {
+        public IList<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, string userName) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT l.id, l.cacheId, l.creatorName, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l " +
                 "WHERE cacheId = @cacheId AND creatorName = @creatorName;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
-            database.DefineParameter(cmd, "creatorName", DbType.String, creator);
+            database.DefineParameter(cmd, "creatorName", DbType.String, userName);
 
             return GetLogEntryListFor(cmd);
         }
@@ -84,11 +83,11 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return entry.Id;
         }
 
-        private IList<LogEntry> GetLogEntryListFor (IDbCommand cmd ) {
-            using ( IDataReader reader = database.ExecuteReader(cmd) ) {
+        private IList<LogEntry> GetLogEntryListFor(IDbCommand cmd) {
+            using (IDataReader reader = database.ExecuteReader(cmd)) {
                 IList<LogEntry> entries = new List<LogEntry>();
 
-                while ( reader.Read() ) {
+                while (reader.Read()) {
                     entries.Add(new LogEntry(
                         ( int ) reader["id"],
                         ( int ) reader["cacheId"],

@@ -44,18 +44,18 @@ namespace GeoCachingTest {
             const int cacheId = 117;
             IList<LogEntry> expected = new List<LogEntry>();
             expected.Add(new LogEntry {Id = 1570});
-            expected.Add(new LogEntry { Id = 1571 });
-            expected.Add(new LogEntry { Id = 1572 });
-            expected.Add(new LogEntry { Id = 1573 });
-            expected.Add(new LogEntry { Id = 1574 });
-            expected.Add(new LogEntry { Id = 1575 });
-            expected.Add(new LogEntry { Id = 1576 });
-            expected.Add(new LogEntry { Id = 1577 });
-            expected.Add(new LogEntry { Id = 1578 });
-            expected.Add(new LogEntry { Id = 1579 });
-            expected.Add(new LogEntry { Id = 1580 });
-            expected.Add(new LogEntry { Id = 1581 });
-            
+            expected.Add(new LogEntry {Id = 1571});
+            expected.Add(new LogEntry {Id = 1572});
+            expected.Add(new LogEntry {Id = 1573});
+            expected.Add(new LogEntry {Id = 1574});
+            expected.Add(new LogEntry {Id = 1575});
+            expected.Add(new LogEntry {Id = 1576});
+            expected.Add(new LogEntry {Id = 1577});
+            expected.Add(new LogEntry {Id = 1578});
+            expected.Add(new LogEntry {Id = 1579});
+            expected.Add(new LogEntry {Id = 1580});
+            expected.Add(new LogEntry {Id = 1581});
+
             IList<LogEntry> actual = target.GetLogEntriesForCache(cacheId);
             Assert.AreEqual(expected.Count, actual.Count);
 
@@ -65,17 +65,22 @@ namespace GeoCachingTest {
         }
 
         [TestMethod]
-        public void GetLogEntriesForCacheAndUserTest ( ) {
+        public void GetLogEntriesForCacheAndUserTest() {
             const int cacheId = 497;
             const string userName = "Tyrion588";
             IList<LogEntry> expected = new List<LogEntry>();
-            expected.Add(new LogEntry(6922, cacheId, userName, new DateTime(2007, 4, 10), false, "viel zu schwer, fast unmöglich"));
+            expected.Add(new LogEntry(6922,
+                cacheId,
+                userName,
+                new DateTime(2007, 4, 10),
+                false,
+                "viel zu schwer, fast unmöglich"));
             expected.Add(new LogEntry(6926, cacheId, userName, new DateTime(2008, 1, 13), true, "diesmal gings besser"));
 
             IList<LogEntry> actual = target.GetLogEntriesForCacheAndUser(cacheId, userName);
             Assert.AreEqual(expected.Count, actual.Count);
 
-            foreach ( LogEntry entry in expected ) {
+            foreach (LogEntry entry in expected) {
                 Assert.IsTrue(actual.Contains(entry));
             }
         }
@@ -85,23 +90,23 @@ namespace GeoCachingTest {
             const string userName = "Rosa334";
             IList<LogEntry> expected = new List<LogEntry>();
             expected.Add(new LogEntry {Id = 453});
-            expected.Add(new LogEntry { Id = 1099 });
-            expected.Add(new LogEntry { Id = 1703 });
-            expected.Add(new LogEntry { Id = 1885 });
-            expected.Add(new LogEntry { Id = 2306 });
-            expected.Add(new LogEntry { Id = 2496 });
-            expected.Add(new LogEntry { Id = 2969 });
-            expected.Add(new LogEntry { Id = 2999 });
-            expected.Add(new LogEntry { Id = 3072 });
-            expected.Add(new LogEntry { Id = 3655 });
-            expected.Add(new LogEntry { Id = 4233 });
-            expected.Add(new LogEntry { Id = 4667 });
-            expected.Add(new LogEntry { Id = 4834 });
-            expected.Add(new LogEntry { Id = 4879 });
-            expected.Add(new LogEntry { Id = 4971 });
-            expected.Add(new LogEntry { Id = 5706 });
-            expected.Add(new LogEntry { Id = 6066 });
-            expected.Add(new LogEntry { Id = 6208 });
+            expected.Add(new LogEntry {Id = 1099});
+            expected.Add(new LogEntry {Id = 1703});
+            expected.Add(new LogEntry {Id = 1885});
+            expected.Add(new LogEntry {Id = 2306});
+            expected.Add(new LogEntry {Id = 2496});
+            expected.Add(new LogEntry {Id = 2969});
+            expected.Add(new LogEntry {Id = 2999});
+            expected.Add(new LogEntry {Id = 3072});
+            expected.Add(new LogEntry {Id = 3655});
+            expected.Add(new LogEntry {Id = 4233});
+            expected.Add(new LogEntry {Id = 4667});
+            expected.Add(new LogEntry {Id = 4834});
+            expected.Add(new LogEntry {Id = 4879});
+            expected.Add(new LogEntry {Id = 4971});
+            expected.Add(new LogEntry {Id = 5706});
+            expected.Add(new LogEntry {Id = 6066});
+            expected.Add(new LogEntry {Id = 6208});
 
             IList<LogEntry> actual = target.GetLogentriesForUser(userName);
             Assert.AreEqual(expected.Count, actual.Count);
@@ -115,24 +120,22 @@ namespace GeoCachingTest {
         public void InsertTest() {
             const int cacheId = 499;
             const string creatorName = "Bunk417";
-            LogEntry toInsert = new LogEntry(-1, cacheId, creatorName, new DateTime(2009, 12, 6), false, "not so fantastic");
+            var toInsert = new LogEntry(-1, cacheId, creatorName, new DateTime(2009, 12, 6), false, "not so fantastic");
 
             target.Insert(toInsert);
             LogEntry expected = target.GetById(toInsert.Id);
 
             Assert.AreEqual(expected, toInsert);
             Assert.AreEqual(expected.CreationDate, toInsert.CreationDate);
-            DeleteLogEntry(cacheId, creatorName); // internal method, not available in DaoInterface
+            DeleteLogEntry(toInsert.Id); // internal method, not available in DaoInterface
             Assert.IsNull(target.GetById(toInsert.Id));
         }
 
-
-        private bool DeleteLogEntry(int cacheId, string creatorName) {
+        private bool DeleteLogEntry(int id) {
             IDbCommand cmd = Database.CreateCommand(
                 "DELETE FROM cache_log " +
-                "WHERE cacheId = @cacheId AND creatorName = @creatorName;");
-            Database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
-            Database.DefineParameter(cmd, "creatorName", DbType.String, creatorName);
+                "WHERE id = @id;");
+            Database.DefineParameter(cmd, "id", DbType.Int32, id);
 
             return Database.ExecuteNonQuery(cmd) == 1;
         }
