@@ -5,14 +5,13 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
     public interface ILogEntryDao {
         // read
         IList<LogEntry> GetAll();
-        LogEntry GetByPrimaryKey(int cacheId, string creator);
-
+        LogEntry GetById(int id);
+        
         IList<LogEntry> GetLogEntriesForCache(int cacheId);
         IList<LogEntry> GetLogentriesForUser(string userName);
+        IList<LogEntry> GetLogEntriesForCacheAndUser ( int cacheId, string creator );
 
         // write
-        bool Insert(LogEntry logEntry);
-        bool Update(LogEntry logEntry);
-        // no deletion allowed
+        int Insert(LogEntry logEntry);
     }
 }

@@ -36,6 +36,9 @@ namespace Swk5.GeoCaching.DomainModel {
                 if (value >= 1 && value <= 4) {
                     roleCode = value;
                 }
+                else {
+                    throw new ArgumentException();
+                }
             }
         }
 

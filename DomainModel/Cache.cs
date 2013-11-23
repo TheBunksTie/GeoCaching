@@ -41,6 +41,9 @@ namespace Swk5.GeoCaching.DomainModel {
                 if (value >= 0 && value <= 5) {
                     cacheDifficulty = value;
                 }
+                else {
+                    throw new ArgumentException();
+                }
             }
         }
 
@@ -49,6 +52,9 @@ namespace Swk5.GeoCaching.DomainModel {
             set {
                 if (value >= 0 && value <= 5) {
                     terrainDifficulty = value;
+                }
+                else {
+                    throw new ArgumentException();
                 }
             }
         }
@@ -63,6 +69,9 @@ namespace Swk5.GeoCaching.DomainModel {
             set {
                 if (value >= 1 && value <= 6) {
                     cacheSize = value;
+                }
+                else {
+                    throw new ArgumentException();
                 }
             }
         }
