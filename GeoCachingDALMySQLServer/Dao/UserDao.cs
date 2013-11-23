@@ -38,7 +38,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             database.DefineParameter(cmd, "email", DbType.String, user.Email);
             database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
             database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
-            database.DefineParameter(cmd, "roleId", DbType.Int32, user.GetUserRoleAsId());
+            database.DefineParameter(cmd, "roleId", DbType.Int32, user.RoleCode);
             database.DefineParameter(cmd, "registrationDate", DbType.Date, user.RegistrationDate);
 
             return database.ExecuteNonQuery(cmd) == 1;
@@ -52,7 +52,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             database.DefineParameter(cmd, "email", DbType.String, user.Email);
             database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
             database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
-            database.DefineParameter(cmd, "roleId", DbType.Int32, user.GetUserRoleAsId());
+            database.DefineParameter(cmd, "roleId", DbType.Int32, user.RoleCode);
             database.DefineParameter(cmd, "registrationDate", DbType.Date, user.RegistrationDate);
             // primary key
             database.DefineParameter(cmd, "name", DbType.String, user.Name);

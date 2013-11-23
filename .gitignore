@@ -15,11 +15,8 @@ Properties/
 *.suo
 *.csproj
 
-# Eclipse project files
-.classpath
-.project
 
 # projects 
 GeoCachingDALConsoleClient/
 TestResults/
-.svn/
+modelling/

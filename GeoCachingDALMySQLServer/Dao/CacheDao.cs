@@ -144,9 +144,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
             database.DefineParameter(cmd, "name", DbType.String, cache.Name);
             database.DefineParameter(cmd, "creationDate", DbType.Date, cache.CreationDate);
-            database.DefineParameter(cmd, "difficultyCache", DbType.Double, cache.DifficultyCache);
-            database.DefineParameter(cmd, "difficultyTerrain", DbType.Double, cache.DifficultyTerrain);
-            database.DefineParameter(cmd, "sizeId", DbType.Int32, cache.GetCacheSizeAsId());
+            database.DefineParameter(cmd, "difficultyCache", DbType.Double, cache.CacheDifficulty);
+            database.DefineParameter(cmd, "difficultyTerrain", DbType.Double, cache.TerrainDifficulty);
+            database.DefineParameter(cmd, "sizeId", DbType.Int32, cache.SizeCode);
             database.DefineParameter(cmd, "ownerName", DbType.String, cache.Owner);
             database.DefineParameter(cmd, "latitude", DbType.Double, cache.Position.Latitude);
             database.DefineParameter(cmd, "longitude", DbType.Double, cache.Position.Longitude);
@@ -170,9 +170,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
             database.DefineParameter(cmd, "name", DbType.String, cache.Name);
             database.DefineParameter(cmd, "creationDate", DbType.Date, cache.CreationDate);
-            database.DefineParameter(cmd, "difficultyCache", DbType.Double, cache.DifficultyCache);
-            database.DefineParameter(cmd, "difficultyTerrain", DbType.Double, cache.DifficultyTerrain);
-            database.DefineParameter(cmd, "sizeId", DbType.Int32, cache.GetCacheSizeAsId());
+            database.DefineParameter(cmd, "difficultyCache", DbType.Double, cache.CacheDifficulty);
+            database.DefineParameter(cmd, "difficultyTerrain", DbType.Double, cache.TerrainDifficulty);
+            database.DefineParameter(cmd, "sizeId", DbType.Int32, cache.SizeCode);
             database.DefineParameter(cmd, "ownerName", DbType.String, cache.Owner);
             database.DefineParameter(cmd, "latitude", DbType.Double, cache.Position.Latitude);
             database.DefineParameter(cmd, "longitude", DbType.Double, cache.Position.Longitude);
