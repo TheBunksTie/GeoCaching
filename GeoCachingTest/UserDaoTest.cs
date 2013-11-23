@@ -9,17 +9,13 @@ using Swk5.GeoCaching.DomainModel;
 
 namespace GeoCachingTest {
     [TestClass]
-    public class UserDaoTest {
-        private const string ConnectionString =
-            "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
-
-        private IDatabase database;
+    public class UserDaoTest : AbstractTest {
         private IUserDao target;
 
         [TestInitialize]
         public void Initialize() {
-            database = new Database(ConnectionString);
-            target = new UserDao(database);
+            Database = new Database(ConnectionString);
+            target = new UserDao(Database);
         }
 
         [TestMethod]

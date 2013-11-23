@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DAL.MySQLServer;
 using Swk5.GeoCaching.DAL.MySQLServer.Dao;
@@ -10,17 +9,13 @@ using Swk5.GeoCaching.DomainModel;
 
 namespace GeoCachingTest {
     [TestClass]
-    public class LogEntryDaoTest {
-        private const string ConnectionString =
-            "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
-
-        private IDatabase database;
+    public class LogEntryDaoTest : AbstractTest {
         private ILogEntryDao target;
 
         [TestInitialize]
         public void Initialize() {
-            database = new Database(ConnectionString);
-            target = new LogEntryDao(database);
+            Database = new Database(ConnectionString);
+            target = new LogEntryDao(Database);
         }
 
         [TestMethod]
@@ -138,13 +133,13 @@ namespace GeoCachingTest {
         }
 
         private bool DeleteLogEntry(int cacheId, string creatorName) {
-            IDbCommand cmd = database.CreateCommand(
+            IDbCommand cmd = Database.CreateCommand(
                 "DELETE FROM cache_log " +
                 "WHERE cacheId = @cacheId AND creatorName = @creatorName;");
-            database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
-            database.DefineParameter(cmd, "creatorName", DbType.String, creatorName);
+            Database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
+            Database.DefineParameter(cmd, "creatorName", DbType.String, creatorName);
 
-            return database.ExecuteNonQuery(cmd) == 1;
+            return Database.ExecuteNonQuery(cmd) == 1;
         }
     }
 }

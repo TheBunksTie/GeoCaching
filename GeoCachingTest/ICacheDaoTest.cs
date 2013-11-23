@@ -9,17 +9,13 @@ using Swk5.GeoCaching.DomainModel;
 
 namespace GeoCachingTest {
     [TestClass]
-    public class CacheDaoTest {
-        private const string ConnectionString =
-            "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
-
-        private IDatabase database;
+    public class CacheDaoTest : AbstractTest {
         private ICacheDao target;
 
         [TestInitialize]
         public void Initialize() {
-            database = new Database(ConnectionString);
-            target = new CacheDao(database);
+            Database = new Database(ConnectionString);
+            target = new CacheDao(Database);
         }
 
         [TestMethod]
@@ -59,7 +55,7 @@ namespace GeoCachingTest {
             Assert.IsTrue(id > 0);
 
             Cache newState = target.GetById(id);
-            Assert.AreEqual(cache.DifficultyTerrain, newState.DifficultyTerrain);
+            Assert.AreEqual(cache.TerrainDifficulty, newState.TerrainDifficulty);
             Assert.AreEqual(cache.Name, newState.Name);
             Assert.AreEqual(cache.Owner, newState.Owner);
 
@@ -240,7 +236,7 @@ namespace GeoCachingTest {
 
             Assert.AreEqual(expectedName, actual.Name);
             Assert.AreEqual(expectedPos, actual.Position);
-            Assert.AreEqual(expectedTerrainDifficulty, actual.DifficultyTerrain);
+            Assert.AreEqual(expectedTerrainDifficulty, actual.TerrainDifficulty);
             Assert.AreEqual(creationDate, actual.CreationDate);
         }
 

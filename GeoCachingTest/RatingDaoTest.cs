@@ -10,17 +10,13 @@ using Swk5.GeoCaching.DomainModel;
 
 namespace GeoCachingTest {
     [TestClass]
-    public class RatingDaoTest {
-        private const string ConnectionString =
-            "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
-
-        private IDatabase database;
+    public class RatingDaoTest : AbstractTest {
         private IRatingDao target;
 
         [TestInitialize]
         public void Initialize() {
-            database = new Database(ConnectionString);
-            target = new RatingDao(database);
+            Database = new Database(ConnectionString);
+            target = new RatingDao(Database);
         }
 
         [TestMethod]
@@ -130,13 +126,13 @@ namespace GeoCachingTest {
         }
 
         private bool DeleteRating(int cacheId, string creatorName) {
-            IDbCommand cmd = database.CreateCommand(
+            IDbCommand cmd = Database.CreateCommand(
                 "DELETE FROM cache_rating " +
                 "WHERE cacheId = @cacheId AND creatorName = @creatorName;");
-            database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
-            database.DefineParameter(cmd, "creatorName", DbType.String, creatorName);
+            Database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
+            Database.DefineParameter(cmd, "creatorName", DbType.String, creatorName);
 
-            return database.ExecuteNonQuery(cmd) == 1;
+            return Database.ExecuteNonQuery(cmd) == 1;
         }
     }
 }

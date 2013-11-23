@@ -1,23 +1,18 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DAL.MySQLServer;
 using Swk5.GeoCaching.DAL.MySQLServer.Dao;
 
 namespace GeoCachingTest {
     [TestClass]
-    public class ImageDaoTest {
-        private const string ConnectionString =
-            "server=localhost;Uid=geocaching;Password=geocaching;Persist Security Info=False;database=geocachingtest";
-
-        private IDatabase database;
+    public class ImageDaoTest : AbstractTest {
         private IImageDao target;
 
         [TestInitialize]
         public void Initialize() {
-            database = new Database(ConnectionString);
-            target = new ImageDao(database);
+            Database = new Database(ConnectionString);
+            target = new ImageDao(Database);
         }
 
         [TestMethod]
