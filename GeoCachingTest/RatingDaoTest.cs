@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DAL.MySQLServer;
 using Swk5.GeoCaching.DAL.MySQLServer.Dao;
@@ -21,14 +20,13 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetAllTest() {
-            const int ratingsCnt = 6734;
+            const int ratingsCnt = 6735;
             IList<Rating> actual = target.GetAll();
             Assert.AreEqual(ratingsCnt, actual.Count);
         }
 
         [TestMethod]
         public void GetAverageCacheRatingTest() {
-            // TODO type conversion of double ???
             const int cacheId = 292;
             const double expected = 6.6429;
             double actual = target.GetAverageCacheRating(cacheId);
@@ -37,10 +35,11 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetByPrimaryKeyTest() {
+            const int id = 2326;
             const int cacheId = 172;
             const string creatorName = "Gabriele177";
-            var expected = new Rating(cacheId, creatorName, new DateTime(2009, 07, 20), 4);
-            Rating actual = target.GetByPrimaryKey(cacheId, creatorName);
+            var expected = new Rating(id, cacheId, creatorName, new DateTime(2009, 07, 20), 4);
+            Rating actual = target.GetByPrimaryKey(id);
 
             Assert.AreEqual(expected.CacheId, actual.CacheId);
             Assert.AreEqual(expected.Creator, actual.Creator);
@@ -52,16 +51,15 @@ namespace GeoCachingTest {
         public void GetRatingsForCacheTest() {
             const int cacheId = 403;
             IList<Rating> expected = new List<Rating>();
-            expected.Add(new Rating {Creator = "Jan911"});
-            expected.Add(new Rating {Creator = "Jana884"});
-            expected.Add(new Rating {Creator = "Karoline687"});
-            expected.Add(new Rating {Creator = "Tyrion588"});
+            expected.Add(new Rating {Id = 5424});
+            expected.Add(new Rating {Id = 5425});
+            expected.Add(new Rating {Id = 5426});
+            expected.Add(new Rating {Id = 5427});
 
             IList<Rating> actual = target.GetRatingsForCache(cacheId);
             Assert.AreEqual(expected.Count, actual.Count);
 
             foreach (Rating entry in expected) {
-                entry.CacheId = cacheId;
                 Assert.IsTrue(actual.Contains(entry));
             }
         }
@@ -70,21 +68,37 @@ namespace GeoCachingTest {
         public void GetRatingsForUserTest() {
             const string userName = "Leia256";
             IList<Rating> expected = new List<Rating>();
-            expected.Add(new Rating {CacheId = 8});
-            expected.Add(new Rating {CacheId = 177});
-            expected.Add(new Rating {CacheId = 215});
-            expected.Add(new Rating {CacheId = 250});
-            expected.Add(new Rating {CacheId = 258});
-            expected.Add(new Rating {CacheId = 288});
-            expected.Add(new Rating {CacheId = 293});
-            expected.Add(new Rating {CacheId = 357});
-            expected.Add(new Rating {CacheId = 409});
+            expected.Add(new Rating {Id = 103});
+            expected.Add(new Rating {Id = 2391});
+            expected.Add(new Rating {Id = 2894});
+            expected.Add(new Rating {Id = 3349});
+            expected.Add(new Rating {Id = 3456});
+            expected.Add(new Rating {Id = 3875});
+            expected.Add(new Rating {Id = 3953});
+            expected.Add(new Rating {Id = 4812});
+            expected.Add(new Rating {Id = 5521});
 
             IList<Rating> actual = target.GetRatingsForUser(userName);
             Assert.AreEqual(expected.Count, actual.Count);
 
             foreach (Rating entry in expected) {
-                entry.Creator = userName;
+                Assert.IsTrue(actual.Contains(entry));
+            }
+        }
+
+        [TestMethod]
+        public void GetRatingsForCacheAndUser() {
+            const int cacheId = 499;
+            const string creatorName = "Imanuel221";
+            IList<Rating> expected = new List<Rating>();
+            expected.Add(new Rating(6715, cacheId, creatorName, new DateTime(2008, 02, 20), 3));
+            expected.Add(new Rating(6721, cacheId, creatorName, new DateTime(2010, 12, 03), 6));
+
+            IList<Rating> actual = target.GetRatingsForCacheAndUser(cacheId, creatorName);
+
+            Assert.AreEqual(expected.Count, actual.Count);
+
+            foreach (Rating entry in expected) {
                 Assert.IsTrue(actual.Contains(entry));
             }
         }
@@ -93,44 +107,24 @@ namespace GeoCachingTest {
         public void InsertTest() {
             const int cacheId = 499;
             const string creatorName = "Bunk417";
-            var toInsert = new Rating(cacheId, creatorName, new DateTime(2009, 12, 6), 10);
+            var toInsert = new Rating(-1, cacheId, creatorName, new DateTime(2009, 12, 6), 10);
 
-            Assert.IsTrue(target.Insert(toInsert));
-            Rating expected = target.GetByPrimaryKey(cacheId, creatorName);
+            target.Insert(toInsert);
+            Rating expected = target.GetByPrimaryKey(toInsert.Id);
 
             Assert.AreEqual(expected, toInsert);
             Assert.AreEqual(expected.CreationDate, toInsert.CreationDate);
-            DeleteRating(cacheId, creatorName); // internal method, not available in DaoInterface
-            Assert.IsNull(target.GetByPrimaryKey(cacheId, creatorName));
+            Assert.AreEqual(expected.Grade, toInsert.Grade);
+
+            DeleteRating(toInsert.Id); // internal method, not available in DaoInterface
+            Assert.IsNull(target.GetByPrimaryKey(toInsert.Id));
         }
 
-        [TestMethod]
-        public void UpdateTest() {
-            const int cacheId = 319;
-            const string creatorName = "Sheldon838";
-            Rating entry = target.GetByPrimaryKey(cacheId, creatorName);
-            int initialGrade = entry.Grade;
-            const int updatedGrade = 0;
-            entry.Grade = updatedGrade;
-
-            Assert.IsTrue(target.Update(entry));
-
-            entry = target.GetByPrimaryKey(cacheId, creatorName);
-            Assert.AreEqual(updatedGrade, entry.Grade);
-
-            entry.Grade = initialGrade;
-            Assert.IsTrue(target.Update(entry));
-
-            entry = target.GetByPrimaryKey(cacheId, creatorName);
-            Assert.AreEqual(initialGrade, entry.Grade);
-        }
-
-        private bool DeleteRating(int cacheId, string creatorName) {
+        private bool DeleteRating(int id) {
             IDbCommand cmd = Database.CreateCommand(
                 "DELETE FROM cache_rating " +
-                "WHERE cacheId = @cacheId AND creatorName = @creatorName;");
-            Database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
-            Database.DefineParameter(cmd, "creatorName", DbType.String, creatorName);
+                "WHERE id = @id;");
+            Database.DefineParameter(cmd, "id", DbType.Int32, id);
 
             return Database.ExecuteNonQuery(cmd) == 1;
         }

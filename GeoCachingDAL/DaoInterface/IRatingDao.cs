@@ -5,16 +5,17 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
     public interface IRatingDao {
         // read
         IList<Rating> GetAll();
-        Rating GetByPrimaryKey(int cacheId, string creator);
+        Rating GetByPrimaryKey(int id);
 
         IList<Rating> GetRatingsForCache(int cacheId);
         IList<Rating> GetRatingsForUser(string userName);
+        IList<Rating> GetRatingsForCacheAndUser(int cacheId, string userName);
 
         double GetAverageCacheRating(int cacheId);
 
         // write
-        bool Insert(Rating rating);
-        bool Update(Rating rating);
+        int Insert(Rating rating);
+        // no update needed because user can add as many ratings for each cache as he wants
         // no deletion allowed
     }
 }
