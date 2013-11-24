@@ -4,16 +4,16 @@ using System.Reflection;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 
 namespace Swk5.GeoCaching.DAL.Common {
-    public static class DALFactory {
+    public static class DalFactory {
         private const string DaoLocation = ".Dao.";
-        private static readonly string assemblyName;
-        private static readonly Assembly dalAssembly;
+        private static readonly string AssemblyName;
+        private static readonly Assembly DalAssembly;
 
-        static DALFactory() {
+        static DalFactory() {
             // TODO: add error handling
 
-            assemblyName = ConfigurationManager.AppSettings["DALAssembly"];
-            dalAssembly = Assembly.Load(assemblyName);
+            AssemblyName = ConfigurationManager.AppSettings["DALAssembly"];
+            DalAssembly = Assembly.Load(AssemblyName);
         }
 
         public static IDatabase CreateDatabase() {
@@ -23,39 +23,39 @@ namespace Swk5.GeoCaching.DAL.Common {
 
         public static IDatabase CreateDatabase(string connectionString) {
             // fully qualified database class name
-            string databaseClassName = assemblyName + ".Database";
-            Type dbClass = dalAssembly.GetType(databaseClassName);
+            string databaseClassName = AssemblyName + ".Database";
+            Type dbClass = DalAssembly.GetType(databaseClassName);
 
             return Activator.CreateInstance(dbClass,
                 new object[] {connectionString}) as IDatabase;
         }
 
         public static ICacheDao CreateCacheDao(IDatabase database) {
-            Type cacheType = dalAssembly.GetType(assemblyName + DaoLocation + "CacheDao");
+            Type cacheType = DalAssembly.GetType(AssemblyName + DaoLocation + "CacheDao");
             return Activator.CreateInstance(cacheType, new object[] {database})
                 as ICacheDao;
         }
 
         public static IUserDao CreateUserDao(IDatabase database) {
-            Type userType = dalAssembly.GetType(assemblyName + DaoLocation + "UserDao");
+            Type userType = DalAssembly.GetType(AssemblyName + DaoLocation + "UserDao");
             return Activator.CreateInstance(userType, new object[] {database})
                 as IUserDao;
         }
 
         public static ILogEntryDao CreateLogEntryDao(IDatabase database) {
-            Type logEntryType = dalAssembly.GetType(assemblyName + DaoLocation + "LogEntryDao");
+            Type logEntryType = DalAssembly.GetType(AssemblyName + DaoLocation + "LogEntryDao");
             return Activator.CreateInstance(logEntryType, new object[] {database})
                 as ILogEntryDao;
         }
 
         public static IRatingDao CreateRatingDao(IDatabase database) {
-            Type ratingType = dalAssembly.GetType(assemblyName + DaoLocation + "RatingDao");
+            Type ratingType = DalAssembly.GetType(AssemblyName + DaoLocation + "RatingDao");
             return Activator.CreateInstance(ratingType, new object[] {database})
                 as IRatingDao;
         }
 
         public static IImageDao CreateImageDao(IDatabase database) {
-            Type imageType = dalAssembly.GetType(assemblyName + DaoLocation + "ImageDao");
+            Type imageType = DalAssembly.GetType(AssemblyName + DaoLocation + "ImageDao");
             return Activator.CreateInstance(imageType, new object[] {database})
                 as IImageDao;
         }

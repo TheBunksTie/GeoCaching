@@ -24,7 +24,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         public bool Insert(int cacheId, string fileName) {
             IDbCommand cmd = database.CreateCommand(
                 "INSERT INTO cache_image (cacheId, fileName) " +
-                "VALUES (@cacheId, @fileName)");
+                "VALUES (@cacheId, @fileName);");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
             database.DefineParameter(cmd, "fileName", DbType.String, fileName);
 

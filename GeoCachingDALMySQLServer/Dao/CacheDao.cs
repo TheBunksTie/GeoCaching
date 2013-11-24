@@ -11,8 +11,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public Cache GetById(int id) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId,  c.ownerName, c.latitude, c.longitude, c.description " +
-                "FROM cache c WHERE c.id = @id");
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode,  c.ownerName, c.latitude, c.longitude, c.description " +
+                "FROM cache c WHERE c.id = @id;");
 
             database.DefineParameter(cmd, "id", DbType.Int32, id);
 
@@ -26,13 +26,13 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Cache> GetAll() {
             return GetCacheListFor(database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId,  c.ownerName, c.latitude, c.longitude, c.description " +
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode,  c.ownerName, c.latitude, c.longitude, c.description " +
                 "FROM cache c;"));
         }
 
         public IList<Cache> GetByOwner(string userName) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId,  c.ownerName, c.latitude, c.longitude, c.description " +
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode,  c.ownerName, c.latitude, c.longitude, c.description " +
                 "FROM cache c WHERE c.ownerName = @owner;");
 
             database.DefineParameter(cmd, "owner", DbType.String, userName);
@@ -41,7 +41,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId,  c.ownerName, c.latitude, c.longitude, c.description " +
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode,  c.ownerName, c.latitude, c.longitude, c.description " +
                 "FROM cache c WHERE difficultyCache" + FilterCriteriumToString(criterium) + "@difficulty;");
 
             database.DefineParameter(cmd, "difficulty", DbType.Double, diffictulty);
@@ -50,7 +50,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Cache> GetByTerrainDifficulty(double diffictulty, FilterCriterium criterium) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId,  c.ownerName, c.latitude, c.longitude, c.description " +
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode,  c.ownerName, c.latitude, c.longitude, c.description " +
                 "FROM cache c WHERE difficultyTerrain" + FilterCriteriumToString(criterium) + "@difficulty;");
 
             database.DefineParameter(cmd, "difficulty", DbType.Double, diffictulty);
@@ -59,7 +59,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Cache> GetByAverageRating(double rating, FilterCriterium criterium) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId, c.ownerName, c.latitude, c.longitude, c.description " +
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode, c.ownerName, c.latitude, c.longitude, c.description " +
                 "FROM cache c INNER JOIN " +
                 "(SELECT cacheId, AVG(grade) AS grade " +
                 "FROM cache_rating GROUP BY cacheId " +
@@ -73,8 +73,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Cache> GetBySize(CacheSize size, FilterCriterium criterium) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId,  c.ownerName, c.latitude, c.longitude, c.description " +
-                "FROM cache c WHERE sizeId " + FilterCriteriumToString(criterium) + "@size;");
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode,  c.ownerName, c.latitude, c.longitude, c.description " +
+                "FROM cache c WHERE sizeCode " + FilterCriteriumToString(criterium) + "@size;");
 
             database.DefineParameter(cmd, "size", DbType.Int32, ( int ) size);
             return GetCacheListFor(cmd);
@@ -82,7 +82,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId,  c.ownerName, c.latitude, c.longitude, c.description " +
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode,  c.ownerName, c.latitude, c.longitude, c.description " +
                 "FROM cache c WHERE (c.creationDate >= @begin AND c.creationDate <= @end) AND " +
                 "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
                 "(c.longitude >= @longFrom AND c.longitude <= @longTo );");
@@ -99,7 +99,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Cache> GetInRegionFoundBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId,  c.ownerName, c.latitude, c.longitude, c.description " +
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode,  c.ownerName, c.latitude, c.longitude, c.description " +
                 "FROM cache c " +
                 "WHERE c.id IN " +
                 "(SELECT cacheId FROM cache_log l " +
@@ -119,7 +119,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Cache> GetInRegionRatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeId, c.ownerName, c.latitude, c.longitude, c.description " +
+                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, c.sizeCode, c.ownerName, c.latitude, c.longitude, c.description " +
                 "FROM cache c " +
                 "WHERE c.id IN " +
                 "(SELECT cacheId FROM cache_rating r " +
@@ -137,42 +137,42 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetCacheListFor(cmd);
         }
 
-        public int Insert(Cache cache) {
-            IDbCommand cmd = database.CreateCommand(
-                "INSERT INTO cache (name, creationDate, difficultyCache, difficultyTerrain, sizeId, ownerName, latitude, longitude, description) " +
-                "VALUES (@name, @creationDate, @difficultyCache, @difficultyTerrain, @sizeId, @ownerName, @latitude, @longitude, @description)");
+public int Insert(Cache cache) {
+    IDbCommand cmd = database.CreateCommand(
+        "INSERT INTO cache (name, creationDate, difficultyCache, difficultyTerrain, sizeCode, ownerName, latitude, longitude, description) " +
+        "VALUES (@name, @creationDate, @difficultyCache, @difficultyTerrain, @sizeCode, @ownerName, @latitude, @longitude, @description);");
 
-            database.DefineParameter(cmd, "name", DbType.String, cache.Name);
-            database.DefineParameter(cmd, "creationDate", DbType.Date, cache.CreationDate);
-            database.DefineParameter(cmd, "difficultyCache", DbType.Double, cache.CacheDifficulty);
-            database.DefineParameter(cmd, "difficultyTerrain", DbType.Double, cache.TerrainDifficulty);
-            database.DefineParameter(cmd, "sizeId", DbType.Int32, cache.SizeCode);
-            database.DefineParameter(cmd, "ownerName", DbType.String, cache.Owner);
-            database.DefineParameter(cmd, "latitude", DbType.Double, cache.Position.Latitude);
-            database.DefineParameter(cmd, "longitude", DbType.Double, cache.Position.Longitude);
-            database.DefineParameter(cmd, "description", DbType.String, cache.Description);
+    database.DefineParameter(cmd, "name", DbType.String, cache.Name);
+    database.DefineParameter(cmd, "creationDate", DbType.Date, cache.CreationDate);
+    database.DefineParameter(cmd, "difficultyCache", DbType.Double, cache.CacheDifficulty);
+    database.DefineParameter(cmd, "difficultyTerrain", DbType.Double, cache.TerrainDifficulty);
+    database.DefineParameter(cmd, "sizeCode", DbType.Int32, cache.SizeCode);
+    database.DefineParameter(cmd, "ownerName", DbType.String, cache.Owner);
+    database.DefineParameter(cmd, "latitude", DbType.Double, cache.Position.Latitude);
+    database.DefineParameter(cmd, "longitude", DbType.Double, cache.Position.Longitude);
+    database.DefineParameter(cmd, "description", DbType.String, cache.Description);
 
-            if (database.ExecuteNonQuery(cmd) == 1) {
-                // retrieve id of just generated database entry and store in in cache
-                IDbCommand idCmd = database.CreateCommand("SELECT last_insert_id()");
-                cache.Id = ( int ) database.ExecuteScalarQuery<long>(idCmd);
-            }
-            else {
-                cache.Id = -1;
-            }
-            return cache.Id;
-        }
+    if (database.ExecuteNonQuery(cmd) == 1) {
+        // retrieve id of just generated database entry and store in in cache
+        IDbCommand idCmd = database.CreateCommand("SELECT last_insert_id();");
+        cache.Id = ( int ) database.ExecuteScalarQuery<long>(idCmd);
+    }
+    else {
+        cache.Id = -1;
+    }
+    return cache.Id;
+}
 
         public bool Update(Cache cache) {
             IDbCommand cmd = database.CreateCommand(
                 "UPDATE cache SET name = @name, creationDate = @creationDate, difficultyCache = @difficultyCache, difficultyTerrain = @difficultyTerrain, " +
-                "sizeId = @sizeId, ownerName = @ownerName, latitude = @latitude, longitude = @longitude, description = @description WHERE id = @id");
+                "sizeCode = @sizeCode, ownerName = @ownerName, latitude = @latitude, longitude = @longitude, description = @description WHERE id = @id;");
 
             database.DefineParameter(cmd, "name", DbType.String, cache.Name);
             database.DefineParameter(cmd, "creationDate", DbType.Date, cache.CreationDate);
             database.DefineParameter(cmd, "difficultyCache", DbType.Double, cache.CacheDifficulty);
             database.DefineParameter(cmd, "difficultyTerrain", DbType.Double, cache.TerrainDifficulty);
-            database.DefineParameter(cmd, "sizeId", DbType.Int32, cache.SizeCode);
+            database.DefineParameter(cmd, "sizeCode", DbType.Int32, cache.SizeCode);
             database.DefineParameter(cmd, "ownerName", DbType.String, cache.Owner);
             database.DefineParameter(cmd, "latitude", DbType.Double, cache.Position.Latitude);
             database.DefineParameter(cmd, "longitude", DbType.Double, cache.Position.Longitude);
@@ -184,7 +184,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         public bool Delete(int cacheId) {
-            IDbCommand cmd = database.CreateCommand("DELETE FROM cache WHERE id = @id");
+            IDbCommand cmd = database.CreateCommand("DELETE FROM cache WHERE id = @id;");
             database.DefineParameter(cmd, "id", DbType.Int32, cacheId);
 
             return database.ExecuteNonQuery(cmd) == 1;
@@ -201,7 +201,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                         DateTime.Parse(reader["creationDate"].ToString()),
                         ( double ) reader["difficultyCache"],
                         ( double ) reader["difficultyTerrain"],
-                        ( int ) reader["sizeId"],
+                        ( int ) reader["sizeCode"],
                         ( string ) reader["ownerName"],
                         new GeoPosition(( double ) reader["latitude"], ( double ) reader["longitude"]),
                         ( string ) reader["description"]));

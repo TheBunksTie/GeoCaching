@@ -54,7 +54,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
       public IList<Rating> GetRatingsForCacheAndUser ( int cacheId, string userName ) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT r.id, r.cacheId, r.creatorName, r.creationDate, r.grade " +
-                "FROM cache_rating r WHERE r.cacheId = @cacheId AND r.creatorName = @creatorName");
+                "FROM cache_rating r WHERE r.cacheId = @cacheId AND r.creatorName = @creatorName;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
             database.DefineParameter(cmd, "creatorName", DbType.String, userName);
 
@@ -77,7 +77,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         public int Insert(Rating rating) {
             IDbCommand cmd = database.CreateCommand(
                 "INSERT INTO cache_rating (cacheId, creatorName, creationDate, grade) " +
-                "VALUES (@cacheId, @creatorName, @creationDate, @grade)");
+                "VALUES (@cacheId, @creatorName, @creationDate, @grade);");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, rating.CacheId);
             database.DefineParameter(cmd, "creatorName", DbType.String, rating.Creator);
             database.DefineParameter(cmd, "creationDate", DbType.Date, rating.CreationDate);
@@ -85,7 +85,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
             if (database.ExecuteNonQuery(cmd) == 1) {
                 // retrieve id of just generated database entry and store in in cache
-                IDbCommand idCmd = database.CreateCommand("SELECT last_insert_id()");
+                IDbCommand idCmd = database.CreateCommand("SELECT last_insert_id();");
                 rating.Id = ( int ) database.ExecuteScalarQuery<long>(idCmd);
             }
             else {

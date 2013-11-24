@@ -55,9 +55,7 @@ namespace Swk5.GeoCaching.DomainModel {
         }
 
         public override int GetHashCode() {
-            unchecked {
-                return (CacheId*397) ^ (Creator != null ? Creator.GetHashCode() : 0);
-            }
+            return Id;
         }
     }
 }

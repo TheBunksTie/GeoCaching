@@ -73,7 +73,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
             if (database.ExecuteNonQuery(cmd) == 1) {
                 // retrieve id of just generated database entry and store in in cache
-                IDbCommand idCmd = database.CreateCommand("SELECT last_insert_id()");
+                IDbCommand idCmd = database.CreateCommand("SELECT last_insert_id();");
                 entry.Id = ( int ) database.ExecuteScalarQuery<long>(idCmd);
             }
             else {

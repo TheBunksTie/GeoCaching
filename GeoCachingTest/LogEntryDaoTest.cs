@@ -120,7 +120,7 @@ namespace GeoCachingTest {
         public void InsertTest() {
             const int cacheId = 499;
             const string creatorName = "Bunk417";
-            var toInsert = new LogEntry(-1, cacheId, creatorName, new DateTime(2009, 12, 6), false, "not so fantastic");
+            LogEntry toInsert = new LogEntry(-1, cacheId, creatorName, new DateTime(2009, 12, 6), false, "not so fantastic");
 
             target.Insert(toInsert);
             LogEntry expected = target.GetById(toInsert.Id);

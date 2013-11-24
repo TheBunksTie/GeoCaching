@@ -11,14 +11,14 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<User> GetAll() {
             return GetUserListFor(database.CreateCommand(
-                "SELECT u.name, u.password, u.email, u.latitude, u.longitude, u.roleId, u.registrationDate " +
+                "SELECT u.name, u.password, u.email, u.latitude, u.longitude, u.roleCode, u.registrationDate " +
                 "FROM user u;"));
         }
 
         public User GetByName(string name) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT u.name, u.password, u.email, u.latitude, u.longitude, u.roleId, u.registrationDate " +
-                "FROM user u WHERE u.name = @name");
+                "SELECT u.name, u.password, u.email, u.latitude, u.longitude, u.roleCode, u.registrationDate " +
+                "FROM user u WHERE u.name = @name;");
             database.DefineParameter(cmd, "name", DbType.String, name);
 
             IList<User> list = GetUserListFor(cmd);
@@ -31,14 +31,14 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public bool Insert(User user) {
             IDbCommand cmd = database.CreateCommand(
-                "INSERT INTO user (name, password, email, latitude, longitude, roleId, registrationDate) " +
-                "VALUES (@name, @password, @email, @latitude, @longitude, @roleId, @registrationDate);");
+                "INSERT INTO user (name, password, email, latitude, longitude, roleCode, registrationDate) " +
+                "VALUES (@name, @password, @email, @latitude, @longitude, @roleCode, @registrationDate);");
             database.DefineParameter(cmd, "name", DbType.String, user.Name);
             database.DefineParameter(cmd, "password", DbType.String, user.Password);
             database.DefineParameter(cmd, "email", DbType.String, user.Email);
             database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
             database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
-            database.DefineParameter(cmd, "roleId", DbType.Int32, user.RoleCode);
+            database.DefineParameter(cmd, "roleCode", DbType.Int32, user.RoleCode);
             database.DefineParameter(cmd, "registrationDate", DbType.Date, user.RegistrationDate);
 
             return database.ExecuteNonQuery(cmd) == 1;
@@ -46,13 +46,13 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public bool Update(User user) {
             IDbCommand cmd = database.CreateCommand(
-                "UPDATE user SET password = @password, email = @email, latitude =  @latitude, longitude = @longitude, roleId = @roleId, registrationDate = @registrationDate " +
-                "WHERE name = @name");
+                "UPDATE user SET password = @password, email = @email, latitude =  @latitude, longitude = @longitude, roleCode = @roleCode, registrationDate = @registrationDate " +
+                "WHERE name = @name;");
             database.DefineParameter(cmd, "password", DbType.String, user.Password);
             database.DefineParameter(cmd, "email", DbType.String, user.Email);
             database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
             database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
-            database.DefineParameter(cmd, "roleId", DbType.Int32, user.RoleCode);
+            database.DefineParameter(cmd, "roleCode", DbType.Int32, user.RoleCode);
             database.DefineParameter(cmd, "registrationDate", DbType.Date, user.RegistrationDate);
             // primary key
             database.DefineParameter(cmd, "name", DbType.String, user.Name);
@@ -79,7 +79,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                         ( string ) reader["password"],
                         ( string ) reader["email"],
                         new GeoPosition(( double ) reader["latitude"], ( double ) reader["longitude"]),
-                        ( int ) reader["roleId"],
+                        ( int ) reader["roleCode"],
                         DateTime.Parse(reader["registrationDate"].ToString())));
                 }
                 return users;

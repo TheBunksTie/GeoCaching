@@ -17,7 +17,7 @@ namespace Swk5.GeoCaching.DomainModel {
         private int cacheSize;
         private double terrainDifficulty;
 
-        public Cache ( int id, string name, DateTime creationDate, double cacheDifficulty, double terrainDifficulty, int size, string owner, GeoPosition position, string description ) {
+        public Cache(int id, string name, DateTime creationDate, double cacheDifficulty, double terrainDifficulty, int size, string owner, GeoPosition position, string description) {
             Id = id;
             Name = name;
             CreationDate = creationDate;
@@ -38,7 +38,7 @@ namespace Swk5.GeoCaching.DomainModel {
         public double CacheDifficulty {
             get { return cacheDifficulty; }
             set {
-                if (value >= 0 && value <= 5) {
+                if (value >= 1 && value <= 5) {
                     cacheDifficulty = value;
                 }
                 else {
@@ -50,7 +50,7 @@ namespace Swk5.GeoCaching.DomainModel {
         public double TerrainDifficulty {
             get { return terrainDifficulty; }
             set {
-                if (value >= 0 && value <= 5) {
+                if (value >= 1 && value <= 5) {
                     terrainDifficulty = value;
                 }
                 else {
@@ -92,6 +92,19 @@ namespace Swk5.GeoCaching.DomainModel {
                 return true;
             }
             return Id == other.Id;
+        }
+
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) {
+                return false;
+            }
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+            if (obj.GetType() != GetType()) {
+                return false;
+            }
+            return Equals(( Cache ) obj);
         }
 
         public override string ToString() {
