@@ -1,0 +1,29 @@
+﻿<Window x:Class="Swk5.GeoCaching.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Swk5.GeoCaching.Desktop"
+        Title="GeoCac#ing Desktop v0.1" Height="450" Width="600"
+        ResizeMode="CanMinimize">
+    <Window.Resources>
+        <Style TargetType="GridSplitter">
+            <Setter Property="Background" Value="BlueViolet" />
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
+            <TabItem Header="User">
+                <Grid Background="#FFE5E5E5">
+                    <!-- TODO: add data context -->
+                    <controls:UserEditor Margin="1" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Caches">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Statistics">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
