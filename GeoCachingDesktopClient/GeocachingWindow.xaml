@@ -1,8 +1,8 @@
-﻿<Window x:Class="Swk5.GeoCaching.Desktop.MainWindow"
+﻿<Window x:Class="Swk5.GeoCaching.Desktop.GeocachingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:Swk5.GeoCaching.Desktop"
-        Title="GeoCac#ing Desktop v0.1" Height="450" Width="600"
+        Title="GeoCac#ing Desktop v0.1" Height="500" Width="800"
         ResizeMode="CanMinimize">
     <Window.Resources>
         <Style TargetType="GridSplitter">
@@ -14,8 +14,8 @@
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
             <TabItem Header="User">
                 <Grid Background="#FFE5E5E5">
-                    <!-- TODO: add data context -->
-                    <controls:UserEditor Margin="1" />
+                    <!-- no special data context needed, the basic one form here will be passed through  -->
+                    <controls:UserEditor Margin="1"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Caches">

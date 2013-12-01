@@ -5,43 +5,147 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="600">
-    
-    <UserControl.Resources>
+
+    <!--<UserControl.Resources>
         <Style TargetType="GridViewColumnHeader">
             <Setter Property="Width" Value="90"></Setter>
         </Style>
-    </UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="MinWidth" Value="10" />            
+        </Style>
+    </UserControl.Resources>-->
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*" />
             <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <ListView Name="listUsers"  Grid.Column="0" BorderThickness="2" Margin="4"
-                 ItemsSource="{Binding Path=Users}"
-                 SelectedItem="{Binding Path=CurrentUser, Mode=TwoWay}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Username" DisplayMemberBinding="{Binding Path=Username}" />
-                    <GridViewColumn Header="Role" DisplayMemberBinding="{Binding Path=Role}" />
-                    <GridViewColumn Header="Latitude" DisplayMemberBinding="{Binding Path=Position.Latitude}" />
-                    <GridViewColumn Header="Longitude" DisplayMemberBinding="{Binding Path=Position.Longitude}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="8*" />
-            </Grid.RowDefinitions>
-            
-            <Button Grid.Row="0" Name="NewUserBtn" Margin="4">New</Button>
-            <Button Grid.Row="1" Name="EditUserBtn" Margin="4">Edit</Button>
-            <Button Grid.Row="2" Name="DeleteUserBtn" Margin="4">Delete</Button>
-        </Grid>
-    
+
+        <Border BorderThickness="2" BorderBrush="BlueViolet" 
+								Margin="5" Padding="5" CornerRadius="5">
+
+            <ListBox Name="listUsers"  Grid.Column="0" BorderThickness="2"
+                     ItemsSource="{Binding Path=Users}"
+                     SelectedItem="{Binding Path=CurrentUser, Mode=TwoWay}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                            (<TextBlock Text="{Binding Path=Role}"></TextBlock>)
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+         </Border>
+
+        <Border Grid.Column="1" BorderThickness="2" BorderBrush="BlueViolet" 
+								Margin="5" Padding="5" CornerRadius="5">
+
+            <Grid Grid.Column="1" DataContext="{Binding Path=CurrentUser}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="103*"/>
+                        <ColumnDefinition Width="273*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="1" Margin="2" Grid.ColumnSpan="2" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock MinWidth="50" Grid.Column="0" Text="Name:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Name, Mode=TwoWay}"/>
+                    </Grid>
+
+                    <!-- e-mail address -->
+                    <Grid Grid.Row="2" Margin="2" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock MinWidth="50" Grid.Column="0" Text="E-Mail:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Email, Mode=TwoWay}"/>
+                    </Grid>
+
+                    <!-- Position -->
+                    <Grid Grid.Row="3" Margin="2" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"  MinWidth="50" Text="Latitude:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Latitude, Mode=TwoWay}"/>
+                        <TextBlock Grid.Column="2" MinWidth="50" Text="Longitude:" Margin="5,0,5,0" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="3" VerticalAlignment="Center" Text="{Binding Path=Longitude, Mode=TwoWay}"/>
+                    </Grid>
+
+                    <!-- user role  -->
+                    <Grid Grid.Row="4" Margin="2" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" MinWidth="50" Text="Role:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <ComboBox Grid.Column="1" ItemsSource="{Binding Path=Role}"/>
+                    </Grid>
+
+                    <!-- password -->
+                    <Grid Grid.Row="5" Margin="2" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" MinWidth="50" Text="Password:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <PasswordBox Grid.Column="1" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="Repeat Password:" Margin="5,0,5,0" VerticalAlignment="Center"/>
+                        <PasswordBox Grid.Column="3" VerticalAlignment="Center" />
+                    </Grid>
+
+                    <!-- registration date -->
+                    <Grid Grid.Row="7" Margin="2" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Registration Date:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=RegistrationDate}"/>
+                    </Grid>
+                </Grid>
+
+                <Grid Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Name="CreateUserBtn" Margin="4">Create</Button>
+                    <Button Grid.Column="1" Name="SaveUserBtn" Margin="4">Save</Button>
+                    <Button Grid.Column="2" Name="DeleteUserBtn" Margin="4">Delete</Button>
+                    <Button Grid.Column="3" Name="ClearBtn" Margin="4">Clear</Button>
+
+                </Grid>
+            </Grid>
+        </Border>
 
     </Grid>
 </UserControl>
