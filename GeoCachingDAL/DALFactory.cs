@@ -11,9 +11,13 @@ namespace Swk5.GeoCaching.DAL.Common {
 
         static DalFactory() {
             // TODO: add error handling
-
-            AssemblyName = ConfigurationManager.AppSettings["DALAssembly"];
-            DalAssembly = Assembly.Load(AssemblyName);
+            try {
+                AssemblyName = ConfigurationManager.AppSettings["DALAssembly"];
+                DalAssembly = Assembly.Load(AssemblyName);
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public static IDatabase CreateDatabase() {

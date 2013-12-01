@@ -9,7 +9,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
     public class UserDao : AbstractDao, IUserDao {
         public UserDao(IDatabase database) : base(database) {}
 
-        public IList<User> GetAll() {
+        public List<User> GetAll() {
             return GetUserListFor(database.CreateCommand(
                 "SELECT u.name, u.password, u.email, u.latitude, u.longitude, u.roleCode, u.registrationDate " +
                 "FROM user u;"));
@@ -69,9 +69,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return database.ExecuteNonQuery(cmd) == 1;
         }
 
-        private IList<User> GetUserListFor(IDbCommand cmd) {
+        private List<User> GetUserListFor(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
-                IList<User> users = new List<User>();
+                List<User> users = new List<User>();
 
                 while (reader.Read()) {
                     users.Add(new User(

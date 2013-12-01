@@ -1,7 +1,7 @@
 ﻿namespace Swk5.GeoCaching.DomainModel {
     public struct GeoPosition {
-        private readonly double latitude;
-        private readonly double longitude;
+        private double latitude;
+        private double longitude;
 
         public GeoPosition(double latitude, double longitude) {
             this.latitude = latitude;
@@ -10,10 +10,12 @@
 
         public double Latitude {
             get { return latitude; }
+            set { latitude = value; }
         }
 
         public double Longitude {
             get { return longitude; }
+            set { longitude = value;  }
         }
 
         public override int GetHashCode() {
