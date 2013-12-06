@@ -29,11 +29,11 @@ namespace GeoCachingTest {
         public void GetByIdTest() {
             const int id = 3565;
             const int cacheId = 260;
-            const string creatorName = "Zelda553";
-            var expected = new LogEntry(id, cacheId, creatorName, new DateTime(2007, 1, 13), false, "einfach klasse");
+            const int creatorId = 240;
+            var expected = new LogEntry(id, cacheId, creatorId, new DateTime(2007, 1, 13), false, "einfach klasse");
             LogEntry actual = target.GetById(id);
             Assert.AreEqual(expected.CacheId, actual.CacheId);
-            Assert.AreEqual(expected.Creator, actual.Creator);
+            Assert.AreEqual(expected.CreatorId, actual.CreatorId);
             Assert.AreEqual(expected.CreationDate, actual.CreationDate);
             Assert.AreEqual(expected.IsFound, actual.IsFound);
             Assert.AreEqual(expected.Comment, actual.Comment);
@@ -67,17 +67,12 @@ namespace GeoCachingTest {
         [TestMethod]
         public void GetLogEntriesForCacheAndUserTest() {
             const int cacheId = 497;
-            const string userName = "Tyrion588";
+            const int userId = 225;
             IList<LogEntry> expected = new List<LogEntry>();
-            expected.Add(new LogEntry(6922,
-                cacheId,
-                userName,
-                new DateTime(2007, 4, 10),
-                false,
-                "viel zu schwer, fast unmöglich"));
-            expected.Add(new LogEntry(6926, cacheId, userName, new DateTime(2008, 1, 13), true, "diesmal gings besser"));
+            expected.Add(new LogEntry(6922, cacheId, userId, new DateTime(2007, 4, 10), false, "viel zu schwer, fast unmöglich"));
+            expected.Add(new LogEntry(6926, cacheId, userId, new DateTime(2008, 1, 13), true, "diesmal gings besser"));
 
-            IList<LogEntry> actual = target.GetLogEntriesForCacheAndUser(cacheId, userName);
+            IList<LogEntry> actual = target.GetLogEntriesForCacheAndUser(cacheId, userId);
             Assert.AreEqual(expected.Count, actual.Count);
 
             foreach (LogEntry entry in expected) {
@@ -87,7 +82,7 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetLogentriesForUserTest() {
-            const string userName = "Rosa334";
+            const int userId = 199;
             IList<LogEntry> expected = new List<LogEntry>();
             expected.Add(new LogEntry {Id = 453});
             expected.Add(new LogEntry {Id = 1099});
@@ -108,7 +103,7 @@ namespace GeoCachingTest {
             expected.Add(new LogEntry {Id = 6066});
             expected.Add(new LogEntry {Id = 6208});
 
-            IList<LogEntry> actual = target.GetLogentriesForUser(userName);
+            IList<LogEntry> actual = target.GetLogentriesForUser(userId);
             Assert.AreEqual(expected.Count, actual.Count);
 
             foreach (LogEntry entry in expected) {
@@ -119,8 +114,8 @@ namespace GeoCachingTest {
         [TestMethod]
         public void InsertTest() {
             const int cacheId = 499;
-            const string creatorName = "Bunk417";
-            LogEntry toInsert = new LogEntry(-1, cacheId, creatorName, new DateTime(2009, 12, 6), false, "not so fantastic");
+            const int creatorId = 32;
+            LogEntry toInsert = new LogEntry(-1, cacheId, creatorId, new DateTime(2009, 12, 6), false, "not so fantastic");
 
             target.Insert(toInsert);
             LogEntry expected = target.GetById(toInsert.Id);

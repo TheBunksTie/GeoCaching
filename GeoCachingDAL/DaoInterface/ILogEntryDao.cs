@@ -8,8 +8,8 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         LogEntry GetById(int id);
 
         IList<LogEntry> GetLogEntriesForCache(int cacheId);
-        IList<LogEntry> GetLogentriesForUser(string userName);
-        IList<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, string userName);
+        IList<LogEntry> GetLogentriesForUser(int userId);
+        IList<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, int userId);
 
         // write
         int Insert(LogEntry logEntry);

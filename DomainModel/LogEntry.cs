@@ -4,10 +4,10 @@ namespace Swk5.GeoCaching.DomainModel {
     public class LogEntry : IEquatable<LogEntry> {
         public LogEntry() {}
 
-        public LogEntry(int id, int cacheId, string creator, DateTime creationDate, bool isFound, string comment) {
+        public LogEntry(int id, int cacheId, int creatorId, DateTime creationDate, bool isFound, string comment) {
             Id = id;
             CacheId = cacheId;
-            Creator = creator;
+            CreatorId = creatorId;
             CreationDate = creationDate;
             IsFound = isFound;
             Comment = comment;
@@ -15,7 +15,7 @@ namespace Swk5.GeoCaching.DomainModel {
 
         public int Id { get; set; }
         public int CacheId { get; set; }
-        public string Creator { get; set; }
+        public int CreatorId { get; set; }
         public DateTime CreationDate { get; set; }
         public bool IsFound { get; set; }
         public string Comment { get; set; }

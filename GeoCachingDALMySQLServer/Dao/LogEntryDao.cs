@@ -11,13 +11,13 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<LogEntry> GetAll() {
             return GetLogEntryListFor(database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorName, l.creationDate, l.found, l.comment " +
+                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l;"));
         }
 
         public LogEntry GetById(int id) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorName, l.creationDate, l.found, l.comment " +
+                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l " +
                 "WHERE l.id = @id;");
             database.DefineParameter(cmd, "id", DbType.Int32, id);
@@ -30,20 +30,20 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return null;
         }
 
-        public IList<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, string userName) {
+        public IList<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, int userId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorName, l.creationDate, l.found, l.comment " +
+                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l " +
-                "WHERE cacheId = @cacheId AND creatorName = @creatorName;");
+                "WHERE cacheId = @cacheId AND creatorId = @creatorId;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
-            database.DefineParameter(cmd, "creatorName", DbType.String, userName);
+            database.DefineParameter(cmd, "creatorId", DbType.Int32, userId);
 
             return GetLogEntryListFor(cmd);
         }
 
         public IList<LogEntry> GetLogEntriesForCache(int cacheId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorName, l.creationDate, l.found, l.comment " +
+                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l " +
                 "WHERE l.cacheId = @cacheId;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
@@ -51,22 +51,22 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetLogEntryListFor(cmd);
         }
 
-        public IList<LogEntry> GetLogentriesForUser(string userName) {
+        public IList<LogEntry> GetLogentriesForUser(int userId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorName, l.creationDate, l.found, l.comment " +
+                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l " +
-                "WHERE l.creatorName = @creatorName;");
-            database.DefineParameter(cmd, "creatorName", DbType.String, userName);
+                "WHERE l.creatorId = @creatorId;");
+            database.DefineParameter(cmd, "creatorId", DbType.Int32, userId);
 
             return GetLogEntryListFor(cmd);
         }
 
         public int Insert(LogEntry entry) {
             IDbCommand cmd = database.CreateCommand(
-                "INSERT INTO cache_log (cacheId, creatorName, creationDate, found, comment) " +
-                "VALUES (@cacheId, @creatorName, @creationDate, @found, @comment);");
+                "INSERT INTO cache_log (cacheId, creatorId, creationDate, found, comment) " +
+                "VALUES (@cacheId, @creatorId, @creationDate, @found, @comment);");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, entry.CacheId);
-            database.DefineParameter(cmd, "creatorName", DbType.String, entry.Creator);
+            database.DefineParameter(cmd, "creatorId", DbType.Int32, entry.CreatorId);
             database.DefineParameter(cmd, "creationDate", DbType.Date, entry.CreationDate);
             database.DefineParameter(cmd, "found", DbType.Boolean, entry.IsFound);
             database.DefineParameter(cmd, "comment", DbType.String, entry.Comment);
@@ -91,7 +91,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                     entries.Add(new LogEntry(
                         ( int ) reader["id"],
                         ( int ) reader["cacheId"],
-                        ( string ) reader["creatorName"],
+                        ( int ) reader["creatorId"],
                         DateTime.Parse(reader["creationDate"].ToString()),
                         ( bool ) reader["found"],
                         ( string ) reader["comment"]));
