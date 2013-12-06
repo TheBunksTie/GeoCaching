@@ -37,12 +37,12 @@ namespace GeoCachingTest {
         public void GetByPrimaryKeyTest() {
             const int id = 2326;
             const int cacheId = 172;
-            const string creatorName = "Gabriele177";
-            var expected = new Rating(id, cacheId, creatorName, new DateTime(2009, 07, 20), 4);
+            const int creatorId = 82;
+            var expected = new Rating(id, cacheId, creatorId, new DateTime(2009, 07, 20), 4);
             Rating actual = target.GetByPrimaryKey(id);
 
             Assert.AreEqual(expected.CacheId, actual.CacheId);
-            Assert.AreEqual(expected.Creator, actual.Creator);
+            Assert.AreEqual(expected.CreatorId, actual.CreatorId);
             Assert.AreEqual(expected.CreationDate, actual.CreationDate);
             Assert.AreEqual(expected.Grade, actual.Grade);
         }
@@ -66,7 +66,7 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetRatingsForUserTest() {
-            const string userName = "Leia256";
+            const int userId = 140;
             IList<Rating> expected = new List<Rating>();
             expected.Add(new Rating {Id = 103});
             expected.Add(new Rating {Id = 2391});
@@ -78,7 +78,7 @@ namespace GeoCachingTest {
             expected.Add(new Rating {Id = 4812});
             expected.Add(new Rating {Id = 5521});
 
-            IList<Rating> actual = target.GetRatingsForUser(userName);
+            IList<Rating> actual = target.GetRatingsForUser(userId);
             Assert.AreEqual(expected.Count, actual.Count);
 
             foreach (Rating entry in expected) {
@@ -89,12 +89,12 @@ namespace GeoCachingTest {
         [TestMethod]
         public void GetRatingsForCacheAndUser() {
             const int cacheId = 499;
-            const string creatorName = "Imanuel221";
+            const int creatorId = 107;
             IList<Rating> expected = new List<Rating>();
-            expected.Add(new Rating(6715, cacheId, creatorName, new DateTime(2008, 02, 20), 3));
-            expected.Add(new Rating(6721, cacheId, creatorName, new DateTime(2010, 12, 03), 6));
+            expected.Add(new Rating(6715, cacheId, creatorId, new DateTime(2008, 02, 20), 3));
+            expected.Add(new Rating(6721, cacheId, creatorId, new DateTime(2010, 12, 03), 6));
 
-            IList<Rating> actual = target.GetRatingsForCacheAndUser(cacheId, creatorName);
+            IList<Rating> actual = target.GetRatingsForCacheAndUser(cacheId, creatorId);
 
             Assert.AreEqual(expected.Count, actual.Count);
 
@@ -106,8 +106,8 @@ namespace GeoCachingTest {
         [TestMethod]
         public void InsertTest() {
             const int cacheId = 499;
-            const string creatorName = "Bunk417";
-            var toInsert = new Rating(-1, cacheId, creatorName, new DateTime(2009, 12, 6), 10);
+            const int creatorId = 32;
+            var toInsert = new Rating(-1, cacheId, creatorId, new DateTime(2009, 12, 6), 10);
 
             target.Insert(toInsert);
             Rating expected = target.GetByPrimaryKey(toInsert.Id);

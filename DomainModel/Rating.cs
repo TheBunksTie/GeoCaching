@@ -4,10 +4,10 @@ namespace Swk5.GeoCaching.DomainModel {
     public class Rating : IEquatable<Rating> {
         private int grade;
 
-        public Rating(int id, int cacheId, string creator, DateTime creationDate, int grade) {
+        public Rating(int id, int cacheId, int creatorId, DateTime creationDate, int grade) {
             Id = id;
             CacheId = cacheId;
-            Creator = creator;
+            CreatorId = creatorId;
             CreationDate = creationDate;
             Grade = grade;
         }
@@ -16,7 +16,7 @@ namespace Swk5.GeoCaching.DomainModel {
 
         public int Id { get; set; }
         public int CacheId { get; set; }
-        public string Creator { get; set; }
+        public int CreatorId { get; set; }
         public DateTime CreationDate { get; set; }
 
         public int Grade {

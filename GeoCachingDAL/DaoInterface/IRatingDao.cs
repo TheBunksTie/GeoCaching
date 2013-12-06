@@ -8,8 +8,8 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         Rating GetByPrimaryKey(int id);
 
         IList<Rating> GetRatingsForCache(int cacheId);
-        IList<Rating> GetRatingsForUser(string userName);
-        IList<Rating> GetRatingsForCacheAndUser(int cacheId, string userName);
+        IList<Rating> GetRatingsForUser(int userId);
+        IList<Rating> GetRatingsForCacheAndUser(int cacheId, int userId);
 
         double GetAverageCacheRating(int cacheId);
 

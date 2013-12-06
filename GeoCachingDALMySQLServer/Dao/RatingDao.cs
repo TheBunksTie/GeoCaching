@@ -11,7 +11,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Rating> GetAll() {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT r.id, r.cacheId, r.creatorName, r.creationDate, r.grade " +
+                "SELECT r.id, r.cacheId, r.creatorId, r.creationDate, r.grade " +
                 "FROM cache_rating r;");
 
             return GetRatingListFor(cmd);
@@ -19,7 +19,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public Rating GetByPrimaryKey(int id) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT r.id, r.cacheId, r.creatorName, r.creationDate, r.grade " +
+                "SELECT r.id, r.cacheId, r.creatorId, r.creationDate, r.grade " +
                 "FROM cache_rating r WHERE r.id = @id;");
             database.DefineParameter(cmd, "id", DbType.Int32, id);
 
@@ -33,7 +33,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public IList<Rating> GetRatingsForCache(int cacheId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT r.id, r.cacheId, r.creatorName, r.creationDate, r.grade " +
+                "SELECT r.id, r.cacheId, r.creatorId, r.creationDate, r.grade " +
                 "FROM cache_rating r " +
                 "WHERE r.cacheId = @cacheId;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
@@ -41,22 +41,22 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetRatingListFor(cmd);
         }
 
-        public IList<Rating> GetRatingsForUser(string userName) {
+        public IList<Rating> GetRatingsForUser(int userId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT r.id, r.cacheId, r.creatorName, r.creationDate, r.grade " +
+                "SELECT r.id, r.cacheId, r.creatorId, r.creationDate, r.grade " +
                 "FROM cache_rating r " +
-                "WHERE r.creatorName = @creatorName;");
-            database.DefineParameter(cmd, "creatorName", DbType.String, userName);
+                "WHERE r.creatorId = @creatorId;");
+            database.DefineParameter(cmd, "creatorId", DbType.Int32, userId);
 
             return GetRatingListFor(cmd);
         }
 
-      public IList<Rating> GetRatingsForCacheAndUser ( int cacheId, string userName ) {
+        public IList<Rating> GetRatingsForCacheAndUser(int cacheId, int userId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT r.id, r.cacheId, r.creatorName, r.creationDate, r.grade " +
-                "FROM cache_rating r WHERE r.cacheId = @cacheId AND r.creatorName = @creatorName;");
+                "SELECT r.id, r.cacheId, r.creatorId, r.creationDate, r.grade " +
+                "FROM cache_rating r WHERE r.cacheId = @cacheId AND r.creatorId = @creatorId;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
-            database.DefineParameter(cmd, "creatorName", DbType.String, userName);
+            database.DefineParameter(cmd, "creatorId", DbType.Int32, userId);
 
             return GetRatingListFor(cmd);
         }
@@ -73,13 +73,12 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return database.ExecuteScalarDoubleQuery(cmd);
         }
 
-     
         public int Insert(Rating rating) {
             IDbCommand cmd = database.CreateCommand(
-                "INSERT INTO cache_rating (cacheId, creatorName, creationDate, grade) " +
-                "VALUES (@cacheId, @creatorName, @creationDate, @grade);");
+                "INSERT INTO cache_rating (cacheId, creatorId, creationDate, grade) " +
+                "VALUES (@cacheId, @creatorId, @creationDate, @grade);");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, rating.CacheId);
-            database.DefineParameter(cmd, "creatorName", DbType.String, rating.Creator);
+            database.DefineParameter(cmd, "creatorId", DbType.Int32, rating.CreatorId);
             database.DefineParameter(cmd, "creationDate", DbType.Date, rating.CreationDate);
             database.DefineParameter(cmd, "grade", DbType.Int32, rating.Grade);
 
@@ -103,7 +102,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                     ratings.Add(new Rating(
                         ( int ) reader["id"],
                         ( int ) reader["cacheId"],
-                        ( string ) reader["creatorName"],
+                        ( int ) reader["creatorId"],
                         DateTime.Parse(reader["creationDate"].ToString()),
                         ( int ) reader["grade"]));
                 }
