@@ -13,7 +13,7 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         IList<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium);
         IList<Cache> GetByTerrainDifficulty(double diffictulty, FilterCriterium criterium);
         IList<Cache> GetByAverageRating(double rating, FilterCriterium criterium);
-        IList<Cache> GetBySize(CacheSize size, FilterCriterium criterium);
+        IList<Cache> GetBySize(string size, FilterCriterium criterium);
 
         // base for statistical output 
         IList<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);

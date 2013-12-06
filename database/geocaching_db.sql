@@ -17,6 +17,48 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `lt_user_role`
+--
+
+CREATE TABLE IF NOT EXISTS `lt_user_role` (
+  `id` int(11) NOT NULL,
+  `roleDescription` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+
+--
+-- Daten für Tabelle `lt_user_role`
+--
+
+INSERT INTO `lt_user_role` (`id`, `roleDescription`) VALUES
+(1, 'Finder'),
+(2, 'Hider'),
+(3, 'Superuser'),
+(4, 'Inactive');
+
+--
+-- Tabellenstruktur für Tabelle `lt_cache_size`
+--
+
+CREATE TABLE IF NOT EXISTS `lt_cache_size` (
+  `id` int(11) NOT NULL,
+  `sizeDescription` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+
+--
+-- Daten für Tabelle `lt_cache_size`
+--
+
+INSERT INTO `lt_cache_size` (`id`, `sizeDescription`) VALUES
+(1, 'Micro'),
+(2, 'Small'),
+(3, 'Regular'),
+(4, 'Large'),
+(5, 'Other'),
+(6, 'None');
+
+--
 -- Tabellenstruktur für Tabelle `cache`
 --
 
@@ -14608,10 +14650,17 @@ INSERT INTO `user` (`name`, `password`, `email`, `latitude`, `longitude`, `roleC
 --
 
 --
+-- Constraints der Tabelle `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `FK_USER_ROLE` FOREIGN KEY (`roleCode`) REFERENCES `lt_user_role` (`id`) ON UPDATE CASCADE;
+
+--
 -- Constraints der Tabelle `cache`
 --
 ALTER TABLE `cache`
-  ADD CONSTRAINT `FK_OWNER` FOREIGN KEY (`ownerName`) REFERENCES `user` (`name`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_OWNER` FOREIGN KEY (`ownerName`) REFERENCES `user` (`name`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_SIZE` FOREIGN KEY (`sizeCode`) REFERENCES `lt_chache_size` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `cache_image`

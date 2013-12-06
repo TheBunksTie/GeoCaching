@@ -46,8 +46,7 @@ namespace GeoCachingTest {
                 "my special test cache",
                 new DateTime(2010, 10, 17),
                 1.9,
-                2.5,
-                2,
+                2.5, "Regular",
                 "Tobias805",
                 new GeoPosition(47.451, 13.89),
                 "this is a test unit test cache");
@@ -181,7 +180,7 @@ namespace GeoCachingTest {
             expected.Add(new Cache {Id = 441});
             expected.Add(new Cache {Id = 473});
 
-            IList<Cache> actual = target.GetBySize(CacheSize.Large, FilterCriterium.Exact);
+            IList<Cache> actual = target.GetBySize("Large", FilterCriterium.Exact);
             Assert.AreEqual(expected.Count, actual.Count);
 
             foreach (Cache cache in expected) {
