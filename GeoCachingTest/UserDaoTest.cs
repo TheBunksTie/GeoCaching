@@ -20,16 +20,11 @@ namespace GeoCachingTest {
         [TestMethod]
         public void InsertAndDeleteTest() {
             const string userName = "SpecialTestUser";
-            var user = new User(userName,
-                "top-secret",
-                "top@secret.com",
-                new GeoPosition(81.56, 14.56), "Finder",
-                new DateTime(2013, 07, 09));
+            var user = new User(-1, userName, "top-secret", "top@secret.com", new GeoPosition(81.56, 14.56), "Finder");
             Assert.IsTrue(target.Insert(user));
 
             User newUser = target.GetByName(userName);
             Assert.AreEqual(user.Position, newUser.Position);
-            Assert.AreEqual(user.RegistrationDate, newUser.RegistrationDate);
             Assert.AreEqual(user.Email, newUser.Email);
 
             Assert.IsTrue(target.Delete(userName));
@@ -47,12 +42,10 @@ namespace GeoCachingTest {
         public void GetByNameTest() {
             const String userName = "Lukas557";
             var pos = new GeoPosition(47.425659, 13.825798);
-            var registrationDate = new DateTime(2007, 05, 12);
             User actual = target.GetByName(userName);
 
             Assert.AreEqual(userName, actual.Name);
             Assert.AreEqual(pos, actual.Position);
-            Assert.AreEqual(registrationDate, actual.RegistrationDate);
         }
 
         [TestMethod]

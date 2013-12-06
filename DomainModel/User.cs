@@ -3,14 +3,18 @@
 namespace Swk5.GeoCaching.DomainModel {
 
     public class User : IEquatable<User> {
-        public User(string name, string password, string email, GeoPosition position, string role, DateTime registrationDate) {
+        private int id;
+
+        public User(int id, string name, string password, string email, GeoPosition position, string role) {
+            Id = id;
             Name = name;
             Password = password;
             Email = email;
             Position = position;
             Role = role;
-            RegistrationDate = registrationDate;
         }
+
+        public int Id { get; set; }
 
         public string Name { get; set; }
         public string Password { get; set; }
@@ -18,8 +22,6 @@ namespace Swk5.GeoCaching.DomainModel {
         public GeoPosition Position { get; set; }
 
         public string Role { get; set; }
-
-        public DateTime RegistrationDate { get; set; }
 
         public bool Equals(User other) {
             if (ReferenceEquals(null, other)) {
