@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
@@ -6,6 +7,7 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         // read
         List<User> GetAll();
         User GetByName(string name);
+        List<String> GetAllUserRoles(); 
 
         // write
         bool Insert(User user);

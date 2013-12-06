@@ -8,6 +8,8 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         Cache GetById(int id);
         IList<Cache> GetAll();
 
+        List<string> GetAllCacheSizes(); 
+            
         // for finding caches on web plattform
         IList<Cache> GetByOwner(string userName);
         IList<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium);

@@ -31,6 +31,19 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                 "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id;"));
         }
 
+        public List<string> GetAllCacheSizes() {
+            List<string> sizes = new List<string>();
+
+            IDbCommand cmd = database.CreateCommand("SELECT sizeDescription FROM lt_cache_size;");
+
+            using ( IDataReader reader = database.ExecuteReader(cmd) ) {
+                while ( reader.Read() ) {
+                    sizes.Add((string) reader["sizeDescription"]);
+                }
+            }
+            return sizes;
+        }
+
         public IList<Cache> GetByOwner(string userName) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerName, c.latitude, c.longitude, c.description " +

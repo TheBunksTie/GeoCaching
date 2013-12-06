@@ -30,6 +30,19 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return null;
         }
 
+        public List<string> GetAllUserRoles() {
+            List<string> roles = new List<string>();
+
+            IDbCommand cmd = database.CreateCommand("SELECT roleDescription FROM lt_user_role;");
+
+            using ( IDataReader reader = database.ExecuteReader(cmd) ) {
+                while ( reader.Read() ) {
+                    roles.Add((string) reader["roleDescription"]);
+                }
+            }
+            return roles;
+        }
+
         public bool Insert(User user) {
             int roleCode = GetIdForRole(user.Role);
 
