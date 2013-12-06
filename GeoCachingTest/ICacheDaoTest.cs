@@ -42,13 +42,7 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void InsertDeleteTest() {
-            var cache = new Cache(-1,
-                "my special test cache",
-                new DateTime(2010, 10, 17),
-                1.9,
-                2.5, "Regular",
-                "Tobias805",
-                new GeoPosition(47.451, 13.89),
+            var cache = new Cache(-1, "my special test cache", new DateTime(2010, 10, 17), 1.9, 2.5, "Regular", 223, new GeoPosition(47.451, 13.89),
                 "this is a test unit test cache");
             int id = target.Insert(cache);
             Assert.IsTrue(id > 0);
@@ -56,7 +50,7 @@ namespace GeoCachingTest {
             Cache newState = target.GetById(id);
             Assert.AreEqual(cache.TerrainDifficulty, newState.TerrainDifficulty);
             Assert.AreEqual(cache.Name, newState.Name);
-            Assert.AreEqual(cache.Owner, newState.Owner);
+            Assert.AreEqual(cache.OwnerId, newState.OwnerId);
 
             bool success = target.Delete(cache.Id);
             Assert.IsTrue(success);
@@ -148,7 +142,7 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetCachesByOwnerTest() {
-            const string owner = "David461";
+            const int ownerId = 49;
             IList<Cache> expected = new List<Cache>();
             expected.Add(new Cache {Id = 57});
             expected.Add(new Cache {Id = 75});
@@ -159,7 +153,7 @@ namespace GeoCachingTest {
             expected.Add(new Cache {Id = 444});
             expected.Add(new Cache {Id = 459});
 
-            IList<Cache> actual = target.GetByOwner(owner);
+            IList<Cache> actual = target.GetByOwner(ownerId);
             Assert.AreEqual(expected.Count, actual.Count);
 
             foreach (Cache cache in expected) {

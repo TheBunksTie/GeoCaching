@@ -8,14 +8,14 @@ namespace Swk5.GeoCaching.DomainModel {
         private double cacheDifficulty;
         private double terrainDifficulty;
 
-        public Cache(int id, string name, DateTime creationDate, double cacheDifficulty, double terrainDifficulty, string size, string owner, GeoPosition position, string description) {
+        public Cache(int id, string name, DateTime creationDate, double cacheDifficulty, double terrainDifficulty, string size, int ownerId, GeoPosition position, string description) {
             Id = id;
             Name = name;
             CreationDate = creationDate;
             CacheDifficulty = cacheDifficulty;
             TerrainDifficulty = terrainDifficulty;
             Size = size;
-            Owner = owner;
+            OwnerId = ownerId;
             Position = position;
             Description = description;
         }
@@ -51,7 +51,7 @@ namespace Swk5.GeoCaching.DomainModel {
         }
 
         public string Size { get; set; }
-        public string Owner { get; set; }
+        public int OwnerId { get; set; }
         public GeoPosition Position { get; set; }
         public string Description { get; set; }
 
