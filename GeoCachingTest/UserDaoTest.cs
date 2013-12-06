@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DAL.MySQLServer;
 using Swk5.GeoCaching.DAL.MySQLServer.Dao;
@@ -24,8 +23,7 @@ namespace GeoCachingTest {
             var user = new User(userName,
                 "top-secret",
                 "top@secret.com",
-                new GeoPosition(81.56, 14.56),
-                2,
+                new GeoPosition(81.56, 14.56), "Finder",
                 new DateTime(2013, 07, 09));
             Assert.IsTrue(target.Insert(user));
 

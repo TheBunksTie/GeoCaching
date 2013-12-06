@@ -1,22 +1,14 @@
 ﻿using System;
 
 namespace Swk5.GeoCaching.DomainModel {
-    public enum UserRole {
-        Finder = 1,
-        Hider = 2,
-        FinderHider = 3,
-        Inactive = 4
-    }
 
     public class User : IEquatable<User> {
-        private int roleCode;
-
-        public User(string name, string password, string email, GeoPosition position, int role, DateTime registrationDate) {
+        public User(string name, string password, string email, GeoPosition position, string role, DateTime registrationDate) {
             Name = name;
             Password = password;
             Email = email;
             Position = position;
-            RoleCode = role;
+            Role = role;
             RegistrationDate = registrationDate;
         }
 
@@ -25,22 +17,7 @@ namespace Swk5.GeoCaching.DomainModel {
         public string Email { get; set; }
         public GeoPosition Position { get; set; }
 
-        public UserRole Role {
-            get { return ( UserRole ) roleCode; }
-            set { roleCode = ( int ) value; }
-        }
-
-        public int RoleCode {
-            get { return roleCode; }
-            set {
-                if (value >= 1 && value <= 4) {
-                    roleCode = value;
-                }
-                else {
-                    throw new ArgumentException();
-                }
-            }
-        }
+        public string Role { get; set; }
 
         public DateTime RegistrationDate { get; set; }
 

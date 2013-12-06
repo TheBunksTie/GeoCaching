@@ -11,14 +11,15 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public List<User> GetAll() {
             return GetUserListFor(database.CreateCommand(
-                "SELECT u.name, u.password, u.email, u.latitude, u.longitude, u.roleCode, u.registrationDate " +
-                "FROM user u;"));
+                "SELECT u.name, u.password, u.email, u.latitude, u.longitude, lt.roleDescription, u.registrationDate " +
+                "FROM user u INNER JOIN lt_user_role lt ON u.roleCode = lt.id;"));
         }
 
         public User GetByName(string name) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT u.name, u.password, u.email, u.latitude, u.longitude, u.roleCode, u.registrationDate " +
-                "FROM user u WHERE u.name = @name;");
+                "SELECT u.name, u.password, u.email, u.latitude, u.longitude, lt.roleDescription, u.registrationDate " +
+                "FROM user u INNER JOIN lt_user_role lt ON u.roleCode = lt.id " +
+                "WHERE u.name = @name;");
             database.DefineParameter(cmd, "name", DbType.String, name);
 
             IList<User> list = GetUserListFor(cmd);
@@ -30,6 +31,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         public bool Insert(User user) {
+            int roleCode = GetIdForRole(user.Role);
+
             IDbCommand cmd = database.CreateCommand(
                 "INSERT INTO user (name, password, email, latitude, longitude, roleCode, registrationDate) " +
                 "VALUES (@name, @password, @email, @latitude, @longitude, @roleCode, @registrationDate);");
@@ -38,13 +41,15 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             database.DefineParameter(cmd, "email", DbType.String, user.Email);
             database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
             database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
-            database.DefineParameter(cmd, "roleCode", DbType.Int32, user.RoleCode);
+            database.DefineParameter(cmd, "roleCode", DbType.Int32, roleCode);
             database.DefineParameter(cmd, "registrationDate", DbType.Date, user.RegistrationDate);
 
             return database.ExecuteNonQuery(cmd) == 1;
         }
 
         public bool Update(User user) {
+            int roleCode = GetIdForRole(user.Role);
+
             IDbCommand cmd = database.CreateCommand(
                 "UPDATE user SET password = @password, email = @email, latitude =  @latitude, longitude = @longitude, roleCode = @roleCode, registrationDate = @registrationDate " +
                 "WHERE name = @name;");
@@ -52,7 +57,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             database.DefineParameter(cmd, "email", DbType.String, user.Email);
             database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
             database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
-            database.DefineParameter(cmd, "roleCode", DbType.Int32, user.RoleCode);
+            database.DefineParameter(cmd, "roleCode", DbType.Int32, roleCode);
             database.DefineParameter(cmd, "registrationDate", DbType.Date, user.RegistrationDate);
             // primary key
             database.DefineParameter(cmd, "name", DbType.String, user.Name);
@@ -69,6 +74,13 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return database.ExecuteNonQuery(cmd) == 1;
         }
 
+        private int GetIdForRole(string role) {
+            IDbCommand cmd = database.CreateCommand("SELECT id FROM lt_user_role WHERE roleDescription = @role;");
+            database.DefineParameter(cmd, "role", DbType.String, role);
+
+            return database.ExecuteScalarQuery<int>(cmd);
+        }
+
         private List<User> GetUserListFor(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
                 List<User> users = new List<User>();
@@ -78,8 +90,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                         ( string ) reader["name"],
                         ( string ) reader["password"],
                         ( string ) reader["email"],
-                        new GeoPosition(( double ) reader["latitude"], ( double ) reader["longitude"]),
-                        ( int ) reader["roleCode"],
+                        new GeoPosition(( double ) reader["latitude"], ( double ) reader["longitude"]), 
+                        (string) reader["roleDescription"],
                         DateTime.Parse(reader["registrationDate"].ToString())));
                 }
                 return users;
