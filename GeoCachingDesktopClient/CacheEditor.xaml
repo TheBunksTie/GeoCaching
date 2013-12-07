@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="Swk5.GeoCaching.Desktop.CacheEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <ListBox Name="listCaches" Grid.Row="0"  BorderThickness="0" Margin="2"
+                     ItemsSource="{Binding Path=Caches}"
+                     SelectedItem="{Binding Path=CurrentCache, Mode=TwoWay}"
+                     SelectionChanged="OnSelectedCacheChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                            (<TextBlock Text="{Binding Path=Size}"></TextBlock>)
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        
+        <Grid Grid.Column="1">
+            <!--<m:Map Center="48.366514,14.506016" ZoomLevel="12"/>-->
+        </Grid>
+
+    </Grid>
+</UserControl>
