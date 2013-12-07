@@ -6,7 +6,7 @@ using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
-    public class RatingDao : AbstractDao, IRatingDao {
+    public class RatingDao : AbstractDaoBase, IRatingDao {
         public RatingDao(IDatabase database) : base(database) {}
 
         public IList<Rating> GetAll() {

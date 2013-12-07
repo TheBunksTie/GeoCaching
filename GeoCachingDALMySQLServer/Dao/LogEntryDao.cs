@@ -6,7 +6,7 @@ using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
-    public class LogEntryDao : AbstractDao, ILogEntryDao {
+    public class LogEntryDao : AbstractDaoBase, ILogEntryDao {
         public LogEntryDao(IDatabase database) : base(database) {}
 
         public IList<LogEntry> GetAll() {

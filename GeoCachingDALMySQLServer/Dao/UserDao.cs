@@ -5,7 +5,7 @@ using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
-    public class UserDao : AbstractDao, IUserDao {
+    public class UserDao : AbstractDaoBase, IUserDao {
         public UserDao(IDatabase database) : base(database) {}
 
         public List<User> GetAll() {

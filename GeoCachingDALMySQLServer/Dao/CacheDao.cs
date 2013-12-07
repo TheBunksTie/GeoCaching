@@ -6,7 +6,7 @@ using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
-    public class CacheDao : AbstractDao, ICacheDao {
+    public class CacheDao : AbstractDaoBase, ICacheDao {
         public CacheDao(IDatabase database) : base(database) {}
 
         public Cache GetById(int id) {
