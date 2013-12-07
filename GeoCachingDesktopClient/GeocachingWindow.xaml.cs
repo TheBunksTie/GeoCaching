@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Swk5.GeoCaching.BusinessLogic;
+using Swk5.GeoCaching.BusinessLogic.UserManager;
 using Swk5.GeoCaching.Desktop.ViewModel.User;
 
 namespace Swk5.GeoCaching.Desktop {
@@ -8,7 +9,7 @@ namespace Swk5.GeoCaching.Desktop {
     /// </summary>
     public partial class GeocachingWindow : Window {
 
-        private IUserManager userManager = new UserManager();
+        private IUserManager userManager = GeoCachingBLFactory.GetUserManager();
 
         public GeocachingWindow ( ) {
             InitializeComponent();
