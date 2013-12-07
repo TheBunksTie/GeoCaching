@@ -12,7 +12,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             this.database = database;
         }
 
-        public IList<String> GetAllForCache(int cacheId) {
+        public List<string> GetAllForCache(int cacheId) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT fileName FROM cache_image " +
                 "WHERE cacheId = @cacheId;");
@@ -41,9 +41,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return database.ExecuteNonQuery(cmd) == 1;
         }
 
-        private IList<String> GetImagesForCache(IDbCommand cmd) {
+        private List<String> GetImagesForCache(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
-                IList<string> images = new List<string>();
+                List<string> images = new List<string>();
 
                 while (reader.Read()) {
                     images.Add(( string ) reader["fileName"]);

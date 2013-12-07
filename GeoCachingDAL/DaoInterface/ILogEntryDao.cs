@@ -4,12 +4,12 @@ using Swk5.GeoCaching.DomainModel;
 namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
     public interface ILogEntryDao {
         // read
-        IList<LogEntry> GetAll();
+        List<LogEntry> GetAll();
         LogEntry GetById(int id);
 
-        IList<LogEntry> GetLogEntriesForCache(int cacheId);
-        IList<LogEntry> GetLogentriesForUser(int userId);
-        IList<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, int userId);
+        List<LogEntry> GetLogEntriesForCache(int cacheId);
+        List<LogEntry> GetLogentriesForUser(int userId);
+        List<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, int userId);
 
         // write
         int Insert(LogEntry logEntry);

@@ -25,7 +25,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return null;
         }
 
-        public IList<Cache> GetAll() {
+        public List<Cache> GetAll() {
             return GetCacheListFor(database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
                 "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id;"));
@@ -44,7 +44,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return sizes;
         }
 
-        public IList<Cache> GetByOwner(int id) {
+        public List<Cache> GetByOwner(int id) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
                 "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
@@ -54,7 +54,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetCacheListFor(cmd);
         }
 
-        public IList<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium) {
+        public List<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription,c.ownerId, c.latitude, c.longitude, c.description " +
                 "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
@@ -64,7 +64,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetCacheListFor(cmd);
         }
 
-        public IList<Cache> GetByTerrainDifficulty(double diffictulty, FilterCriterium criterium) {
+        public List<Cache> GetByTerrainDifficulty(double diffictulty, FilterCriterium criterium) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
                 "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
@@ -74,7 +74,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetCacheListFor(cmd);
         }
 
-        public IList<Cache> GetByAverageRating(double rating, FilterCriterium criterium) {
+        public List<Cache> GetByAverageRating(double rating, FilterCriterium criterium) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
                 "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
@@ -89,7 +89,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetCacheListFor(cmd);
         }
 
-        public IList<Cache> GetBySize(string size, FilterCriterium criterium) {
+        public List<Cache> GetBySize(string size, FilterCriterium criterium) {
 
             int sizeCode = GetIdForSize(size);
            
@@ -102,7 +102,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetCacheListFor(cmd);
         }
 
-        public IList<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to) {
+        public List<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
                 "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
@@ -120,7 +120,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetCacheListFor(cmd);
         }
 
-        public IList<Cache> GetInRegionFoundBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to) {
+        public List<Cache> GetInRegionFoundBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
                 "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
@@ -140,7 +140,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetCacheListFor(cmd);
         }
 
-        public IList<Cache> GetInRegionRatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to) {
+        public List<Cache> GetInRegionRatedBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
                 "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
@@ -235,9 +235,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return database.ExecuteScalarQuery<string>(cmd);
         }
 
-        private IList<Cache> GetCacheListFor(IDbCommand cmd) {
+        private List<Cache> GetCacheListFor(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
-                IList<Cache> caches = new List<Cache>();
+                List<Cache> caches = new List<Cache>();
 
                 while (reader.Read()) {
                     caches.Add(new Cache(

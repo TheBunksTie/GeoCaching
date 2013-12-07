@@ -9,7 +9,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
     public class LogEntryDao : AbstractDaoBase, ILogEntryDao {
         public LogEntryDao(IDatabase database) : base(database) {}
 
-        public IList<LogEntry> GetAll() {
+        public List<LogEntry> GetAll() {
             return GetLogEntryListFor(database.CreateCommand(
                 "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l;"));
@@ -30,7 +30,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return null;
         }
 
-        public IList<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, int userId) {
+        public List<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, int userId) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l " +
@@ -41,7 +41,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetLogEntryListFor(cmd);
         }
 
-        public IList<LogEntry> GetLogEntriesForCache(int cacheId) {
+        public List<LogEntry> GetLogEntriesForCache(int cacheId) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l " +
@@ -51,7 +51,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetLogEntryListFor(cmd);
         }
 
-        public IList<LogEntry> GetLogentriesForUser(int userId) {
+        public List<LogEntry> GetLogentriesForUser(int userId) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
                 "FROM cache_log l " +
@@ -83,9 +83,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return entry.Id;
         }
 
-        private IList<LogEntry> GetLogEntryListFor(IDbCommand cmd) {
+        private List<LogEntry> GetLogEntryListFor(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
-                IList<LogEntry> entries = new List<LogEntry>();
+                List<LogEntry> entries = new List<LogEntry>();
 
                 while (reader.Read()) {
                     entries.Add(new LogEntry(

@@ -9,7 +9,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
     public class RatingDao : AbstractDaoBase, IRatingDao {
         public RatingDao(IDatabase database) : base(database) {}
 
-        public IList<Rating> GetAll() {
+        public List<Rating> GetAll() {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT r.id, r.cacheId, r.creatorId, r.creationDate, r.grade " +
                 "FROM cache_rating r;");
@@ -31,7 +31,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return null;
         }
 
-        public IList<Rating> GetRatingsForCache(int cacheId) {
+        public List<Rating> GetRatingsForCache(int cacheId) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT r.id, r.cacheId, r.creatorId, r.creationDate, r.grade " +
                 "FROM cache_rating r " +
@@ -41,7 +41,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetRatingListFor(cmd);
         }
 
-        public IList<Rating> GetRatingsForUser(int userId) {
+        public List<Rating> GetRatingsForUser(int userId) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT r.id, r.cacheId, r.creatorId, r.creationDate, r.grade " +
                 "FROM cache_rating r " +
@@ -51,7 +51,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetRatingListFor(cmd);
         }
 
-        public IList<Rating> GetRatingsForCacheAndUser(int cacheId, int userId) {
+        public List<Rating> GetRatingsForCacheAndUser(int cacheId, int userId) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT r.id, r.cacheId, r.creatorId, r.creationDate, r.grade " +
                 "FROM cache_rating r WHERE r.cacheId = @cacheId AND r.creatorId = @creatorId;");
@@ -94,9 +94,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return rating.Id;
         }
 
-        private IList<Rating> GetRatingListFor(IDbCommand cmd) {
+        private List<Rating> GetRatingListFor(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
-                IList<Rating> ratings = new List<Rating>();
+                List<Rating> ratings = new List<Rating>();
 
                 while (reader.Read()) {
                     ratings.Add(new Rating(
