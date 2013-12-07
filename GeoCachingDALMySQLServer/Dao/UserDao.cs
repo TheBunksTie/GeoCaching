@@ -11,7 +11,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         public List<User> GetAll() {
             return GetUserListFor(database.CreateCommand(
                 "SELECT u.id, u.name, u.password, u.email, u.latitude, u.longitude, lt.roleDescription " +
-                "FROM user u INNER JOIN lt_user_role lt ON u.roleCode = lt.id;"));
+                "FROM user u INNER JOIN lt_user_role lt ON u.roleCode = lt.id " +
+                "ORDER BY u.name ASC;"));
         }
 
         public User GetByName(string name) {
@@ -57,7 +58,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return roles;
         }
 
-        public bool Insert(User user) {
+        public int Insert(User user) {
             int roleCode = GetIdForRole(user.Role);
 
             IDbCommand cmd = database.CreateCommand(
@@ -70,7 +71,15 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
             database.DefineParameter(cmd, "roleCode", DbType.Int32, roleCode);
 
-            return database.ExecuteNonQuery(cmd) == 1;
+            if ( database.ExecuteNonQuery(cmd) == 1 ) {
+                // retrieve id of just generated database entry and store in in cache
+                IDbCommand idCmd = database.CreateCommand("SELECT last_insert_id();");
+                user.Id = ( int ) database.ExecuteScalarQuery<long>(idCmd);
+            }
+            else {
+                user.Id = -1;
+            }
+            return user.Id;            
         }
 
         public bool Update(User user) {

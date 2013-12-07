@@ -1,5 +1,6 @@
 ﻿using System;
 using Swk5.GeoCaching.BusinessLogic;
+using Swk5.GeoCaching.BusinessLogic.UserManager;
 using Swk5.GeoCaching.DomainModel;
 
 
@@ -10,10 +11,10 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         private readonly DomainModel.User user;
         private string passwordRepition;
 
-
-        private RelayCommand createCommand;
-        private RelayCommand deleteCommand;
         private RelayCommand updateCommand;
+
+
+
         private IUserManager userManager;
 
         public UserVM(IUserManager userManager, DomainModel.User user) {
@@ -21,13 +22,20 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
             this.user = user;
         }
 
+        public int Id {
+            get { return user.Id; }
+        }
+
         public string Name {
             get { return user.Name; }
             set {
-                if (user.Name != value) {
+                if (value.Length > 3 && user.Name != value) {
                     user.Name = value;
 
                     RaisePropertyChangedEvent(vm => vm.Name);
+                }
+                else {
+                    throw new ArgumentException("Error: User name must no be empty.");
                 }
             }
         }
@@ -42,10 +50,10 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
             }
         }
 
-        public UserRole Role {
+        public string Role {
             get { return user.Role; }
             set {
-                if (user.Role != value) {
+                if ( user.Role != value ) {
                     user.Role = value;
 
                     RaisePropertyChangedEvent(vm => vm.Role);
@@ -59,6 +67,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
             }
             set {
                 if (Math.Abs(user.Position.Latitude - value) > TOLERANCE) {
+
                     GeoPosition currentPosition = user.Position;
                     currentPosition.Latitude = value;
                     user.Position = currentPosition;
@@ -91,12 +100,18 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
             }
         }
 
-        public string RegistrationDate {
-            get { return user.RegistrationDate.ToShortDateString(); }
-            set {
-                DateTime registrationDate = DateTime.Parse(value);
-            }
+        public RelayCommand UpdateCommand {
+            get {
+                if (updateCommand == null) {
+                    updateCommand = new RelayCommand(param => userManager.UpdateExistingUser(user));
+                }
 
+                return updateCommand;
+            }
+        }
+
+        private void UpdateUser() {
+            throw new NotImplementedException();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         List<String> GetAllUserRoles();
 
         // write
-        bool Insert(User user);
+        int Insert(User user);
         bool Update(User user);
         bool Delete(string userName);
         bool DeleteById(int id);

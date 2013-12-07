@@ -21,7 +21,7 @@ namespace GeoCachingTest {
         public void InsertAndDeleteTest() {
             const string userName = "SpecialTestUser";
             var user = new User(-1, userName, "top-secret", "top@secret.com", new GeoPosition(81.56, 14.56), "Finder");
-            Assert.IsTrue(target.Insert(user));
+            Assert.IsTrue(target.Insert(user) > 240);
 
             User newUser = target.GetByName(userName);
             Assert.AreEqual(user.Position, newUser.Position);
