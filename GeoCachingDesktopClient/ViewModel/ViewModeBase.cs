@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 
 namespace Swk5.GeoCaching.Desktop.ViewModel {
-    public abstract class ViewModelBase<TViewModel> : INotifyPropertyChanged {
+    public abstract class AbstractViewModelBase<TViewModel> : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void RaisePropertyChangedEvent<TProperty>(Expression<Func<TViewModel, TProperty>> propertySelector) {

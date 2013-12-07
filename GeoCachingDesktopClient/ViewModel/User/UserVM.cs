@@ -1,21 +1,16 @@
 ﻿using System;
-using Swk5.GeoCaching.BusinessLogic;
 using Swk5.GeoCaching.BusinessLogic.UserManager;
 using Swk5.GeoCaching.DomainModel;
 
-
 namespace Swk5.GeoCaching.Desktop.ViewModel.User {
-    public class UserVM : ViewModelBase<UserVM> {
+    public class UserVM : AbstractViewModelBase<UserVM> {
         private const double TOLERANCE = 0.000001;
 
         private readonly DomainModel.User user;
-        private string passwordRepition;
+        //private string passwordRepition;
 
+        private readonly IUserManager userManager;
         private RelayCommand updateCommand;
-
-
-
-        private IUserManager userManager;
 
         public UserVM(IUserManager userManager, DomainModel.User user) {
             this.userManager = userManager;
@@ -53,7 +48,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         public string Role {
             get { return user.Role; }
             set {
-                if ( user.Role != value ) {
+                if (user.Role != value) {
                     user.Role = value;
 
                     RaisePropertyChangedEvent(vm => vm.Role);
@@ -62,12 +57,9 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         }
 
         public double Latitude {
-            get {
-                return user.Position.Latitude;
-            }
+            get { return user.Position.Latitude; }
             set {
                 if (Math.Abs(user.Position.Latitude - value) > TOLERANCE) {
-
                     GeoPosition currentPosition = user.Position;
                     currentPosition.Latitude = value;
                     user.Position = currentPosition;
@@ -80,7 +72,6 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
             get { return user.Position.Longitude; }
             set {
                 if (Math.Abs(user.Position.Longitude - value) > TOLERANCE) {
-                    
                     GeoPosition currentPosition = user.Position;
                     currentPosition.Longitude = value;
                     user.Position = currentPosition;

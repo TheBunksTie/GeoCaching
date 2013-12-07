@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
-using Swk5.GeoCaching.BusinessLogic;
 using Swk5.GeoCaching.BusinessLogic.UserManager;
 
 namespace Swk5.GeoCaching.Desktop.ViewModel.User {
     // represent a list of all users
-    public class UserCollectionVM : ViewModelBase<UserCollectionVM> {
+    public class UserCollectionVM : AbstractViewModelBase<UserCollectionVM> {
         private readonly IUserManager userManager;
 
         private RelayCommand createCommand;
-        private UserVM currentUser;
         private RelayCommand deleteCommand;
+
+        private UserVM currentUser;
 
         public UserCollectionVM(IUserManager userManager) {
             this.userManager = userManager;
@@ -60,14 +60,13 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         }
 
         private void NewUser() {
-
             try {
                 // create new dummy user and set him as current one
-                CurrentUser = new UserVM(userManager, userManager.CreateNewDefaultUser());                
+                CurrentUser = new UserVM(userManager, userManager.CreateNewDefaultUser());
                 Users.Add(CurrentUser);
             }
-            catch (Exception e) {                
-                MessageBox.Show(e.Message, "User manager error",  MessageBoxButton.OK, MessageBoxImage.Error);                
+            catch (Exception e) {
+                MessageBox.Show(e.Message, "User manager error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -80,7 +79,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         private async void LoadUsers() {
             Users.Clear();
 
-            IEnumerator<DomainModel.User> e = userManager.GetUsers().GetEnumerator();
+            IEnumerator<DomainModel.User> e = userManager.GetUserList().GetEnumerator();
             while (await Task.Factory.StartNew(() => e.MoveNext())) {
                 Users.Add(new UserVM(userManager, e.Current));
             }
@@ -89,7 +88,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         private async void LoadUserRoleList() {
             RoleList.Clear();
 
-            IEnumerator<string> e = userManager.GetUserRoles().GetEnumerator();
+            IEnumerator<string> e = userManager.GetUserRoleList().GetEnumerator();
             while (await Task.Factory.StartNew(() => e.MoveNext())) {
                 RoleList.Add(e.Current);
             }
