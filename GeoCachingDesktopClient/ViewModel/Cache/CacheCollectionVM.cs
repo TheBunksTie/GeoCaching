@@ -16,6 +16,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
             this.cacheManager = cacheManager;
 
             Caches = new ObservableCollection<CacheVM>();
+            Pins = new ObservableCollection<PushpinVM>();                 
             LoadCaches();
 
             SizeList = new List<string>();
@@ -23,6 +24,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
         }
 
         public ObservableCollection<CacheVM> Caches { get; private set; }
+        public ObservableCollection<PushpinVM> Pins { get; private set; } 
         public List<string> SizeList { get; private set; }
 
         public CacheVM CurrentCache {
@@ -49,7 +51,9 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
 
             IEnumerator<DomainModel.Cache> e = cacheManager.GetCacheList().GetEnumerator();
             while (await Task.Factory.StartNew(() => e.MoveNext())) {
-                Caches.Add(new CacheVM(cacheManager, e.Current));
+                CacheVM cache = new CacheVM(cacheManager, e.Current);
+                Caches.Add(cache);
+                Pins.Add(new PushpinVM(cache));
             }
         }
     }
