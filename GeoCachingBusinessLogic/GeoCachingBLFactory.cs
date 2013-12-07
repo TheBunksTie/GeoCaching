@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Swk5.GeoCaching.BusinessLogic.AuthentificationManager;
+﻿using Swk5.GeoCaching.BusinessLogic.AuthentificationManager;
 using Swk5.GeoCaching.BusinessLogic.CacheManager;
 using Swk5.GeoCaching.BusinessLogic.StatisticsManager;
 using Swk5.GeoCaching.BusinessLogic.UserManager;
@@ -19,18 +14,16 @@ namespace Swk5.GeoCaching.BusinessLogic {
             return authentificationManager ?? (authentificationManager = new AuthentificationManager.AuthentificationManager());
         }
 
-        public static ICacheManager GetCacheManager ( ) {
-            return cacheManager ?? ( cacheManager = new CacheManager.CacheManager());
+        public static ICacheManager GetCacheManager() {
+            return cacheManager ?? (cacheManager = new CacheManager.CacheManager());
         }
 
-        public static IStatisticsManager GetStatisticsManager ( ) {
-            return statisticsManager ?? ( statisticsManager = new StatisticsManager.StatisticsManager());
+        public static IStatisticsManager GetStatisticsManager() {
+            return statisticsManager ?? (statisticsManager = new StatisticsManager.StatisticsManager());
         }
 
-        public static IUserManager GetUserManager ( ) {
-            return userManager ?? ( userManager = new UserManager.UserManager());
+        public static IUserManager GetUserManager() {
+            return userManager ?? (userManager = new UserManager.UserManager());
         }
     }
-
-    
 }

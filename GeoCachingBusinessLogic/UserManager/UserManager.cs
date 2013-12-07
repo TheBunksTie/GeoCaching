@@ -5,15 +5,14 @@ using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.BusinessLogic.UserManager {
-    public class UserManager : IUserManager {
-        private static readonly IDatabase database = DalFactory.CreateDatabase();
+    public class UserManager : AbstractManagerBase, IUserManager {       
         private readonly IUserDao userDao = DalFactory.CreateUserDao(database);
 
-        public List<User> GetUsers() {
+        public List<User> GetUserList() {
             return userDao.GetAll();
         }
 
-        public List<string> GetUserRoles() {
+        public List<string> GetUserRoleList() {
             return userDao.GetAllUserRoles();
         }
 
