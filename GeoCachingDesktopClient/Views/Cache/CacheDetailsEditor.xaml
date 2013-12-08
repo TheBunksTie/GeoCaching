@@ -1,0 +1,141 @@
+﻿<UserControl x:Class="Swk5.GeoCaching.Desktop.Views.Cache.CacheDetailsEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="500">
+    <Grid Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="0.2*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" MinWidth="55" Text="Images:" Margin="4,2" VerticalAlignment="Center"/>
+            <ListBox Grid.Row="1" Name="ListImages" BorderThickness="0" MinHeight="100" Margin="4,2"
+                    ItemsSource="{Binding Path=CurrentCache.Images}" 
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     SelectedItem="{Binding Path=CurrentImage}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="2">
+                            <!-- TODO acces to real image not via path but image itself-->
+                            <Image Source="{Binding Path=Image}" />
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Grid Grid.Row="2" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="1" Command="{Binding Path=UploadImageCommand}">Add Image</Button>
+                <Button Grid.Column="3" Command="{Binding Path=DeleteImageCommand}">Delete Image</Button>
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock MinWidth="65" Grid.Column="0" Text="Name:" Margin="2" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.Name, Mode=TwoWay, 
+                            ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <!-- creation date -->
+            <Grid Grid.Row="4" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock MinWidth="65" Grid.Column="0" Text="Created On:" Margin="2" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.CreationDateString}"/>
+            </Grid>
+
+            <!-- Difficulties -->
+            <Grid Grid.Row="5" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" MinWidth="65" Text="Difficulty:" Margin="2" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.CacheDifficulty, Mode=TwoWay}"/>
+                <TextBlock Grid.Column="2" Text="Terrain Difficulty:" Margin="10,2" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="3" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.TerrainDifficulty, Mode=TwoWay}"/>
+            </Grid>
+
+            <!-- cache size -->
+            <Grid Grid.Row="6" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" MinWidth="65" Text="Size:" Margin="2" VerticalAlignment="Center"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding Path=SizeList}" SelectedItem="{Binding Path=CurrentCache.Size}"/>
+            </Grid>
+
+            <!-- Position -->
+            <Grid Grid.Row="7" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" MinWidth="65" Text="Latitude:" Margin="2" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.Latitude, Mode=TwoWay}"/>
+                <TextBlock Grid.Column="2" Text="Longitude:" Margin="10,2" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="3" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.Longitude, Mode=TwoWay}"/>
+            </Grid>
+
+            <!-- owner -->
+            <Grid Grid.Row="8" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" MinWidth="65" Text="Owner:" Margin="2" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="{Binding Path=CurrentCache.Owner}" VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- description -->
+            <TextBlock Grid.Row="9" MinWidth="55" Text="Description:" Margin="4,2" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="10" Margin="4,2" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Text="{Binding Path=CurrentCache.Description}"/>
+        </Grid>
+
+        <Grid Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="90" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Name="SaveCacheBtn" Margin="4" Command="{Binding Path=CurrentCache.UpdateCommand}">Save</Button>
+
+        </Grid>
+    </Grid>
+
+
+</UserControl>

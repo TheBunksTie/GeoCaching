@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Swk5.GeoCaching.BusinessLogic.CacheManager;
@@ -15,8 +16,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
         public CacheCollectionVM(ICacheManager cacheManager) {
             this.cacheManager = cacheManager;
 
-            Caches = new ObservableCollection<CacheVM>();
-            Pins = new ObservableCollection<PushpinVM>();                 
+            Caches = new ObservableCollection<CacheVM>();            
             LoadCaches();
 
             SizeList = new List<string>();
@@ -24,7 +24,6 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
         }
 
         public ObservableCollection<CacheVM> Caches { get; private set; }
-        public ObservableCollection<PushpinVM> Pins { get; private set; } 
         public List<string> SizeList { get; private set; }
 
         public CacheVM CurrentCache {
@@ -35,6 +34,32 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
                     RaisePropertyChangedEvent(vm => vm.CurrentCache);
                 }
             }
+        }
+
+        public RelayCommand CreateCacheCommand {
+            get {
+                if (createCommand == null) {
+                    createCommand = new RelayCommand(param => NewCache());
+                }
+                return createCommand;
+            }
+        }
+
+        public RelayCommand DeleteCacheCommand {
+            get {
+                if (deleteCommand == null) {
+                    deleteCommand = new RelayCommand(param => DeleteCache());
+                }
+                return deleteCommand;
+            }
+        }
+
+        private void NewCache() {
+            throw new NotImplementedException();
+        }
+
+        private void DeleteCache() {
+            throw new NotImplementedException();
         }
 
         private async void LoadCacheSizeList() {
@@ -51,9 +76,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
 
             IEnumerator<DomainModel.Cache> e = cacheManager.GetCacheList().GetEnumerator();
             while (await Task.Factory.StartNew(() => e.MoveNext())) {
-                CacheVM cache = new CacheVM(cacheManager, e.Current);
-                Caches.Add(cache);
-                Pins.Add(new PushpinVM(cache));
+                Caches.Add(new CacheVM(cacheManager, e.Current));
             }
         }
     }

@@ -3,7 +3,7 @@ using Swk5.GeoCaching.BusinessLogic;
 using Swk5.GeoCaching.BusinessLogic.UserManager;
 using Swk5.GeoCaching.Desktop.ViewModel.User;
 
-namespace Swk5.GeoCaching.Desktop {
+namespace Swk5.GeoCaching.Desktop.Views.User {
     /// <summary>
     ///     Interaction logic for UserEditor.xaml
     /// </summary>

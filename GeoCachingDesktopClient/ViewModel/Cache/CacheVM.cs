@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Maps.MapControl.WPF;
 using Swk5.GeoCaching.BusinessLogic.CacheManager;
 using Swk5.GeoCaching.DomainModel;
 
@@ -7,11 +8,22 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
         private readonly DomainModel.Cache cache;
         private readonly ICacheManager cacheManager;
         private const double TOLERANCE = 0.000001;
+        private readonly string ownerName; 
+
+        //private readonly CachePin pin;
+        private readonly Location location;
 
         public CacheVM(ICacheManager cacheManager, DomainModel.Cache cache) {
             this.cacheManager = cacheManager;
             this.cache = cache;
+            location = new Location(Latitude, Longitude);
+            ownerName = cacheManager.GetCacheOwner(this.cache).Name;
+
+            // create new image collection vm (includes async loading of all assignes images)
+            Images = new ImageCollectionVM(cacheManager, cache);
         }
+
+        public ImageCollectionVM Images { get; private set; }
 
         public int Id {
             get { return cache.Id; }
@@ -29,6 +41,10 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
 
         public DateTime CreationDate {
             get { return cache.CreationDate; }
+        }
+
+        public string CreationDateString {
+            get { return cache.CreationDate.ToShortDateString(); }
         }
 
         public double CacheDifficulty {
@@ -63,11 +79,11 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
 
         public int OwnerId {
             get { return cache.OwnerId; }
-            set {
-                if ( cache.OwnerId != value ) {
-                    cache.OwnerId = value;
-                    RaisePropertyChangedEvent(vm => vm.OwnerId);
-                }
+        }
+
+        public string Owner {
+            get {
+                return ownerName;
             }
         }
 
@@ -78,6 +94,10 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
                     GeoPosition currentPosition = cache.Position;
                     currentPosition.Latitude = value;
                     cache.Position = currentPosition;
+
+                    // propagate to location
+                    location.Latitude = value;
+
                     RaisePropertyChangedEvent(vm => vm.Latitude);
                 }
             }
@@ -90,6 +110,10 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
                     GeoPosition currentPosition = cache.Position;
                     currentPosition.Longitude = value;
                     cache.Position = currentPosition;
+
+                    // propagate to location
+                    location.Longitude = value;
+
                     RaisePropertyChangedEvent(vm => vm.Longitude);
                 }
             }
@@ -104,6 +128,12 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
                 }
             }
         }
+
+        public Location Location {
+            get { return location; }
+        }
+
+
 
     }
 }
