@@ -21,6 +21,7 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
             ValidateUserInput(u);
 
             if (userDao.GetById(u.Id) != null) {
+                // TODO fix bug
                 // name must be unique, so check if user has not choosen an already exisiting name
                 if (userDao.GetByName(u.Name).Id == u.Id) {
                     userDao.Update(u);

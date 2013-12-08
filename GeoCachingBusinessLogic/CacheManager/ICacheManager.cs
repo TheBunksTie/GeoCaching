@@ -9,8 +9,18 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         // retrieve look up list of all define cache sizes
         List<string> GetCacheSizeList();
 
+        // get username for given id
+        User GetCacheOwner(Cache c);
+
+        // retrieve all assigned picture for one cache
+        List<Image> GetImagesForCache(int cacheId);
+
+        // upload and associate a certain image with a cache
+        bool AssignImageToCache(Image image);
+
         // creates a new cache with default values
-        bool CreateNewDefaultCache(Cache c);
+        bool CreateNewDefaultCache();
+        bool CreateNewCacheFromData(Cache c);
 
         // only updates exisiting cache
         bool UpdateExisitingCache(Cache c);
