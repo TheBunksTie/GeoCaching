@@ -1,53 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
+using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
-    public class ImageDao : IImageDao {
-        private readonly IDatabase database;
+    public class ImageDao : AbstractDaoBase, IImageDao {
+        public ImageDao(IDatabase database) : base(database) {}
 
-        public ImageDao(IDatabase database) {
-            this.database = database;
-        }
-
-        public List<string> GetAllForCache(int cacheId) {
+        public List<Image> GetAllForCache(int cacheId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT fileName FROM cache_image " +
+                "SELECT id, cacheId, fileName FROM cache_image " +
                 "WHERE cacheId = @cacheId;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
 
             return GetImagesForCache(cmd);
         }
 
-        public bool Insert(int cacheId, string fileName) {
+        public bool Insert(Image image) {
+            bool success = false;
+
             IDbCommand cmd = database.CreateCommand(
                 "INSERT INTO cache_image (cacheId, fileName) " +
                 "VALUES (@cacheId, @fileName);");
-            database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
-            database.DefineParameter(cmd, "fileName", DbType.String, fileName);
+            database.DefineParameter(cmd, "cacheId", DbType.Int32, image.CacheId);
+            database.DefineParameter(cmd, "fileName", DbType.String, image.FileName);
 
-            return database.ExecuteNonQuery(cmd) == 1;
+            success = database.ExecuteNonQuery(cmd) == 1;
+
+            if (success) {
+                // if database entry was inserted succesfully, store image data in local image dir
+                image.SaveImage(database.LocalImageDirectory);
+            }
+
+            return success;
         }
 
-        public bool Delete(int cacheId, string fileName) {
+        public bool Delete(int id) {
             IDbCommand cmd = database.CreateCommand(
                 "DELETE FROM cache_image " +
-                "WHERE cacheId = @cacheId AND fileName = @fileName;");
-            database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
-            database.DefineParameter(cmd, "fileName", DbType.String, fileName);
+                "WHERE id = @id;");
+            database.DefineParameter(cmd, "id", DbType.Int32, id);
 
             return database.ExecuteNonQuery(cmd) == 1;
         }
 
-        private List<String> GetImagesForCache(IDbCommand cmd) {
+        private List<Image> GetImagesForCache(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
-                List<string> images = new List<string>();
+                var images = new List<Image>();
 
+
+                // while reading add app-wise configured local image storage to pathname
                 while (reader.Read()) {
-                    images.Add(( string ) reader["fileName"]);
+                    images.Add(new Image(
+                        ( int ) reader["id"],
+                        ( int ) reader["cacheId"],
+                        ( string ) reader["fileName"]));
                 }
+
+                // explicitly load each image (for use in async methods, when reader is already closed)
+                foreach (Image image in images) {
+                    image.LoadImage(database.LocalImageDirectory + "\\");
+                }
+
                 return images;
             }
         }

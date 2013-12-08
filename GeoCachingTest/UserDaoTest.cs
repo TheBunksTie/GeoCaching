@@ -13,7 +13,7 @@ namespace GeoCachingTest {
 
         [TestInitialize]
         public void Initialize() {
-            Database = new Database(ConnectionString);
+            Database = new Database(ConnectionString, "<image is not important here>");
             target = new UserDao(Database);
         }
 

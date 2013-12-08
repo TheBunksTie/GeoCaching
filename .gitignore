@@ -1,12 +1,13 @@
 # built application files
 *.exe
 *.dll
-*.config
+packages.config
 
 # generated files
 bin/
 obj/
 Properties/
+images/
 
 
 # Local configuration file (sdk path, etc)

@@ -11,5 +11,6 @@ namespace Swk5.GeoCaching.DAL.Common {
         int ExecuteNonQuery(IDbCommand cmd);
         T ExecuteScalarQuery<T>(IDbCommand cmd);
         double ExecuteScalarDoubleQuery(IDbCommand cmd);
+        string LocalImageDirectory { get; }
     }
 }

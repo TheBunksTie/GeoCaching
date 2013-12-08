@@ -11,38 +11,41 @@ namespace GeoCachingTest {
 
         [TestInitialize]
         public void Initialize() {
-            Database = new Database(ConnectionString);
+            // TODO 
+            Database = new Database(ConnectionString, "");
             target = new ImageDao(Database);
         }
 
-        [TestMethod]
-        public void InsertAndDeleteTest() {
-            const int cacheId = 137;
-            const string fileName = "./images/coolPic.pic";
-            Assert.IsTrue(target.Insert(cacheId, fileName));
+        // TODO write tests and insert correct local image strogare (maybe automatically via dal factory)
 
-            IList<string> list = target.GetAllForCache(cacheId);
-            Assert.AreEqual(1, list.Count);
+        //[TestMethod]
+        //public void InsertAndDeleteTest() {
+        //    const int cacheId = 137;
+        //    const string fileName = "./images/coolPic.pic";
+        //    Assert.IsTrue(target.Insert(cacheId, fileName));
 
-            Assert.IsTrue(target.Delete(cacheId, fileName));
-            list = target.GetAllForCache(cacheId);
-            Assert.AreEqual(0, list.Count);
-        }
+        //    IList<string> list = target.GetAllForCache(cacheId);
+        //    Assert.AreEqual(1, list.Count);
 
-        [TestMethod]
-        public void GetAllForCacheTest() {
-            const int cacheId = 268;
-            IList<string> expected = new List<string>();
-            expected.Add("./images/myCoolCache.jpg");
-            expected.Add("./images/northEastView.png");
+        //    Assert.IsTrue(target.Delete(cacheId, fileName));
+        //    list = target.GetAllForCache(cacheId);
+        //    Assert.AreEqual(0, list.Count);
+        //}
 
-            IList<string> actual = target.GetAllForCache(cacheId);
+        //[TestMethod]
+        //public void GetAllForCacheTest() {
+        //    const int cacheId = 268;
+        //    IList<string> expected = new List<string>();
+        //    expected.Add("./images/myCoolCache.jpg");
+        //    expected.Add("./images/northEastView.png");
 
-            Assert.AreEqual(expected.Count, actual.Count);
+        //    IList<string> actual = target.GetAllForCache(cacheId);
 
-            foreach (string image in expected) {
-                Assert.IsTrue(actual.Contains(image));
-            }
-        }
+        //    Assert.AreEqual(expected.Count, actual.Count);
+
+        //    foreach (string image in expected) {
+        //        Assert.IsTrue(actual.Contains(image));
+        //    }
+        //}
     }
 }

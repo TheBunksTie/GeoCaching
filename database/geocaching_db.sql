@@ -622,19 +622,20 @@ INSERT INTO `cache` (`id`, `name`, `creationDate`, `difficultyCache`, `difficult
 --
 
 CREATE TABLE IF NOT EXISTS `cache_image` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `cacheId` int(11) NOT NULL,
   `fileName` varchar(100) NOT NULL,
-  PRIMARY KEY (`cacheId`,`fileName`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
 
 --
 -- Daten für Tabelle `cache_image`
 --
 
-INSERT INTO `cache_image` (`cacheId`, `fileName`) VALUES
-(268, './images/myCoolCache.jpg'),
-(268, './images/northEastView.png'),
-(419, './images/missingExtension');
+INSERT INTO `cache_image` (`id`, `cacheId`, `fileName`) VALUES
+(1, 268, 'myCoolCache.jpg'),
+(2, 268, 'northEastView.jpg'),
+(3, 268, 'funcache.jpg');
 
 -- --------------------------------------------------------
 

@@ -28,7 +28,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         public List<Cache> GetAll() {
             return GetCacheListFor(database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
-                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id;"));
+                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+                "ORDER BY c.creationDate ASC;"));
         }
 
         public List<string> GetAllCacheSizes() {

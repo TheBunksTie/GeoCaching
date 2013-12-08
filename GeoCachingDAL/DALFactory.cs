@@ -8,11 +8,13 @@ namespace Swk5.GeoCaching.DAL.Common {
         private const string DaoLocation = ".Dao.";
         private static readonly string AssemblyName;
         private static readonly Assembly DalAssembly;
+        private static readonly string LocalImageStorage;
 
         static DalFactory() {
             // TODO: add error handling
             try {
                 AssemblyName = ConfigurationManager.AppSettings["DALAssembly"];
+                LocalImageStorage = ConfigurationManager.AppSettings["LocalImageStorage"];
                 DalAssembly = Assembly.Load(AssemblyName);
             }
             catch (Exception e) {
@@ -25,13 +27,13 @@ namespace Swk5.GeoCaching.DAL.Common {
             return CreateDatabase(connectionString);
         }
 
-        public static IDatabase CreateDatabase(string connectionString) {
+        private static IDatabase CreateDatabase(string connectionString) {
             // fully qualified database class name
             string databaseClassName = AssemblyName + ".Database";
             Type dbClass = DalAssembly.GetType(databaseClassName);
 
             return Activator.CreateInstance(dbClass,
-                new object[] {connectionString}) as IDatabase;
+                new object[] {connectionString, LocalImageStorage}) as IDatabase;
         }
 
         public static ICacheDao CreateCacheDao(IDatabase database) {

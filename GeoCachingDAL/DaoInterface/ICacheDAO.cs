@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
@@ -8,8 +9,8 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         Cache GetById(int id);
         List<Cache> GetAll();
 
-        List<string> GetAllCacheSizes(); 
-            
+        List<string> GetAllCacheSizes();
+
         // for finding caches on web plattform
         List<Cache> GetByOwner(int userId);
         List<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium);

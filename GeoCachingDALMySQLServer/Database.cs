@@ -7,9 +7,11 @@ using Swk5.GeoCaching.DAL.Common;
 namespace Swk5.GeoCaching.DAL.MySQLServer {
     public class Database : IDatabase {
         private readonly string connectionString;
+        private readonly string localImageDirectory;
 
-        public Database(string connectionString) {
+        public Database(string connectionString, string localImageDirectory) {
             this.connectionString = connectionString;
+            this.localImageDirectory = localImageDirectory;
         }
 
         public IDbCommand CreateCommand(string sql) {
@@ -86,6 +88,10 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
             finally {
                 ConnectionUtils.ReleaseConnection(conn);
             }
+        }
+
+        public string LocalImageDirectory {
+            get { return localImageDirectory; }
         }
 
         protected DbConnection GetOpenConnection() {
