@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Microsoft.Maps.MapControl.WPF;
 
-namespace Swk5.GeoCaching.Desktop.Views.Cache {
+namespace Swk5.GeoCaching.Desktop.View.Cache {
     /// <summary>
     ///     Interaction logic for CacheDetailsWindow.xaml
     /// </summary>

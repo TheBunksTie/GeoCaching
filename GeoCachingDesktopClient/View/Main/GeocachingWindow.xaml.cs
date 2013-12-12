@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Swk5.GeoCaching.Desktop {
+namespace Swk5.GeoCaching.Desktop.View.Main {
     /// <summary>
     ///     Interaction logic for GeocachingWindow.xaml
     /// </summary>

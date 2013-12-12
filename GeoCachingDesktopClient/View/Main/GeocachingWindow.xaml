@@ -1,9 +1,9 @@
-﻿<Window x:Class="Swk5.GeoCaching.Desktop.GeocachingWindow"
+﻿<Window x:Class="Swk5.GeoCaching.Desktop.View.Main.GeocachingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:user="clr-namespace:Swk5.GeoCaching.Desktop.Views.User"
-        xmlns:statistics="clr-namespace:Swk5.GeoCaching.Desktop.Views.Statistics"
-        xmlns:cache="clr-namespace:Swk5.GeoCaching.Desktop.Views.Cache"
+        xmlns:cache1="clr-namespace:Swk5.GeoCaching.Desktop.View.Cache"
+        xmlns:statistics="clr-namespace:Swk5.GeoCaching.Desktop.View.Statistics"
+        xmlns:user="clr-namespace:Swk5.GeoCaching.Desktop.View.User"
         Title="GeoCac#ing Desktop v0.1" Height="700" Width="900"
         ResizeMode="CanMinimize">
     
@@ -13,10 +13,10 @@
                 <user:UserEditor/>
             </TabItem>
             <TabItem Header="Caches">
-                <cache:CacheEditor/>
+                <cache1:CacheEditor/>
             </TabItem>
             <TabItem Header="Map">
-                <cache:CacheMapEditor/>
+                <cache1:CacheMapEditor/>
             </TabItem>
             <TabItem Header="Statistics">
                 <statistics:StatisticsControl />

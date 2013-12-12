@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Swk5.GeoCaching.Desktop.Views.Statistics {
+namespace Swk5.GeoCaching.Desktop.View.Statistics {
     /// <summary>
     /// Interaction logic for StatisticsControl.xaml
     /// </summary>

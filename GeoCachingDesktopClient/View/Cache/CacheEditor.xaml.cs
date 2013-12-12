@@ -3,7 +3,7 @@ using Swk5.GeoCaching.BusinessLogic;
 using Swk5.GeoCaching.BusinessLogic.CacheManager;
 using Swk5.GeoCaching.Desktop.ViewModel.Cache;
 
-namespace Swk5.GeoCaching.Desktop.Views.Cache {
+namespace Swk5.GeoCaching.Desktop.View.Cache {
     /// <summary>
     ///     Interaction logic for CacheEditor.xaml
     /// </summary>
