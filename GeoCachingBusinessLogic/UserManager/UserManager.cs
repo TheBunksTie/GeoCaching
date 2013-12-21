@@ -17,13 +17,16 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
         }
 
         public void UpdateExistingUser(User u) {
+            // encrypt password
+            u.Password = u.Password.Encrypt();
+
             // validate user input concerning empty fields
             ValidateUserInput(u);
 
             if (userDao.GetById(u.Id) != null) {
-                // TODO fix bug
                 // name must be unique, so check if user has not choosen an already exisiting name
-                if (userDao.GetByName(u.Name).Id == u.Id) {
+                User expectedUser = userDao.GetByName(u.Name);
+                if (expectedUser == null || expectedUser.Id == u.Id) {
                     userDao.Update(u);
                 }
                 else {
@@ -41,7 +44,7 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
 
             // check if there is another "default" user with default name in database
             if (userDao.GetByName(defaultName) == null) {
-                u = new User(-1, defaultName, "", "my.mail@domain.com", new GeoPosition(47.123, 18.123), "Finder");
+                u = new User(-1, defaultName, "test".Encrypt(), "my.mail@domain.com", new GeoPosition(47.123, 18.123), "Finder");
                 userDao.Insert(u);
             }
             else {

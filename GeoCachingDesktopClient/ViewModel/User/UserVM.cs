@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Windows;
+using System.Windows.Input;
 using Swk5.GeoCaching.BusinessLogic.UserManager;
 using Swk5.GeoCaching.DomainModel;
 
@@ -7,14 +9,15 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         private const double TOLERANCE = 0.000001;
 
         private readonly DomainModel.User user;
-        //private string passwordRepition;
+        private string passwordRepition;
 
         private readonly IUserManager userManager;
-        private RelayCommand updateCommand;
+        private ICommand updateCommand;
 
         public UserVM(IUserManager userManager, DomainModel.User user) {
             this.userManager = userManager;
             this.user = user;
+            passwordRepition = user.Password;
         }
 
         public int Id {
@@ -91,10 +94,21 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
             }
         }
 
-        public RelayCommand UpdateCommand {
+        public string PasswordRepetition {
+            get { return passwordRepition; }
+            set {
+                if ( passwordRepition != value ) {
+                    passwordRepition = value;
+
+                    RaisePropertyChangedEvent(vm => vm.PasswordRepetition);
+                }
+            }
+        }
+
+        public ICommand UpdateCommand {
             get {
                 if (updateCommand == null) {
-                    updateCommand = new RelayCommand(param => userManager.UpdateExistingUser(user));
+                    updateCommand = new RelayCommand(param => UpdateUser());
                 }
 
                 return updateCommand;
@@ -102,7 +116,13 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         }
 
         private void UpdateUser() {
-            throw new NotImplementedException();
+
+            if (Password.Equals(PasswordRepetition)) {
+                userManager.UpdateExistingUser(user);
+            }
+            else {
+                MessageBox.Show("Error: Provided passwords do not match", "User manager error", MessageBoxButton.OK, MessageBoxImage.Error);                
+            }
         }
     }
 }

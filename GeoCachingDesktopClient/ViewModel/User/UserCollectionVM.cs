@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using Swk5.GeoCaching.BusinessLogic.UserManager;
 
 namespace Swk5.GeoCaching.Desktop.ViewModel.User {
@@ -10,8 +11,8 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
     public class UserCollectionVM : AbstractViewModelBase<UserCollectionVM> {
         private readonly IUserManager userManager;
 
-        private RelayCommand createCommand;
-        private RelayCommand deleteCommand;
+        private ICommand createCommand;
+        private ICommand deleteCommand;
 
         private UserVM currentUser;
 
@@ -39,24 +40,12 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
 
         public List<string> RoleList { get; private set; }
 
-        public RelayCommand CreateCommand {
-            get {
-                if (createCommand == null) {
-                    createCommand = new RelayCommand(param => NewUser());
-                }
-
-                return createCommand;
-            }
+        public ICommand CreateCommand {
+            get { return createCommand ?? (createCommand = new RelayCommand(param => NewUser())); }
         }
 
-        public RelayCommand DeleteCommand {
-            get {
-                if (deleteCommand == null) {
-                    deleteCommand = new RelayCommand(param => DeleteUser());
-                }
-
-                return deleteCommand;
-            }
+        public ICommand DeleteCommand {
+            get { return deleteCommand ?? (deleteCommand = new RelayCommand(param => DeleteUser())); }
         }
 
         private void NewUser() {
