@@ -8,13 +8,16 @@ namespace Swk5.GeoCaching.Desktop.View.Cache {
     ///     Interaction logic for CacheEditor.xaml
     /// </summary>
     public partial class CacheEditor : UserControl {
-        private readonly CacheCollectionVM cacheCollectionVm;
         private readonly ICacheManager cacheManager = GeoCachingBLFactory.GetCacheManager();
+        private CacheCollectionVM cacheCollectionVm;
 
         public CacheEditor() {
             InitializeComponent();
             cacheCollectionVm = new CacheCollectionVM(cacheManager);
-            Loaded += (s, e) => { DataContext = cacheCollectionVm; };
+            Loaded += (s, e) => {
+                cacheCollectionVm = new CacheCollectionVM(cacheManager);
+                DataContext = cacheCollectionVm;
+            };
         }
 
         private void OnSelectedCacheChanged(object sender, SelectionChangedEventArgs e) {

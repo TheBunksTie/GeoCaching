@@ -129,11 +129,10 @@
         <Grid Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="90" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Name="SaveCacheBtn" Margin="4" Command="{Binding Path=CurrentCache.UpdateCommand}">Save</Button>
-
+            <Button Grid.Column="0" HorizontalAlignment="Center" Width="90" Name="SaveCacheBtn" Margin="4" Command="{Binding Path=CurrentCache.UpdateCommand}">Save</Button>
+            <Button Grid.Column="1" HorizontalAlignment="Center" Width="90" Name="DeleteCacheBtn" Margin="4" Command="{Binding Path=DeleteCurrentCacheCommand}">Delete</Button>
         </Grid>
     </Grid>
 

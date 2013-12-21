@@ -1,7 +1,0 @@
-﻿<Window x:Class="Swk5.GeoCaching.Desktop.View.Cache.CacheDetailsWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:cache1="clr-namespace:Swk5.GeoCaching.Desktop.View.Cache"
-        Title="CacheDetailsWindow" Height="500" Width="500">
-    <cache1:CacheDetailsEditor/>
-</Window>

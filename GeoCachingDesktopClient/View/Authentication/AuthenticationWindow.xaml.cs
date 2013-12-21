@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using Swk5.GeoCaching.BusinessLogic.AuthenticationManager;
 using Swk5.GeoCaching.Desktop.View.Main;
-using MessageBox = System.Windows.MessageBox;
 
 namespace Swk5.GeoCaching.Desktop.View.Authentication {
     /// <summary>

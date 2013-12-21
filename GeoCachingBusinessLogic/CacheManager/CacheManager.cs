@@ -37,16 +37,29 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
             throw new NotImplementedException();
         }
 
+        public Cache CreateNewPositionedCache(int ownerId, double latitude, double longitude) {
+            Cache defaultCache = new Cache(-1, "<default cache>", new DateTime(), 1, 1, "Regular", ownerId, new GeoPosition(latitude, longitude), "put a short description here" );
+            cacheDao.Insert(defaultCache);
+            return defaultCache;
+        }
+
         public bool CreateNewCacheFromData(Cache c) {
             throw new NotImplementedException();
         }
 
         public bool UpdateExisitingCache(Cache c) {
-            throw new NotImplementedException();
+            return cacheDao.Update(c);
         }
 
-        public bool DeleteCache(Cache c) {
-            throw new NotImplementedException();
+        public bool DeleteCache(int cacheId) {
+            // check if there are no assigned log entries or ratings
+            if (logEntryDao.GetLogEntriesForCache(cacheId).Count == 0 ||
+                ratingDao.GetRatingsForCache(cacheId).Count == 0) {
+                
+                imageDao.DeleteAllForCache(cacheId);                                
+                return cacheDao.Delete(cacheId);
+            }
+            throw new Exception("Error: Unable to delete Cache due to assigned log entries/ratings.");
         }
     }
 }

@@ -20,12 +20,15 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
 
         // creates a new cache with default values
         bool CreateNewDefaultCache();
+
+        Cache CreateNewPositionedCache(int ownerId, double latitude, double longitude);
+
         bool CreateNewCacheFromData(Cache c);
 
         // only updates exisiting cache
         bool UpdateExisitingCache(Cache c);
 
         // try to delete cache
-        bool DeleteCache(Cache c);
+        bool DeleteCache(int cacheId);
     }
 }
