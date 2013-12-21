@@ -30,7 +30,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
             if (success) {
                 // if database entry was inserted succesfully, store image data in local image dir
-                image.SaveImage(database.LocalImageDirectory);
+                image.SaveImage(database.LocalImageRepository);
             }
 
             return success;
@@ -43,6 +43,19 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             database.DefineParameter(cmd, "id", DbType.Int32, id);
 
             return database.ExecuteNonQuery(cmd) == 1;
+        }
+
+        public bool DeleteAllForCache(int cacheId) {
+            foreach (var image in GetAllForCache(cacheId)) {
+                image.Delete(database.LocalImageRepository);
+            }
+
+            IDbCommand cmd = database.CreateCommand(
+               "DELETE FROM cache_image " +
+               "WHERE cacheId = @cacheId;");
+            database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
+
+            return database.ExecuteNonQuery(cmd) >= 0;
         }
 
         private List<Image> GetImagesForCache(IDbCommand cmd) {
@@ -60,7 +73,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
                 // explicitly load each image (for use in async methods, when reader is already closed)
                 foreach (Image image in images) {
-                    image.LoadImage(database.LocalImageDirectory + "\\");
+                    image.LoadImage(database.LocalImageRepository + @"\");
                 }
 
                 return images;
