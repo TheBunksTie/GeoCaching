@@ -9,7 +9,8 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         User GetByName(string name);
         User GetById(int id);
 
-        List<String> GetAllUserRoles();
+        List<string> GetAllUserRoles();
+        List<string> GetPrivilegedRoles();
 
         // write
         int Insert(User user);

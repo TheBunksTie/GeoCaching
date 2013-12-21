@@ -46,16 +46,11 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         public List<string> GetAllUserRoles() {
-            var roles = new List<string>();
+            return GetRoleListFor(database.CreateCommand("SELECT roleDescription FROM lt_user_role;"));
+        }
 
-            IDbCommand cmd = database.CreateCommand("SELECT roleDescription FROM lt_user_role;");
-
-            using (IDataReader reader = database.ExecuteReader(cmd)) {
-                while (reader.Read()) {
-                    roles.Add(( string ) reader["roleDescription"]);
-                }
-            }
-            return roles;
+        public List<string> GetPrivilegedRoles() {
+            return GetRoleListFor(database.CreateCommand("SELECT roleDescription FROM lt_user_role WHERE id > 1;"));
         }
 
         public int Insert(User user) {
@@ -141,5 +136,16 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                 return users;
             }
         }
+
+        private List<string> GetRoleListFor(IDbCommand cmd) {
+            using ( IDataReader reader = database.ExecuteReader(cmd) ) {                
+                List<string> roles = new List<string>();
+                
+                while ( reader.Read() ) {
+                    roles.Add(( string ) reader["roleDescription"]);
+                }
+                return roles;
+            }            
+        } 
     }
 }
