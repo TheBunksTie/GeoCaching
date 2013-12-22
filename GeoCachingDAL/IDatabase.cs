@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
+using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.Common {
     public interface IDatabase {
@@ -11,6 +13,7 @@ namespace Swk5.GeoCaching.DAL.Common {
         int ExecuteNonQuery(IDbCommand cmd);
         T ExecuteScalarQuery<T>(IDbCommand cmd);
         double ExecuteScalarDoubleQuery(IDbCommand cmd);
+
         string LocalImageRepository { get; }
     }
 }

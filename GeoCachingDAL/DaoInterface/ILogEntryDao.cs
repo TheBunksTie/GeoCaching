@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
@@ -10,6 +11,8 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         List<LogEntry> GetLogEntriesForCache(int cacheId);
         List<LogEntry> GetLogentriesForUser(int userId);
         List<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, int userId);
+
+        List<StatisticData> GetFoundCachesCountPerUser(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
 
         // write
         int Insert(LogEntry logEntry);

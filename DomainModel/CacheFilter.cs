@@ -32,19 +32,19 @@ namespace Swk5.GeoCaching.DomainModel {
 
         public static string UiCaption(this FilterOperation c) {
             if (c == FilterOperation.Below) {
-                return "<";
+                return "less than";
             }
             if (c == FilterOperation.BelowEquals) {
-                return "<=";
+                return "less or equal than";
             }
             if (c == FilterOperation.Above) {
-                return ">";
+                return "greater than";
             }
             if (c == FilterOperation.AboveEquals) {
-                return ">=";
+                return "greater or equal than";
             }
             if (c == FilterOperation.Exact) {
-                return "=";
+                return "equals";
             }
             throw new ArgumentException();
         }

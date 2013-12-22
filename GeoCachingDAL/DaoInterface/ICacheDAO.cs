@@ -21,9 +21,35 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         //List<Cache> GetBySize(string size, FilterOperation operation);
 
         // base for statistical output 
-        List<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
-        List<Cache> GetInRegionFoundBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
-        List<Cache> GetInRegionRatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
+        DateTime GetEarliestCacheCreationDate();
+        DateTime GetLatestCacheCreationDate();
+
+        GeoPosition GetLowestCachePosition();
+        GeoPosition GetHighestCachePosition();
+
+        List<StatisticData> GetHiddenCachesCountPerUser(DateTime fromDate,
+            DateTime toDate,
+            GeoPosition fromPosition,
+            GeoPosition toPosition);
+
+        List<StatisticData> GetCacheDistributionBySize(DateTime fromDate,
+            DateTime toDate,
+            GeoPosition fromPosition,
+            GeoPosition toPosition);
+
+        List<StatisticData> GetCacheDistributionByCacheDifficulty(DateTime fromDate,
+            DateTime toDate,
+            GeoPosition fromPosition,
+            GeoPosition toPosition);
+
+        List<StatisticData> GetCacheDistributionByTerrainDifficulty(DateTime fromDate,
+            DateTime toDate,
+            GeoPosition fromPosition,
+            GeoPosition toPosition);
+
+        //List<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
+        //List<Cache> GetInRegionFoundBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
+        //List<Cache> GetInRegionRatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
 
         // write
         int Insert(Cache cache);

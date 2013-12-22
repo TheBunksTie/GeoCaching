@@ -12,7 +12,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         public Cache GetById(int id) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
-                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " + 
+                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
                 "WHERE c.id = @id;");
 
             database.DefineParameter(cmd, "id", DbType.Int32, id);
@@ -33,13 +33,13 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         public List<string> GetAllCacheSizes() {
-            List<string> sizes = new List<string>();
+            var sizes = new List<string>();
 
             IDbCommand cmd = database.CreateCommand("SELECT sizeDescription FROM lt_cache_size;");
 
-            using ( IDataReader reader = database.ExecuteReader(cmd) ) {
-                while ( reader.Read() ) {
-                    sizes.Add((string) reader["sizeDescription"]);
+            using (IDataReader reader = database.ExecuteReader(cmd)) {
+                while (reader.Read()) {
+                    sizes.Add(( string ) reader["sizeDescription"]);
                 }
             }
             return sizes;
@@ -56,7 +56,6 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         public List<Cache> GetCacheByCriterium(FilterCriterium criterium, FilterOperation operation, string value) {
-
             try {
                 // map filterCriterium to column name of cache table
                 string columnName = criterium.ToColumnName();
@@ -68,18 +67,129 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                     "WHERE c." + columnName + " " + operationName + " @value;");
 
 
-                if ( criterium.ToDataType() == DbType.Double ) {
+                if (criterium.ToDataType() == DbType.Double) {
                     database.DefineParameter(cmd, "value", DbType.Double, Double.Parse(value));
                 }
                 else if (criterium.ToDataType() == DbType.Int32) {
                     database.DefineParameter(cmd, "value", DbType.Int32, Int32.Parse(value));
-                }                                               
+                }
                 return GetCacheListFor(cmd);
-            
             }
             catch (Exception e) {
                 throw e;
-            }                                       
+            }
+        }
+
+        public DateTime GetEarliestCacheCreationDate() {
+            return GetDateTimeFor(database.CreateCommand(
+                "SELECT c.creationDate FROM cache c ORDER BY c.creationDate ASC LIMIT 1;"));
+        }
+
+        public DateTime GetLatestCacheCreationDate() {
+            return GetDateTimeFor(database.CreateCommand(
+                "SELECT c.creationDate FROM cache c ORDER BY c.creationDate DESC LIMIT 1;"));
+        }
+
+        public GeoPosition GetLowestCachePosition() {
+            var geoPosition = new GeoPosition {
+                Latitude =
+                    database.ExecuteScalarDoubleQuery(
+                        database.CreateCommand("SELECT c.latitude FROM cache c ORDER BY c.latitude ASC LIMIT 1;")),
+                Longitude =
+                    database.ExecuteScalarDoubleQuery(
+                        database.CreateCommand("SELECT c.longitude FROM cache c ORDER BY c.longitude ASC LIMIT 1;"))
+            };
+
+            return geoPosition;
+        }
+
+        public GeoPosition GetHighestCachePosition() {
+            var geoPosition = new GeoPosition {
+                Latitude =
+                    database.ExecuteScalarDoubleQuery(
+                        database.CreateCommand("SELECT c.latitude FROM cache c ORDER BY c.latitude DESC LIMIT 1;")),
+                Longitude =
+                    database.ExecuteScalarDoubleQuery(
+                        database.CreateCommand("SELECT c.longitude FROM cache c ORDER BY c.longitude DESC LIMIT 1;"))
+            };
+
+            return geoPosition;
+        }
+
+        public List<StatisticData> GetHiddenCachesCountPerUser(DateTime fromDate, DateTime toDate, GeoPosition fromPosition, GeoPosition toPosition) {
+            IDbCommand cmd = database.CreateCommand(
+              "SELECT u.name, s.count " +
+              "FROM user u INNER JOIN " +
+                  "(SELECT ownerId, COUNT(id) AS count " +
+                   "FROM cache " +
+                   "WHERE (creationDate >= @begin AND creationDate <= @end) AND " +
+                         "(latitude >= @latFrom AND latitude <= @latTo) AND " +
+                         "(longitude >= @longFrom AND longitude <= @longTo) " +
+                   "GROUP BY ownerId) AS s " +
+              "ON u.id = s.ownerId " +
+              "ORDER BY s.count DESC;");
+
+            AddLimitationParameters(cmd, fromDate, toDate, fromPosition, toPosition);
+            return GetStatisticsDataFor(cmd);
+        }
+
+        public List<StatisticData> GetCacheDistributionBySize(DateTime fromDate, DateTime toDate, GeoPosition fromPosition, GeoPosition toPosition) {
+            IDbCommand cmd = database.CreateCommand("SELECT cs.sizeDescription, " +
+                                                     "(c.count / " +
+                                                         "(SELECT COUNT(id) " +
+                                                          "FROM cache " +
+                                                          "WHERE (creationDate >= @begin AND creationDate <= @end) AND " +
+                                                                "(latitude >= @latFrom AND latitude <= @latTo) AND " +
+                                                                "(longitude >= @longFrom AND longitude <= @longTo)) * 100) AS percent " +
+                                                     "FROM lt_cache_size cs INNER JOIN " +
+                                                           "(SELECT sizeCode, COUNT(sizeCode) AS count " +
+                                                            "FROM cache " +                                                           
+                                                            "WHERE (creationDate >= @begin AND creationDate <= @end) AND " +
+                                                                  "(latitude >= @latFrom AND latitude <= @latTo) AND " +
+                                                                  "(longitude >= @longFrom AND longitude <= @longTo) " +
+                                                            "GROUP BY sizeCode) AS c " +
+                                                     "ON cs.id = c.sizeCode " +
+                                                     "ORDER BY percent DESC;");
+            AddLimitationParameters(cmd, fromDate, toDate, fromPosition, toPosition);
+            return GetStatisticsDataFor(cmd);
+        }
+
+        public List<StatisticData> GetCacheDistributionByCacheDifficulty(DateTime fromDate, DateTime toDate, GeoPosition fromPosition, GeoPosition toPosition) {
+            IDbCommand cmd = database.CreateCommand("SELECT difficultyCache, " +
+                                                     "(COUNT(difficultyCache) / " +
+                                                         "(SELECT COUNT(id) " +
+                                                          "FROM cache " +
+                                                          "WHERE (creationDate >= @begin AND creationDate <= @end) AND " +
+                                                                "(latitude >= @latFrom AND latitude <= @latTo) AND " +
+                                                                "(longitude >= @longFrom AND longitude <= @longTo)) * 100) AS percent " +
+                                                     "FROM cache " +
+                                                     "WHERE (creationDate >= @begin AND creationDate <= @end) AND " +
+                                                           "(latitude >= @latFrom AND latitude <= @latTo) AND " +
+                                                           "(longitude >= @longFrom AND longitude <= @longTo) " +
+                                                     "GROUP BY difficultyCache " +                                                     
+                                                     "ORDER BY percent DESC;");
+
+            AddLimitationParameters(cmd, fromDate, toDate, fromPosition, toPosition);
+            return GetStatisticsDataFor(cmd);
+        }
+
+        public List<StatisticData> GetCacheDistributionByTerrainDifficulty(DateTime fromDate, DateTime toDate, GeoPosition fromPosition, GeoPosition toPosition) {
+            IDbCommand cmd = database.CreateCommand("SELECT difficultyTerrain, " +
+                                                     "(COUNT(difficultyCache) / " +
+                                                         "(SELECT COUNT(id) " +
+                                                          "FROM cache " +
+                                                          "WHERE (creationDate >= @begin AND creationDate <= @end) AND " +
+                                                                "(latitude >= @latFrom AND latitude <= @latTo) AND " +
+                                                                "(longitude >= @longFrom AND longitude <= @longTo)) * 100) AS percent " +
+                                                     "FROM cache " +
+                                                     "WHERE (creationDate >= @begin AND creationDate <= @end) AND " +
+                                                           "(latitude >= @latFrom AND latitude <= @latTo) AND " +
+                                                           "(longitude >= @longFrom AND longitude <= @longTo) " +
+                                                    "GROUP BY difficultyTerrain " +
+                                                    "ORDER BY percent DESC;");
+
+            AddLimitationParameters(cmd, fromDate, toDate, fromPosition, toPosition);
+            return GetStatisticsDataFor(cmd);
         }
 
         //public List<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium) {
@@ -120,7 +230,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         //public List<Cache> GetBySize(string size, FilterCriterium criterium) {
 
         //    int sizeCode = GetIdForSize(size);
-           
+
         //    IDbCommand cmd = database.CreateCommand(
         //        "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
         //        "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
@@ -130,66 +240,65 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         //    return GetCacheListFor(cmd);
         //}
 
-        public List<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
-            IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
-                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
-                "WHERE (c.creationDate >= @begin AND c.creationDate <= @end) AND " +
-                "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
-                "(c.longitude >= @longFrom AND c.longitude <= @longTo );");
+        //public List<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
+        //    IDbCommand cmd = database.CreateCommand(
+        //        "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
+        //        "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+        //        "WHERE (c.creationDate >= @begin AND c.creationDate <= @end) AND " +
+        //        "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
+        //        "(c.longitude >= @longFrom AND c.longitude <= @longTo );");
 
-            database.DefineParameter(cmd, "begin", DbType.DateTime, begin);
-            database.DefineParameter(cmd, "end", DbType.DateTime, end);
-            database.DefineParameter(cmd, "latFrom", DbType.Double, from.Latitude);
-            database.DefineParameter(cmd, "latTo", DbType.Double, to.Latitude);
-            database.DefineParameter(cmd, "longFrom", DbType.Double, from.Longitude);
-            database.DefineParameter(cmd, "longTo", DbType.Double, to.Longitude);
+        //    database.DefineParameter(cmd, "begin", DbType.DateTime, begin);
+        //    database.DefineParameter(cmd, "end", DbType.DateTime, end);
+        //    database.DefineParameter(cmd, "latFrom", DbType.Double, from.Latitude);
+        //    database.DefineParameter(cmd, "latTo", DbType.Double, to.Latitude);
+        //    database.DefineParameter(cmd, "longFrom", DbType.Double, from.Longitude);
+        //    database.DefineParameter(cmd, "longTo", DbType.Double, to.Longitude);
 
-            return GetCacheListFor(cmd);
-        }
+        //    return GetCacheListFor(cmd);
+        //}
 
-        public List<Cache> GetInRegionFoundBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
-            IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
-                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
-                "WHERE c.id IN " +
-                "(SELECT cacheId FROM cache_log l " +
-                "WHERE (l.creationDate >= @begin AND l.creationDate <= @end)) AND " +
-                "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
-                "(c.longitude >= @longFrom AND c.longitude <= @longTo );");
+        //public List<Cache> GetInRegionFoundBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
+        //    IDbCommand cmd = database.CreateCommand(
+        //        "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
+        //        "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+        //        "WHERE c.id IN " +
+        //        "(SELECT cacheId FROM cache_log l " +
+        //        "WHERE (l.creationDate >= @begin AND l.creationDate <= @end)) AND " +
+        //        "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
+        //        "(c.longitude >= @longFrom AND c.longitude <= @longTo );");
 
-            database.DefineParameter(cmd, "begin", DbType.DateTime, begin);
-            database.DefineParameter(cmd, "end", DbType.DateTime, end);
-            database.DefineParameter(cmd, "latFrom", DbType.Double, from.Latitude);
-            database.DefineParameter(cmd, "latTo", DbType.Double, to.Latitude);
-            database.DefineParameter(cmd, "longFrom", DbType.Double, from.Longitude);
-            database.DefineParameter(cmd, "longTo", DbType.Double, to.Longitude);
+        //    database.DefineParameter(cmd, "begin", DbType.DateTime, begin);
+        //    database.DefineParameter(cmd, "end", DbType.DateTime, end);
+        //    database.DefineParameter(cmd, "latFrom", DbType.Double, from.Latitude);
+        //    database.DefineParameter(cmd, "latTo", DbType.Double, to.Latitude);
+        //    database.DefineParameter(cmd, "longFrom", DbType.Double, from.Longitude);
+        //    database.DefineParameter(cmd, "longTo", DbType.Double, to.Longitude);
 
-            return GetCacheListFor(cmd);
-        }
+        //    return GetCacheListFor(cmd);
+        //}
 
-        public List<Cache> GetInRegionRatedBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
-            IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
-                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
-                "WHERE c.id IN " +
-                "(SELECT cacheId FROM cache_rating r " +
-                "WHERE (r.creationDate >= @begin AND r.creationDate <= @end)) AND " +
-                "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
-                "(c.longitude >= @longFrom AND c.longitude <= @longTo);");
+        //public List<Cache> GetInRegionRatedBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
+        //    IDbCommand cmd = database.CreateCommand(
+        //        "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
+        //        "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+        //        "WHERE c.id IN " +
+        //        "(SELECT cacheId FROM cache_rating r " +
+        //        "WHERE (r.creationDate >= @begin AND r.creationDate <= @end)) AND " +
+        //        "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
+        //        "(c.longitude >= @longFrom AND c.longitude <= @longTo);");
 
-            database.DefineParameter(cmd, "begin", DbType.DateTime, begin);
-            database.DefineParameter(cmd, "end", DbType.DateTime, end);
-            database.DefineParameter(cmd, "latFrom", DbType.Double, from.Latitude);
-            database.DefineParameter(cmd, "latTo", DbType.Double, to.Latitude);
-            database.DefineParameter(cmd, "longFrom", DbType.Double, from.Longitude);
-            database.DefineParameter(cmd, "longTo", DbType.Double, to.Longitude);
+        //    database.DefineParameter(cmd, "begin", DbType.DateTime, begin);
+        //    database.DefineParameter(cmd, "end", DbType.DateTime, end);
+        //    database.DefineParameter(cmd, "latFrom", DbType.Double, from.Latitude);
+        //    database.DefineParameter(cmd, "latTo", DbType.Double, to.Latitude);
+        //    database.DefineParameter(cmd, "longFrom", DbType.Double, from.Longitude);
+        //    database.DefineParameter(cmd, "longTo", DbType.Double, to.Longitude);
 
-            return GetCacheListFor(cmd);
-        }
+        //    return GetCacheListFor(cmd);
+        //}
 
         public int Insert(Cache cache) {
-
             int sizeCode = GetIdForSize(cache.Size);
 
             IDbCommand cmd = database.CreateCommand(
@@ -218,7 +327,6 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         public bool Update(Cache cache) {
-
             int sizeCode = GetIdForSize(cache.Size);
 
             IDbCommand cmd = database.CreateCommand(
@@ -255,17 +363,17 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return database.ExecuteScalarQuery<int>(cmd);
         }
 
-        private string GetSizeForId ( int id ) {
-            IDbCommand cmd = database.CreateCommand("SELECT sizeDescription FROM lt_cache_size WHERE id = @size");
+        //private string GetSizeForId(int id) {
+        //    IDbCommand cmd = database.CreateCommand("SELECT sizeDescription FROM lt_cache_size WHERE id = @size");
 
-            database.DefineParameter(cmd, "size", DbType.Int32, id);
+        //    database.DefineParameter(cmd, "size", DbType.Int32, id);
 
-            return database.ExecuteScalarQuery<string>(cmd);
-        }
+        //    return database.ExecuteScalarQuery<string>(cmd);
+        //}
 
         private List<Cache> GetCacheListFor(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
-                List<Cache> caches = new List<Cache>();
+                var caches = new List<Cache>();
 
                 while (reader.Read()) {
                     caches.Add(new Cache(
@@ -273,14 +381,32 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                         ( string ) reader["name"],
                         DateTime.Parse(reader["creationDate"].ToString()),
                         ( double ) reader["difficultyCache"],
-                        ( double ) reader["difficultyTerrain"], 
-                        (string) reader["sizeDescription"],
+                        ( double ) reader["difficultyTerrain"],
+                        ( string ) reader["sizeDescription"],
                         ( int ) reader["ownerId"],
                         new GeoPosition(( double ) reader["latitude"], ( double ) reader["longitude"]),
                         ( string ) reader["description"]));
                 }
                 return caches;
             }
+        }
+
+        private DateTime GetDateTimeFor(IDbCommand cmd) {
+            using (IDataReader reader = database.ExecuteReader(cmd)) {
+                if (reader.Read()) {
+                    return DateTime.Parse(reader["creationDate"].ToString());
+                }
+            }
+            throw new Exception();
+        }
+
+        private void AddLimitationParameters ( IDbCommand cmd, DateTime fromDate, DateTime toDate, GeoPosition fromPosition, GeoPosition toPosition ) {
+            database.DefineParameter(cmd, "begin", DbType.DateTime, fromDate);
+            database.DefineParameter(cmd, "end", DbType.DateTime, toDate);
+            database.DefineParameter(cmd, "latFrom", DbType.Double, fromPosition.Latitude);
+            database.DefineParameter(cmd, "latTo", DbType.Double, toPosition.Latitude);
+            database.DefineParameter(cmd, "longFrom", DbType.Double, fromPosition.Longitude);
+            database.DefineParameter(cmd, "longTo", DbType.Double, toPosition.Longitude);
         }
     }
 }

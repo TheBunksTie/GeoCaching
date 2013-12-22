@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DomainModel;
@@ -39,6 +40,33 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             database.DefineParameter(cmd, "creatorId", DbType.Int32, userId);
 
             return GetLogEntryListFor(cmd);
+        }
+
+        public List<StatisticData> GetFoundCachesCountPerUser(DateTime begin, DateTime end, GeoPosition from, GeoPosition to) {
+            
+            IDbCommand cmd = database.CreateCommand(
+                 "SELECT u.name, s.count " +
+                 "FROM user u INNER JOIN " +
+                     "(SELECT creatorId, COUNT(cacheId) AS count " +
+                      "FROM cache_log " +
+                      "WHERE (found = 1) AND " +
+                            "(creationDate >= @begin AND creationDate <= @end) AND " +
+                             "cacheId IN (SELECT id " +
+                                         "FROM cache " +
+                                         "WHERE (latitude >= @latFrom AND latitude <= @latTo) AND " +
+                                               "(longitude >= @longFrom AND longitude <= @longTo ))" +
+                      "GROUP BY creatorId) as s " +
+                 "ON u.id = s.creatorId " +
+                 "ORDER BY s.count DESC;");
+
+            database.DefineParameter(cmd, "begin", DbType.DateTime, begin);
+            database.DefineParameter(cmd, "end", DbType.DateTime, end);
+            database.DefineParameter(cmd, "latFrom", DbType.Double, from.Latitude);
+            database.DefineParameter(cmd, "latTo", DbType.Double, to.Latitude);
+            database.DefineParameter(cmd, "longFrom", DbType.Double, from.Longitude);
+            database.DefineParameter(cmd, "longTo", DbType.Double, to.Longitude);
+            
+            return GetStatisticsDataFor(cmd);
         }
 
         public List<LogEntry> GetLogEntriesForCache(int cacheId) {
@@ -85,7 +113,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         private List<LogEntry> GetLogEntryListFor(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
-                List<LogEntry> entries = new List<LogEntry>();
+                var entries = new List<LogEntry>();
 
                 while (reader.Read()) {
                     entries.Add(new LogEntry(
@@ -94,7 +122,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                         ( int ) reader["creatorId"],
                         DateTime.Parse(reader["creationDate"].ToString()),
                         ( bool ) reader["found"],
-                        ( string ) reader["comment"]));
+                        reader["comment"].ToString()));
                 }
                 return entries;
             }
