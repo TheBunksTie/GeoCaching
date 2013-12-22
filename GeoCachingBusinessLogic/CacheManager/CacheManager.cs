@@ -61,5 +61,14 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
             }
             throw new Exception("Error: Unable to delete Cache due to assigned log entries/ratings.");
         }
+
+        public List<Cache> GetFilteredCacheList(FilterCriterium criterium = FilterCriterium.Size, FilterOperation operation = FilterOperation.AboveEquals, string filterValue = "1") {
+            try {
+                return cacheDao.GetCacheByCriterium(criterium, operation, filterValue);
+            }
+            catch {
+                throw new Exception("Error: Unable to resolve filter criterium.");
+            }            
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
@@ -13,10 +12,13 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
 
         // for finding caches on web plattform
         List<Cache> GetByOwner(int userId);
-        List<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium);
-        List<Cache> GetByTerrainDifficulty(double diffictulty, FilterCriterium criterium);
-        List<Cache> GetByAverageRating(double rating, FilterCriterium criterium);
-        List<Cache> GetBySize(string size, FilterCriterium criterium);
+
+        List<Cache> GetCacheByCriterium(FilterCriterium criterium, FilterOperation operation, string value);
+
+        //List<Cache> GetByCacheDifficulty(double diffictulty, FilterOperation operation);
+        //List<Cache> GetByTerrainDifficulty(double diffictulty, FilterOperation operation);
+        //List<Cache> GetByAverageRating(double rating, FilterOperation operation);
+        //List<Cache> GetBySize(string size, FilterOperation operation);
 
         // base for statistical output 
         List<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);

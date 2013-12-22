@@ -6,6 +6,9 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         // retrieve list of all existing caches
         List<Cache> GetCacheList();
 
+        // retrieve filtered subset of all caches
+        List<Cache> GetFilteredCacheList(FilterCriterium criterium, FilterOperation operation, string filterValue);
+
         // retrieve look up list of all define cache sizes
         List<string> GetCacheSizeList();
 
@@ -29,6 +32,6 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         bool UpdateExisitingCache(Cache c);
 
         // try to delete cache
-        bool DeleteCache(int cacheId);
+        bool DeleteCache(int cacheId);        
     }
 }

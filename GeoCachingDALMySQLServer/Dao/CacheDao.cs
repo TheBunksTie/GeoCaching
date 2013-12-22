@@ -55,53 +55,80 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             return GetCacheListFor(cmd);
         }
 
-        public List<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium) {
-            IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription,c.ownerId, c.latitude, c.longitude, c.description " +
-                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
-                "WHERE c.difficultyCache" + FilterCriteriumToString(criterium) + "@difficulty;");
+        public List<Cache> GetCacheByCriterium(FilterCriterium criterium, FilterOperation operation, string value) {
 
-            database.DefineParameter(cmd, "difficulty", DbType.Double, diffictulty);
-            return GetCacheListFor(cmd);
+            try {
+                // map filterCriterium to column name of cache table
+                string columnName = criterium.ToColumnName();
+                string operationName = operation.ToOperationName();
+
+                IDbCommand cmd = database.CreateCommand(
+                    "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription,c.ownerId, c.latitude, c.longitude, c.description " +
+                    "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+                    "WHERE c." + columnName + " " + operationName + " @value;");
+
+
+                if ( criterium.ToDataType() == DbType.Double ) {
+                    database.DefineParameter(cmd, "value", DbType.Double, Double.Parse(value));
+                }
+                else if (criterium.ToDataType() == DbType.Int32) {
+                    database.DefineParameter(cmd, "value", DbType.Int32, Int32.Parse(value));
+                }                                               
+                return GetCacheListFor(cmd);
+            
+            }
+            catch (Exception e) {
+                throw e;
+            }                                       
         }
 
-        public List<Cache> GetByTerrainDifficulty(double diffictulty, FilterCriterium criterium) {
-            IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
-                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
-                "WHERE c.difficultyTerrain" + FilterCriteriumToString(criterium) + "@difficulty;");
+        //public List<Cache> GetByCacheDifficulty(double diffictulty, FilterCriterium criterium) {
+        //    IDbCommand cmd = database.CreateCommand(
+        //        "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription,c.ownerId, c.latitude, c.longitude, c.description " +
+        //        "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+        //        "WHERE c.difficultyCache" + FilterCriteriumToString(criterium) + "@difficulty;");
 
-            database.DefineParameter(cmd, "difficulty", DbType.Double, diffictulty);
-            return GetCacheListFor(cmd);
-        }
+        //    database.DefineParameter(cmd, "difficulty", DbType.Double, diffictulty);
+        //    return GetCacheListFor(cmd);
+        //}
 
-        public List<Cache> GetByAverageRating(double rating, FilterCriterium criterium) {
-            IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
-                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
-                "INNER JOIN " +
-                "(SELECT cacheId, AVG(grade) AS grade " +
-                "FROM cache_rating GROUP BY cacheId " +
-                "HAVING grade" + FilterCriteriumToString(criterium) + "@grade) AS r " +
-                "ON c.id = r.cacheId;");
+        //public List<Cache> GetByTerrainDifficulty(double diffictulty, FilterCriterium criterium) {
+        //    IDbCommand cmd = database.CreateCommand(
+        //        "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
+        //        "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+        //        "WHERE c.difficultyTerrain" + FilterCriteriumToString(criterium) + "@difficulty;");
 
-            database.DefineParameter(cmd, "grade", DbType.Double, rating);
+        //    database.DefineParameter(cmd, "difficulty", DbType.Double, diffictulty);
+        //    return GetCacheListFor(cmd);
+        //}
 
-            return GetCacheListFor(cmd);
-        }
+        //public List<Cache> GetByAverageRating(double rating, FilterCriterium criterium) {
+        //    IDbCommand cmd = database.CreateCommand(
+        //        "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
+        //        "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+        //        "INNER JOIN " +
+        //        "(SELECT cacheId, AVG(grade) AS grade " +
+        //        "FROM cache_rating GROUP BY cacheId " +
+        //        "HAVING grade" + FilterCriteriumToString(criterium) + "@grade) AS r " +
+        //        "ON c.id = r.cacheId;");
 
-        public List<Cache> GetBySize(string size, FilterCriterium criterium) {
+        //    database.DefineParameter(cmd, "grade", DbType.Double, rating);
 
-            int sizeCode = GetIdForSize(size);
+        //    return GetCacheListFor(cmd);
+        //}
+
+        //public List<Cache> GetBySize(string size, FilterCriterium criterium) {
+
+        //    int sizeCode = GetIdForSize(size);
            
-            IDbCommand cmd = database.CreateCommand(
-                "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
-                "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
-                "WHERE c.sizeCode" + FilterCriteriumToString(criterium) + "@size;");
+        //    IDbCommand cmd = database.CreateCommand(
+        //        "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
+        //        "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+        //        "WHERE c.sizeCode" + FilterCriteriumToString(criterium) + "@size;");
 
-            database.DefineParameter(cmd, "size", DbType.Int32, sizeCode);
-            return GetCacheListFor(cmd);
-        }
+        //    database.DefineParameter(cmd, "size", DbType.Int32, sizeCode);
+        //    return GetCacheListFor(cmd);
+        //}
 
         public List<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition @from, GeoPosition to) {
             IDbCommand cmd = database.CreateCommand(

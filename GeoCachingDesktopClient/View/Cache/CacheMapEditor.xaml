@@ -6,13 +6,19 @@
              xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
              xmlns:src="clr-namespace:Swk5.GeoCaching.Desktop.View.Cache"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="600">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-            <m:Map Grid.Column="0" CredentialsProvider="myCreds" Name="CacheMap" Center="48.123, 13.9" ZoomLevel="10"
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <m:Map Grid.Row="0" CredentialsProvider="myCreds" Name="CacheMap" Center="48.123, 13.9" ZoomLevel="10"
                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                            Margin="4" MouseDoubleClick="OnCacheMapClicked" MouseRightButtonDown="OnCacheMapRightClicked">
                 <m:MapItemsControl ItemsSource="{Binding Path=Caches}">
@@ -23,6 +29,37 @@
                     </m:MapItemsControl.ItemTemplate>
                 </m:MapItemsControl>
             </m:Map>
+            
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <TextBlock Text="Filter caches:" />
+                <ComboBox Name="FilterCriteriumBox" Margin="5,0" ItemsSource="{Binding Path=FilterCriteria}"
+                          SelectedItem="{Binding Path=CurrentFilterCriterium}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Caption}" />                            
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <ComboBox Name="FilterLimiterBox" Margin="5,0" ItemsSource="{Binding Path=FilterOperations}"
+                          SelectedItem="{Binding Path=CurrentFilterOperation}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Caption}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <ComboBox Name="FilterValueBox" Margin="5,0" ItemsSource="{Binding Path=FilterValues}"
+                          SelectedItem="{Binding Path=CurrentFilterValue}">
+                </ComboBox>
+                
+                <Button Command="{Binding Path=ActualizeCommand}" Margin="5,0">Actualize</Button>
+
+            </StackPanel>
+
+        </Grid>
+           
         <src:CacheDetailsEditor Grid.Column="1" />
     </Grid>
 </UserControl>
