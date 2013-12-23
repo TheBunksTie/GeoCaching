@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DAL.MySQLServer;
 using Swk5.GeoCaching.DAL.MySQLServer.Dao;
@@ -42,8 +41,17 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void InsertDeleteTest() {
-            var cache = new Cache(-1, "my special test cache", new DateTime(2010, 10, 17), 1.9, 2.5, "Regular", 223, new GeoPosition(47.451, 13.89),
-                "this is a test unit test cache");
+            var cache = new Cache {
+                Id = -1,
+                Name = "my special test cache",
+                CreationDate = new DateTime(2010, 10, 17),
+                TerrainDifficulty = 1.9,
+                CacheDifficulty = 2.5,
+                Size = "Regular",
+                OwnerId = 223,
+                Position = new GeoPosition(47.451, 13.89),
+                Description = "this is a test unit test cache"
+            };
             int id = target.Insert(cache);
             Assert.IsTrue(id > 0);
 
@@ -68,12 +76,12 @@ namespace GeoCachingTest {
             expected.Add(new Cache {Id = 207});
             expected.Add(new Cache {Id = 217});
 
-            //IList<Cache> actual = target.GetInRegionRatedBetween(begin, end, from, to);
-            //Assert.AreEqual(expected.Count, actual.Count);
+            IList<Cache> actual = target.GetInRegionRatedBetween(begin, end, from, to);
+            Assert.AreEqual(expected.Count, actual.Count);
 
-            //foreach (Cache cache in expected) {
-            //    Assert.IsTrue(actual.Contains(cache));
-            //}
+            foreach ( Cache cache in expected ) {
+                Assert.IsTrue(actual.Contains(cache));
+            }
         }
 
         [TestMethod]
@@ -89,12 +97,12 @@ namespace GeoCachingTest {
             expected.Add(new Cache {Id = 426});
             expected.Add(new Cache {Id = 499});
 
-            //IList<Cache> actual = target.GetInRegionFoundBetween(begin, end, from, to);
-            //Assert.AreEqual(expected.Count, actual.Count);
+            IList<Cache> actual = target.GetInRegionFoundBetween(begin, end, from, to);
+            Assert.AreEqual(expected.Count, actual.Count);
 
-            //foreach (Cache cache in expected) {
-            //    Assert.IsTrue(actual.Contains(cache));
-            //}
+            foreach ( Cache cache in expected ) {
+                Assert.IsTrue(actual.Contains(cache));
+            }
         }
 
         [TestMethod]
@@ -109,17 +117,17 @@ namespace GeoCachingTest {
             expected.Add(new Cache {Id = 47});
             expected.Add(new Cache {Id = 73});
 
-            //IList<Cache> actual = target.GetInRegionCreatedBetween(begin, end, from, to);
-            //Assert.AreEqual(expected.Count, actual.Count);
+            IList<Cache> actual = target.GetInRegionCreatedBetween(begin, end, from, to);
+            Assert.AreEqual(expected.Count, actual.Count);
 
-            //foreach (Cache cache in expected) {
-            //    Assert.IsTrue(actual.Contains(cache));
-            //}
+            foreach ( Cache cache in expected ) {
+                Assert.IsTrue(actual.Contains(cache));
+            }
         }
 
         [TestMethod]
         public void GetCachesByTerrainDifficultyTest() {
-            const double difficulty = 4.9;
+            const string value = "4,9";
             IList<Cache> expected = new List<Cache>();
             expected.Add(new Cache {Id = 9});
             expected.Add(new Cache {Id = 64});
@@ -131,13 +139,13 @@ namespace GeoCachingTest {
             expected.Add(new Cache {Id = 299});
             expected.Add(new Cache {Id = 316});
             expected.Add(new Cache {Id = 413});
-            
-            // TODO IList<Cache> actual = target.GetByTerrainDifficulty(difficulty, FilterCriterium.AboveEquals);
-            //Assert.AreEqual(expected.Count, actual.Count);
 
-            //foreach (Cache cache in expected) {
-            //    Assert.IsTrue(actual.Contains(cache));
-            //}
+            IList<Cache> actual = target.GetCachesByCriterium(FilterCriterium.TerrainDifficulty, FilterOperation.AboveEquals, value);
+            Assert.AreEqual(expected.Count, actual.Count);
+
+            foreach ( Cache cache in expected ) {
+                Assert.IsTrue(actual.Contains(cache));
+            }
         }
 
         [TestMethod]
@@ -162,46 +170,48 @@ namespace GeoCachingTest {
         }
 
         [TestMethod]
-        public void GetCachesBySizeTest() {
+        public void GetCachesBySizeTest ( ) {
+            const string value = "4";
             IList<Cache> expected = new List<Cache>();
-            expected.Add(new Cache {Id = 49});
-            expected.Add(new Cache {Id = 106});
-            expected.Add(new Cache {Id = 132});
-            expected.Add(new Cache {Id = 277});
-            expected.Add(new Cache {Id = 297});
-            expected.Add(new Cache {Id = 301});
-            expected.Add(new Cache {Id = 387});
-            expected.Add(new Cache {Id = 441});
-            expected.Add(new Cache {Id = 473});
+            expected.Add(new Cache { Id = 49 });
+            expected.Add(new Cache { Id = 106 });
+            expected.Add(new Cache { Id = 132 });
+            expected.Add(new Cache { Id = 277 });
+            expected.Add(new Cache { Id = 297 });
+            expected.Add(new Cache { Id = 301 });
+            expected.Add(new Cache { Id = 387 });
+            expected.Add(new Cache { Id = 441 });
+            expected.Add(new Cache { Id = 473 });
 
-            // TODO IList<Cache> actual = target.GetBySize("Large", FilterCriterium.Exact);
-            //Assert.AreEqual(expected.Count, actual.Count);
+            IList<Cache> actual = target.GetCachesByCriterium(FilterCriterium.Size, FilterOperation.Exact, value);
+            Assert.AreEqual(expected.Count, actual.Count);
 
-            //foreach (Cache cache in expected) {
-            //    Assert.IsTrue(actual.Contains(cache));
-            //}
+            foreach ( Cache cache in expected ) {
+                Assert.IsTrue(actual.Contains(cache));
+            }
         }
 
         [TestMethod]
-        public void GetCachesByRatingTest() {
-            const double rating = 7.5;
+        public void GetCachesByAveragRating ( ) {
+            const double value = 7.5;
             IList<Cache> expected = new List<Cache>();
-            expected.Add(new Cache {Id = 131});
-            expected.Add(new Cache {Id = 188});
-            expected.Add(new Cache {Id = 229});
-            expected.Add(new Cache {Id = 470});
+            expected.Add(new Cache { Id = 131 });
+            expected.Add(new Cache { Id = 188 });
+            expected.Add(new Cache { Id = 229 });
+            expected.Add(new Cache { Id = 470 });
+           
+            IList<Cache> actual = target.GetByAverageRating(value, FilterOperation.AboveEquals);
+            Assert.AreEqual(expected.Count, actual.Count);
 
-            // TODO IList<Cache> actual = target.GetByAverageRating(rating, FilterCriterium.AboveEquals);
-            //Assert.AreEqual(expected.Count, actual.Count);
-
-            //foreach (Cache cache in expected) {
-            //    Assert.IsTrue(actual.Contains(cache));
-            //}
+            foreach ( Cache cache in expected ) {
+                Assert.IsTrue(actual.Contains(cache));
+            }
         }
-
+    
         [TestMethod]
         public void GetCachesByCacheDifficultyTest() {
-            const double difficulty = 4.8;
+            const string value = "4,8";
+
             IList<Cache> expected = new List<Cache>();
             expected.Add(new Cache {Id = 64});
             expected.Add(new Cache {Id = 72});
@@ -210,12 +220,12 @@ namespace GeoCachingTest {
             expected.Add(new Cache {Id = 108});
             expected.Add(new Cache {Id = 424});
 
-            // TODO IList<Cache> actual = target.GetByCacheDifficulty(difficulty, FilterCriterium.Above);
-            //Assert.AreEqual(expected.Count, actual.Count);
+            IList<Cache> actual = target.GetCachesByCriterium(FilterCriterium.CacheDifficulty, FilterOperation.Above, value);
+            Assert.AreEqual(expected.Count, actual.Count);
 
-            //foreach (Cache cache in expected) {
-            //    Assert.IsTrue(actual.Contains(cache));
-            //}
+            foreach (Cache cache in expected) {
+                Assert.IsTrue(actual.Contains(cache));
+            }
         }
 
         [TestMethod]
