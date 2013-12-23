@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DomainModel;
@@ -23,12 +24,7 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         public List<Image> GetImagesForCache(int cacheId) {
             return imageDao.GetAllForCache(cacheId);
         }
-
-        public bool AssignImageToCache(Image image) {
-            // TODO check if name of image is not already in db, else rename? 
-            return imageDao.Insert(image);
-        }
-
+    
         public List<Cache> GetCacheList() {
             return cacheDao.GetAll();
         }
@@ -38,7 +34,15 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         }
 
         public Cache CreateNewPositionedCache(int ownerId, double latitude, double longitude) {
-            Cache defaultCache = new Cache(-1, "<default cache>", new DateTime(), 1, 1, "Regular", ownerId, new GeoPosition(latitude, longitude), "put a short description here" );
+            var defaultCache = new Cache(-1,
+                "<default cache>",
+                DateTime.Now,
+                1,
+                1,
+                "Regular",
+                ownerId,
+                new GeoPosition(latitude, longitude),
+                "put a short description here");
             cacheDao.Insert(defaultCache);
             return defaultCache;
         }
@@ -55,20 +59,46 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
             // check if there are no assigned log entries or ratings
             if (logEntryDao.GetLogEntriesForCache(cacheId).Count == 0 ||
                 ratingDao.GetRatingsForCache(cacheId).Count == 0) {
-                
-                imageDao.DeleteAllForCache(cacheId);                                
+                imageDao.DeleteAllForCache(cacheId);
                 return cacheDao.Delete(cacheId);
             }
-            throw new Exception("Error: Unable to delete Cache due to assigned log entries/ratings.");
+            throw new Exception("Error: Unable to delete cache due to assigned log entries/ratings.");
         }
 
-        public List<Cache> GetFilteredCacheList(FilterCriterium criterium = FilterCriterium.Size, FilterOperation operation = FilterOperation.AboveEquals, string filterValue = "1") {
+        public Image UploadImage(int cacheId, Stream imageStream, string fileExtension) {
+            var image = new Image {
+                Id = -1,
+                CacheId = cacheId,
+                FileName = imageStream.GetHashCode() + DateTime.Now.GetHashCode() + fileExtension,
+            };
+
+            using (var memoryStream = new MemoryStream()) {
+                imageStream.CopyTo(memoryStream);
+                image.ImageData = memoryStream.ToArray();
+            }
+
+            // put into database
+            if (imageDao.Insert(image)) {
+                return image;
+            }
+            throw new Exception("Error: Unable to upload image.");
+        }
+
+        public void DeleteImage(Image image) {
+            if (!imageDao.Delete(image)) {
+                throw new Exception("Error: Unable to delete image");
+            }
+        }
+
+        public List<Cache> GetFilteredCacheList(FilterCriterium criterium = FilterCriterium.Size,
+            FilterOperation operation = FilterOperation.AboveEquals,
+            string filterValue = "1") {
             try {
                 return cacheDao.GetCacheByCriterium(criterium, operation, filterValue);
             }
             catch {
                 throw new Exception("Error: Unable to resolve filter criterium.");
-            }            
+            }
         }
     }
 }

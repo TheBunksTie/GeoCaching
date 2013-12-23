@@ -8,7 +8,7 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
 
         // write
         bool Insert(Image image);
-        bool Delete(int id);
+        bool Delete(Image image);
         bool DeleteAllForCache(int cacheId);
     }
 }

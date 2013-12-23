@@ -5,6 +5,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="500">
+    <UserControl.Resources>
+        <Style TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="MinWidth" Value="110" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="20,0,5,0"/>
+        </Style>
+        
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="50" />
+            <!--<Setter Property="Margin" Value="4" />-->
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="Margin" Value="4" />
+        </Style>
+
+    </UserControl.Resources>
+    
     <Grid Margin="2">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -26,31 +57,40 @@
                 <RowDefinition Height="0.2*" />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" MinWidth="55" Text="Images:" Margin="4,2" VerticalAlignment="Center"/>
-            <ListBox Grid.Row="1" Name="ListImages" BorderThickness="0" MinHeight="100" Margin="4,2"
-                    ItemsSource="{Binding Path=CurrentCache.Images}" 
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     SelectedItem="{Binding Path=CurrentImage}">
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="Images (" Margin="0" />
+                <TextBlock Text="{Binding Path=CurrentCache.Images.Count}" Margin="0" />
+                <TextBlock Text=")" Margin="0"/>
+            </StackPanel>            
+
+            <ListBox Grid.Row="1" BorderThickness="0" MinHeight="100" Margin="4,2"
+                    DataContext="{Binding Path=CurrentCache}"
+                    ItemsSource="{Binding Path=Images}" 
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    SelectedItem="{Binding Path=CurrentImage, Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="2">
-                            <!-- TODO acces to real image not via path but image itself-->
-                            <Image Source="{Binding Path=Image}" />
+                            <Image Source="{Binding Path=WpfImageSource}" />
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                <!-- for horizontal listing of images -->
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel ItemHeight="95" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
             </ListBox>
             <Grid Grid.Row="2" Margin="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="90" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="90" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="1" Command="{Binding Path=UploadImageCommand}">Add Image</Button>
-                <Button Grid.Column="3" Command="{Binding Path=DeleteImageCommand}">Delete Image</Button>
+                <Button Grid.Column="0" Command="{Binding Path=CurrentCache.UploadImageCommand}">Add Image</Button>
+                <Button Grid.Column="1" Command="{Binding Path=CurrentCache.DeleteCurrentImageCommand}">Delete Image</Button>
             </Grid>
 
             <Grid Grid.Row="3" Margin="2">
@@ -69,8 +109,8 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock MinWidth="65" Grid.Column="0" Text="Created On:" Margin="2" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.CreationDateString}"/>
+                <TextBlock MinWidth="65" Grid.Column="0" Text="Created On:" Margin="2" />
+                <TextBlock Grid.Column="1" Text="{Binding Path=CurrentCache.CreationDateString}"/>
             </Grid>
 
             <!-- Difficulties -->
@@ -81,10 +121,10 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" MinWidth="65" Text="Difficulty:" Margin="2" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.CacheDifficulty, Mode=TwoWay}"/>
-                <TextBlock Grid.Column="2" Text="Terrain Difficulty:" Margin="10,2" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="3" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.TerrainDifficulty, Mode=TwoWay}"/>
+                <TextBlock Grid.Column="0" MinWidth="65" Text="Difficulty:" Margin="2"/>
+                <TextBox Grid.Column="1" Text="{Binding Path=CurrentCache.CacheDifficulty, Mode=TwoWay}"/>
+                <TextBlock Grid.Column="2" Text="Terrain Difficulty:" Margin="10,2"/>
+                <TextBox Grid.Column="3" Text="{Binding Path=CurrentCache.TerrainDifficulty, Mode=TwoWay}"/>
             </Grid>
 
             <!-- cache size -->
@@ -93,7 +133,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" MinWidth="65" Text="Size:" Margin="2" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" MinWidth="65" Text="Size:" Margin="2"/>
                 <ComboBox Grid.Column="1" ItemsSource="{Binding Path=SizeList}" SelectedItem="{Binding Path=CurrentCache.Size}"/>
             </Grid>
 
@@ -105,10 +145,10 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" MinWidth="65" Text="Latitude:" Margin="2" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.Latitude, Mode=TwoWay}"/>
-                <TextBlock Grid.Column="2" Text="Longitude:" Margin="10,2" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="3" VerticalAlignment="Center" Text="{Binding Path=CurrentCache.Longitude, Mode=TwoWay}"/>
+                <TextBlock Grid.Column="0" MinWidth="65" Text="Latitude:" Margin="2" />
+                <TextBox Grid.Column="1" Text="{Binding Path=CurrentCache.Latitude, Mode=TwoWay}"/>
+                <TextBlock Grid.Column="2" Text="Longitude:" Margin="10,2" />
+                <TextBox Grid.Column="3" Text="{Binding Path=CurrentCache.Longitude, Mode=TwoWay}"/>
             </Grid>
 
             <!-- owner -->
@@ -117,13 +157,14 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" MinWidth="65" Text="Owner:" Margin="2" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="1" Text="{Binding Path=CurrentCache.Owner}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" MinWidth="65" Text="Owner:" Margin="2" />
+                <TextBlock Grid.Column="1" Text="{Binding Path=CurrentCache.Owner}" />
             </Grid>
 
             <!-- description -->
-            <TextBlock Grid.Row="9" MinWidth="55" Text="Description:" Margin="4,2" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="10" Margin="4,2" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Text="{Binding Path=CurrentCache.Description}"/>
+            <TextBlock Grid.Row="9" MinWidth="55" Text="Description:" Margin="4,2" />
+            <TextBox Grid.Row="10" Margin="4,2" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  
+                     Text="{Binding Path=CurrentCache.Description}" VerticalAlignment="Stretch"/>
         </Grid>
 
         <Grid Row="1">
@@ -131,8 +172,8 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" HorizontalAlignment="Center" Width="90" Name="SaveCacheBtn" Margin="4" Command="{Binding Path=CurrentCache.UpdateCommand}">Save</Button>
-            <Button Grid.Column="1" HorizontalAlignment="Center" Width="90" Name="DeleteCacheBtn" Margin="4" Command="{Binding Path=DeleteCurrentCacheCommand}">Delete</Button>
+            <Button Grid.Column="0" Command="{Binding Path=CurrentCache.UpdateCommand}">Save</Button>
+            <Button Grid.Column="1" Command="{Binding Path=DeleteCurrentCacheCommand}">Delete</Button>
         </Grid>
     </Grid>
 

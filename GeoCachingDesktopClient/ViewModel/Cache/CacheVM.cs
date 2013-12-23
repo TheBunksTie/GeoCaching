@@ -1,8 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Maps.MapControl.WPF;
+using Microsoft.Win32;
 using Swk5.GeoCaching.BusinessLogic.CacheManager;
+using Swk5.GeoCaching.Desktop.ViewModel.Cache.Image;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
@@ -13,6 +20,9 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
 
         private readonly Location location;
         private readonly string ownerName;
+        private ImageVM currentImage;
+        private ICommand deleteImage;
+        private ICommand newImage;
         private ICommand updateCommand;
 
         public CacheVM(ICacheManager cacheManager, DomainModel.Cache cache) {
@@ -22,10 +32,13 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
             ownerName = cacheManager.GetCacheOwner(this.cache).Name;
 
             // create new image collection vm (includes async loading of all assignes images)
-            Images = new ImageCollectionVM(cacheManager, cache);
+            Images = new ObservableCollection<ImageVM>();
+            LoadImages();
+
+            CurrentImage = Images.FirstOrDefault();
         }
 
-        public ImageCollectionVM Images { get; private set; }
+        public ObservableCollection<ImageVM> Images { get; private set; }
 
         public int Id {
             get { return cache.Id; }
@@ -133,8 +146,34 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
             get { return location; }
         }
 
+        public ImageVM CurrentImage {
+            get { return currentImage; }
+            set {
+                if (currentImage != value) {
+                    currentImage = value;
+                    RaisePropertyChangedEvent(vm => vm.CurrentImage);
+                }
+            }
+        }
+
+        public ICommand UploadImageCommand {
+            get { return newImage ?? (newImage = new RelayCommand(param => UploadImage())); }
+        }
+
+        public ICommand DeleteCurrentImageCommand {
+            get { return deleteImage ?? (deleteImage = new RelayCommand(param => DeleteImage())); }
+        }
+
         public ICommand UpdateCommand {
             get { return updateCommand ?? (updateCommand = new RelayCommand(param => UpdateCache())); }
+        }
+
+        private async void LoadImages() {
+            IEnumerator<DomainModel.Image> e = cacheManager.GetImagesForCache(cache.Id).GetEnumerator();
+
+            while (await Task.Factory.StartNew(() => e.MoveNext())) {
+                Images.Add(new ImageVM(cacheManager, e.Current));
+            }
         }
 
         private void UpdateCache() {
@@ -143,6 +182,35 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
             }
             catch (Exception e) {
                 MessageBox.Show(e.Message, "Cache manager error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void UploadImage() {            
+            var openFileDialog = new OpenFileDialog {DefaultExt = ".jpg", Filter = "Image Files |*.png; *.jpg; *.gif"};
+
+            if (openFileDialog.ShowDialog() == true) {
+                try {
+                    DomainModel.Image image = cacheManager.UploadImage(cache.Id, openFileDialog.OpenFile(), Path.GetExtension(openFileDialog.FileName));
+                    // make just uploaded image visible
+                    Images.Add(new ImageVM(cacheManager, image));
+
+                }
+                catch (Exception e) {
+                    MessageBox.Show(e.Message, "Cache manager error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void DeleteImage() {
+            if (CurrentImage != null) {
+                try {
+                    cacheManager.DeleteImage(CurrentImage.Image);
+                    Images.Remove(CurrentImage);
+                    CurrentImage = null;
+                }
+                catch (Exception e) {
+                    MessageBox.Show(e.Message, "Cache manager error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

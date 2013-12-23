@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
@@ -19,7 +20,7 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         List<Image> GetImagesForCache(int cacheId);
 
         // upload and associate a certain image with a cache
-        bool AssignImageToCache(Image image);
+        Image UploadImage (int cacheId, Stream imageStream, string fileExtension);
 
         // creates a new cache with default values
         bool CreateNewDefaultCache();
@@ -32,6 +33,7 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         bool UpdateExisitingCache(Cache c);
 
         // try to delete cache
-        bool DeleteCache(int cacheId);        
+        bool DeleteCache(int cacheId);
+        void DeleteImage(Image image);
     }
 }
