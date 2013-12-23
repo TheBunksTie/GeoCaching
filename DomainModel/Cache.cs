@@ -1,26 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Swk5.GeoCaching.DomainModel {
-   
     public class Cache : IEquatable<Cache> {
-        private readonly IList<string> assignedImages = new List<string>();
         private double cacheDifficulty;
         private double terrainDifficulty;
-
-        public Cache(int id, string name, DateTime creationDate, double cacheDifficulty, double terrainDifficulty, string size, int ownerId, GeoPosition position, string description) {
-            Id = id;
-            Name = name;
-            CreationDate = creationDate;
-            CacheDifficulty = cacheDifficulty;
-            TerrainDifficulty = terrainDifficulty;
-            Size = size;
-            OwnerId = ownerId;
-            Position = position;
-            Description = description;
-        }
-
-        public Cache() {}
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -55,10 +38,6 @@ namespace Swk5.GeoCaching.DomainModel {
         public GeoPosition Position { get; set; }
         public string Description { get; set; }
 
-        public IList<string> AssignesImages {
-            get { return assignedImages; }
-        }
-
         public bool Equals(Cache other) {
             if (ReferenceEquals(null, other)) {
                 return false;
@@ -86,12 +65,58 @@ namespace Swk5.GeoCaching.DomainModel {
             return string.Format("Id: {0}, Name: {1}, size: {2}", Id, Name, Size);
         }
 
-        public void AddAssignedImage(string fileName) {
-            assignedImages.Add(fileName);
-        }
-
         public override int GetHashCode() {
             return Id;
         }
     }
+
+    public enum FilterCriterium {
+        Size,
+        TerrainDifficulty,
+        CacheDifficulty
+    }
+
+    public enum FilterOperation {
+        Exact,
+        Above,
+        AboveEquals,
+        Below,
+        BelowEquals
+    }
+
+    public static class EnumExtension {
+        public static string UiCaption ( this FilterCriterium c ) {
+            if ( c == FilterCriterium.Size ) {
+                return "by size";
+            }
+            if ( c == FilterCriterium.CacheDifficulty ) {
+                return "by cache difficulty";
+            }
+            if ( c == FilterCriterium.TerrainDifficulty ) {
+                return "by terrain difficulty";
+            }
+
+            throw new ArgumentException();
+        }
+
+        public static string UiCaption ( this FilterOperation c ) {
+            if ( c == FilterOperation.Below ) {
+                return "less than";
+            }
+            if ( c == FilterOperation.BelowEquals ) {
+                return "less or equal than";
+            }
+            if ( c == FilterOperation.Above ) {
+                return "greater than";
+            }
+            if ( c == FilterOperation.AboveEquals ) {
+                return "greater or equal than";
+            }
+            if ( c == FilterOperation.Exact ) {
+                return "equals";
+            }
+            throw new ArgumentException();
+        }
+    }
+
 }

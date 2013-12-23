@@ -5,10 +5,13 @@ using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.BusinessLogic.AuthenticationManager {
     public class AuthenticationManager : AbstractManagerBase, IAuthenticationManager {
-        private readonly IUserDao userDao = DalFactory.CreateUserDao(database);
-        private bool isAuthenticated;
+        private static readonly IUserDao userDao = DalFactory.CreateUserDao(database);
+        private static User authenticatedUser;
 
         public User AuthenticateUser(string username, string password, bool priviligedRequired) {
+            // reset authentication indicator
+            authenticatedUser = null;
+            
             // hash password
             string passwordHash = password.Encrypt();
 
@@ -27,7 +30,7 @@ namespace Swk5.GeoCaching.BusinessLogic.AuthenticationManager {
                 }
 
                 if (u.Password.Equals(passwordHash)) {
-                    isAuthenticated = true;
+                    authenticatedUser = u;
                     return u;
                 }
             }
@@ -35,11 +38,11 @@ namespace Swk5.GeoCaching.BusinessLogic.AuthenticationManager {
         }
 
         public void LogoutUser() {
-            isAuthenticated = false;
+            authenticatedUser = null;
         }
 
-        public bool IsAuthenticated {
-            get { return isAuthenticated; }
+        public User AuthenticatedUser {
+            get { return authenticatedUser; }
         }
     }
 }

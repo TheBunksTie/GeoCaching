@@ -7,13 +7,13 @@ namespace Swk5.GeoCaching.Desktop.View.Cache {
     /// <summary>
     ///     Interaction logic for CacheEditor.xaml
     /// </summary>
-    public partial class CacheEditor : UserControl {
+    public partial class CacheEditor {
         private readonly ICacheManager cacheManager = GeoCachingBLFactory.GetCacheManager();
-        private CacheCollectionVM cacheCollectionVm;
 
         public CacheEditor() {
             InitializeComponent();
-            cacheCollectionVm = new CacheCollectionVM(cacheManager);
+            CacheCollectionVM cacheCollectionVm;
+            
             Loaded += (s, e) => {
                 cacheCollectionVm = new CacheCollectionVM(cacheManager);
                 DataContext = cacheCollectionVm;

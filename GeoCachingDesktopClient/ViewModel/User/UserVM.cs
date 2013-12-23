@@ -9,7 +9,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         private const double TOLERANCE = 0.000001;
 
         private readonly DomainModel.User user;
-        private string passwordRepition;
+        private string passwordRepitition;
 
         private readonly IUserManager userManager;
         private ICommand updateCommand;
@@ -17,8 +17,11 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         public UserVM(IUserManager userManager, DomainModel.User user) {
             this.userManager = userManager;
             this.user = user;
-            passwordRepition = user.Password;
+            passwordRepitition = user.Password;
         }
+
+        // TODO bug when modifying name of existing user to another existing name
+        // check for name duplicates also when just updating
 
         public int Id {
             get { return user.Id; }
@@ -31,10 +34,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
                     user.Name = value;
 
                     RaisePropertyChangedEvent(vm => vm.Name);
-                }
-                else {
-                    throw new ArgumentException("Error: User name must no be empty.");
-                }
+                }                
             }
         }
 
@@ -95,10 +95,10 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         }
 
         public string PasswordRepetition {
-            get { return passwordRepition; }
+            get { return passwordRepitition; }
             set {
-                if ( passwordRepition != value ) {
-                    passwordRepition = value;
+                if ( passwordRepitition != value ) {
+                    passwordRepitition = value;
 
                     RaisePropertyChangedEvent(vm => vm.PasswordRepetition);
                 }

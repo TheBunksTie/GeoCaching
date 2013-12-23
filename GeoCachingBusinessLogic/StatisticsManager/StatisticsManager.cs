@@ -9,8 +9,6 @@ namespace Swk5.GeoCaching.BusinessLogic.StatisticsManager {
     public class StatisticsManager : AbstractManagerBase, IStatisticsManager {
         private readonly ICacheDao cacheDao = DalFactory.CreateCacheDao(database);
         private readonly ILogEntryDao logEntryDao = DalFactory.CreateLogEntryDao(database);
-        private readonly IRatingDao ratingDao = DalFactory.CreateRatingDao(database);
-        private readonly IUserDao userDao = DalFactory.CreateUserDao(database);
 
         public DateTime GetEarliestCacheCreationDate() {
             return cacheDao.GetEarliestCacheCreationDate();
@@ -44,23 +42,23 @@ namespace Swk5.GeoCaching.BusinessLogic.StatisticsManager {
 
         public List<StatisticData> GetCacheDistributionBySize(Filter limitation) {
             return cacheDao.GetCacheDistributionBySize(limitation.FromDate,
-                  limitation.ToDate,
-                  limitation.FromPosition,
-                  limitation.ToPosition);
+                limitation.ToDate,
+                limitation.FromPosition,
+                limitation.ToPosition);
         }
 
         public List<StatisticData> GetCacheDistributionByCacheDifficulty(Filter limitation) {
             return cacheDao.GetCacheDistributionByCacheDifficulty(limitation.FromDate,
-                  limitation.ToDate,
-                  limitation.FromPosition,
-                  limitation.ToPosition);
+                limitation.ToDate,
+                limitation.FromPosition,
+                limitation.ToPosition);
         }
 
         public List<StatisticData> GetCacheDistributionByTerrainDifficulty(Filter limitation) {
             return cacheDao.GetCacheDistributionByTerrainDifficulty(limitation.FromDate,
-                  limitation.ToDate,
-                  limitation.FromPosition,
-                  limitation.ToPosition);
+                limitation.ToDate,
+                limitation.FromPosition,
+                limitation.ToPosition);
         }
     }
 }

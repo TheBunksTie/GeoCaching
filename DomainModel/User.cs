@@ -1,17 +1,7 @@
 ﻿using System;
 
 namespace Swk5.GeoCaching.DomainModel {
-
     public class User : IEquatable<User> {
-        public User(int id, string name, string password, string email, GeoPosition position, string role) {
-            Id = id;
-            Name = name;
-            Password = password;
-            Email = email;
-            Position = position;
-            Role = role;
-        }
-
         public int Id { get; set; }
 
         public string Name { get; set; }

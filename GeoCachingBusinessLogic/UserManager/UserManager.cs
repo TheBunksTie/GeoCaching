@@ -16,7 +16,7 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
             return userDao.GetAllUserRoles();
         }
 
-        public void UpdateExistingUser(User u) {
+        public bool UpdateExistingUser(User u) {
             // encrypt password
             u.Password = u.Password.Encrypt();
 
@@ -27,15 +27,11 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
                 // name must be unique, so check if user has not choosen an already exisiting name
                 User expectedUser = userDao.GetByName(u.Name);
                 if (expectedUser == null || expectedUser.Id == u.Id) {
-                    userDao.Update(u);
+                    return userDao.Update(u);
                 }
-                else {
-                    throw new Exception("Error: The username " + u.Name + " has already been taken.");
-                }
-            }
-            else {
-                throw new Exception("Error: User " + u.Name + " is not exisiting in databse.");
-            }
+                throw new Exception("Error: The username " + u.Name + " has already been taken.");                
+            }            
+            throw new Exception("Error: User " + u.Name + " is not exisiting in databse.");           
         }
 
         public User CreateNewDefaultUser() {
@@ -44,7 +40,7 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
 
             // check if there is another "default" user with default name in database
             if (userDao.GetByName(defaultName) == null) {
-                u = new User(-1, defaultName, "test".Encrypt(), "my.mail@domain.com", new GeoPosition(47.123, 18.123), "Finder");
+                u = new User{Id = -1, Name = defaultName, Password = "".Encrypt(), Email = "my.mail@domain.com", Position = new GeoPosition(47.123, 18.123), Role = "Finder"};
                 userDao.Insert(u);
             }
             else {
@@ -53,9 +49,9 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
             return u;
         }
 
-        public void DeleteUser(int id) {
+        public bool DeleteUser(int id) {
             // TODO check for ownership of cache, logs, ratings
-            userDao.DeleteById(id);
+            return userDao.DeleteById(id);
         }
 
         private void ValidateUserInput(User u) {

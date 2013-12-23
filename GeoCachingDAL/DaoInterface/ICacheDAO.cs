@@ -13,13 +13,9 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         // for finding caches on web plattform
         List<Cache> GetByOwner(int userId);
 
-        List<Cache> GetCacheByCriterium(FilterCriterium criterium, FilterOperation operation, string value);
-
-        //List<Cache> GetByCacheDifficulty(double diffictulty, FilterOperation operation);
-        //List<Cache> GetByTerrainDifficulty(double diffictulty, FilterOperation operation);
-        //List<Cache> GetByAverageRating(double rating, FilterOperation operation);
-        //List<Cache> GetBySize(string size, FilterOperation operation);
-
+        List<Cache> GetCachesByCriterium(FilterCriterium criterium, FilterOperation operation, string value);
+        List<Cache> GetByAverageRating(double rating, FilterOperation operation);
+        
         // base for statistical output 
         DateTime GetEarliestCacheCreationDate();
         DateTime GetLatestCacheCreationDate();
@@ -27,29 +23,14 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         GeoPosition GetLowestCachePosition();
         GeoPosition GetHighestCachePosition();
 
-        List<StatisticData> GetHiddenCachesCountPerUser(DateTime fromDate,
-            DateTime toDate,
-            GeoPosition fromPosition,
-            GeoPosition toPosition);
+        List<StatisticData> GetHiddenCachesCountPerUser(DateTime fromDate, DateTime toDate, GeoPosition fromPosition, GeoPosition toPosition);
+        List<StatisticData> GetCacheDistributionBySize(DateTime fromDate, DateTime toDate, GeoPosition fromPosition, GeoPosition toPosition);
+        List<StatisticData> GetCacheDistributionByCacheDifficulty(DateTime fromDate, DateTime toDate, GeoPosition fromPosition, GeoPosition toPosition);
+        List<StatisticData> GetCacheDistributionByTerrainDifficulty(DateTime fromDate, DateTime toDate, GeoPosition fromPosition, GeoPosition toPosition);
 
-        List<StatisticData> GetCacheDistributionBySize(DateTime fromDate,
-            DateTime toDate,
-            GeoPosition fromPosition,
-            GeoPosition toPosition);
-
-        List<StatisticData> GetCacheDistributionByCacheDifficulty(DateTime fromDate,
-            DateTime toDate,
-            GeoPosition fromPosition,
-            GeoPosition toPosition);
-
-        List<StatisticData> GetCacheDistributionByTerrainDifficulty(DateTime fromDate,
-            DateTime toDate,
-            GeoPosition fromPosition,
-            GeoPosition toPosition);
-
-        //List<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
-        //List<Cache> GetInRegionFoundBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
-        //List<Cache> GetInRegionRatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
+        List<Cache> GetInRegionCreatedBetween ( DateTime begin, DateTime end, GeoPosition from, GeoPosition to );
+        List<Cache> GetInRegionFoundBetween ( DateTime begin, DateTime end, GeoPosition from, GeoPosition to );
+        List<Cache> GetInRegionRatedBetween ( DateTime begin, DateTime end, GeoPosition from, GeoPosition to );
 
         // write
         int Insert(Cache cache);

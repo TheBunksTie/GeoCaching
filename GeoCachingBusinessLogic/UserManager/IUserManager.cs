@@ -13,9 +13,9 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
         User CreateNewDefaultUser();
 
         // trys to find specified user in db and the update him
-        void UpdateExistingUser(User u);
+        bool UpdateExistingUser(User u);
 
         // deletes the user 
-        void DeleteUser(int id);
+        bool DeleteUser(int id);
     }
 }

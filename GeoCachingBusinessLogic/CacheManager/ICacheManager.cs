@@ -13,7 +13,7 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         // retrieve look up list of all define cache sizes
         List<string> GetCacheSizeList();
 
-        // get username for given id
+        // get owner of cache
         User GetCacheOwner(Cache c);
 
         // retrieve all assigned picture for one cache
@@ -22,18 +22,14 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         // upload and associate a certain image with a cache
         Image UploadImage (int cacheId, Stream imageStream, string fileExtension);
 
-        // creates a new cache with default values
-        bool CreateNewDefaultCache();
 
         Cache CreateNewPositionedCache(int ownerId, double latitude, double longitude);
-
-        bool CreateNewCacheFromData(Cache c);
 
         // only updates exisiting cache
         bool UpdateExisitingCache(Cache c);
 
-        // try to delete cache
+        // deletion methods
         bool DeleteCache(int cacheId);
-        void DeleteImage(Image image);
+        bool DeleteImage(Image image);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -127,15 +128,17 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
 
         private void LoadFilterValues() {
             FilterValues = new ObservableCollection<string>();
-            int maxI = 5;
+            int maxValue = 5;
 
             if (CurrentFilterCriterium.Criterium == FilterCriterium.Size) {
-                maxI = 6;
+                maxValue = 6;
                 
             }
-            for ( int i = 1; i <= maxI; i++ ) {
-                FilterValues.Add(String.Format("{0}",i));
+            for ( int i = 1; i <= maxValue; i++ ) {
+                FilterValues.Add(i.ToString(CultureInfo.InvariantCulture));
             }
+
+            CurrentFilterValue = FilterValues.First();
         }
 
         private void LoadFilterCriteria() {

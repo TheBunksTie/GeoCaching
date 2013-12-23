@@ -8,7 +8,7 @@ namespace Swk5.GeoCaching.Desktop.View.User {
     /// <summary>
     ///     Interaction logic for UserEditor.xaml
     /// </summary>
-    public partial class UserEditor : UserControl {
+    public partial class UserEditor {
         private readonly IUserManager userManager = GeoCachingBLFactory.GetUserManager();
         private UserCollectionVM userCollectionVm;
         
@@ -28,7 +28,7 @@ namespace Swk5.GeoCaching.Desktop.View.User {
             }
         }
 
-        // manual handling necessary, because not databinding for password box
+        // manual handling necessary, because no databinding for password box allowed
         private void OnPasswordLostFocus(object sender, RoutedEventArgs e) {
             userCollectionVm.CurrentUser.Password = (( PasswordBox ) sender).Password;
         }

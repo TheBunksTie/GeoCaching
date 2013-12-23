@@ -32,7 +32,7 @@
             
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <TextBlock Text="Filter caches:" />
-                <ComboBox Name="FilterCriteriumBox" Margin="5,0" ItemsSource="{Binding Path=FilterCriteria}"
+                <ComboBox Margin="5,0" ItemsSource="{Binding Path=FilterCriteria}"
                           SelectedItem="{Binding Path=CurrentFilterCriterium}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>

@@ -11,7 +11,7 @@ namespace Swk5.GeoCaching.Desktop.View.Cache {
     /// <summary>
     ///     Interaction logic for CacheMapEditor.xaml
     /// </summary>
-    public partial class CacheMapEditor : UserControl {
+    public partial class CacheMapEditor {
         private readonly ICacheManager cacheManager = GeoCachingBLFactory.GetCacheManager();
         private CacheCollectionVM cacheCollectionVm;
 
@@ -47,6 +47,7 @@ namespace Swk5.GeoCaching.Desktop.View.Cache {
             // transform clicked coordinated to geo location
             Location clickedLocation = (( Map ) sender).ViewportPointToLocation(new Point(e.GetPosition(CacheMap).X, e.GetPosition(CacheMap).Y));
 
+            // TODO retrieve Id of currently authenticated user for ownership of cache
             cacheCollectionVm.CurrentCache = new CacheVM(cacheManager, cacheManager.CreateNewPositionedCache(1, clickedLocation.Latitude, clickedLocation.Longitude));
             cacheCollectionVm.Caches.Add(cacheCollectionVm.CurrentCache);
         }

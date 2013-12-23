@@ -125,13 +125,14 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                 var users = new List<User>();
 
                 while (reader.Read()) {
-                    users.Add(new User(
-                        ( int ) reader["id"],
-                        ( string ) reader["name"],
-                        ( string ) reader["password"],
-                        ( string ) reader["email"],
-                        new GeoPosition(( double ) reader["latitude"], ( double ) reader["longitude"]),
-                        ( string ) reader["roleDescription"]));
+                    users.Add(new User {
+                        Id = ( int ) reader["id"],
+                        Name = reader["name"].ToString(),
+                        Password = reader["password"].ToString(),
+                        Email = reader["email"].ToString(),
+                        Position = new GeoPosition(( double ) reader["latitude"], ( double ) reader["longitude"]),
+                        Role = reader["roleDescription"].ToString()
+                    });
                 }
                 return users;
             }

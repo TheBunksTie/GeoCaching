@@ -12,7 +12,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
         private readonly IStatisticsManager statisticsManager;
         private StatisticVM currentStatistic;
         private bool dateFilterRequested;
-        private Filter defaultFilter;
+        private readonly Filter defaultFilter;
 
         private ICommand getStatisticsCommand;
 
@@ -129,4 +129,6 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
             }
         }
     }
+    // TODO display number of results for each statistical query
+
 }

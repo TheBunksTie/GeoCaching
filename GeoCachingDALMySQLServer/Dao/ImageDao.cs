@@ -66,13 +66,12 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                "WHERE cacheId = @cacheId;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
 
-            return database.ExecuteNonQuery(cmd) >= 0;
+            return database.ExecuteNonQuery(cmd) > 0;
         }
 
         private List<Image> GetImagesForCache(IDbCommand cmd) {
             using (IDataReader reader = database.ExecuteReader(cmd)) {
                 var images = new List<Image>();
-
 
                 // while reading add app-wise configured local image storage to pathname
                 while (reader.Read()) {
@@ -82,7 +81,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                         FileName = reader["fileName"].ToString()});
                 }
 
-                // explicitly load each image (for use in async methods, when reader is already closed)
+                // explicitly load each image (for use in async methods and when reader is already closed)
                 foreach (Image image in images) {
                     image.LoadImageData(database.LocalImageRepository + @"\");
                 }

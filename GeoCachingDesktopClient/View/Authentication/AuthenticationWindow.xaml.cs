@@ -6,7 +6,7 @@ namespace Swk5.GeoCaching.Desktop.View.Authentication {
     /// <summary>
     ///     Interaction logic for AuthenticationWindow.xaml
     /// </summary>
-    public partial class AuthenticationWindow : Window {
+    public partial class AuthenticationWindow {
         private readonly IAuthenticationManager authenticationManager = new AuthenticationManager();
 
         public AuthenticationWindow() {
@@ -16,7 +16,7 @@ namespace Swk5.GeoCaching.Desktop.View.Authentication {
         private void LoginButton_OnClick(object sender, RoutedEventArgs e) {
 
             if (authenticationManager.AuthenticateUser(UsernameBox.Text, PasswordBox.Password, true) != null) {
-                new GeocachingWindow().Show();
+                new GeocachingWindow(authenticationManager).Show();
                 Close();
             }
             else {

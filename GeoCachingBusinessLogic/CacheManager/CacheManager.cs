@@ -12,7 +12,7 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         private readonly ILogEntryDao logEntryDao = DalFactory.CreateLogEntryDao(database);
         private readonly IRatingDao ratingDao = DalFactory.CreateRatingDao(database);
         private readonly IUserDao userDao = DalFactory.CreateUserDao(database);
-
+        
         public List<string> GetCacheSizeList() {
             return cacheDao.GetAllCacheSizes();
         }
@@ -29,26 +29,12 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
             return cacheDao.GetAll();
         }
 
-        public bool CreateNewDefaultCache() {
-            throw new NotImplementedException();
-        }
-
         public Cache CreateNewPositionedCache(int ownerId, double latitude, double longitude) {
-            var defaultCache = new Cache(-1,
-                "<default cache>",
-                DateTime.Now,
-                1,
-                1,
-                "Regular",
-                ownerId,
-                new GeoPosition(latitude, longitude),
-                "put a short description here");
+            var defaultCache = new Cache{ Id = -1,
+                Name = "<default cache>", CreationDate = DateTime.Now, CacheDifficulty = 1, TerrainDifficulty = 1, Size = "Regular",
+                OwnerId = ownerId, Position = new GeoPosition(latitude, longitude), Description = "put a short description here"};
             cacheDao.Insert(defaultCache);
             return defaultCache;
-        }
-
-        public bool CreateNewCacheFromData(Cache c) {
-            throw new NotImplementedException();
         }
 
         public bool UpdateExisitingCache(Cache c) {
@@ -59,6 +45,7 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
             // check if there are no assigned log entries or ratings
             if (logEntryDao.GetLogEntriesForCache(cacheId).Count == 0 ||
                 ratingDao.GetRatingsForCache(cacheId).Count == 0) {
+                
                 imageDao.DeleteAllForCache(cacheId);
                 return cacheDao.Delete(cacheId);
             }
@@ -84,17 +71,18 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
             throw new Exception("Error: Unable to upload image.");
         }
 
-        public void DeleteImage(Image image) {
+        public bool DeleteImage(Image image) {
             if (!imageDao.Delete(image)) {
                 throw new Exception("Error: Unable to delete image");
             }
+            return true;
         }
 
         public List<Cache> GetFilteredCacheList(FilterCriterium criterium = FilterCriterium.Size,
             FilterOperation operation = FilterOperation.AboveEquals,
             string filterValue = "1") {
             try {
-                return cacheDao.GetCacheByCriterium(criterium, operation, filterValue);
+                return cacheDao.GetCachesByCriterium(criterium, operation, filterValue);
             }
             catch {
                 throw new Exception("Error: Unable to resolve filter criterium.");

@@ -6,10 +6,6 @@
              xmlns:cache1="clr-namespace:Swk5.GeoCaching.Desktop.View.Cache"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
-
-
-    <!-- TODO vielleicht den cache als data template benutzen und bei dessen pin komponente onClick?-->
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -19,7 +15,6 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -36,6 +31,10 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <TextBlock Text="Number of caches: "/>
+                <TextBlock Text="{Binding Path=Caches.Count}" Margin="5,0"/>
+            </StackPanel>            
         </Grid>
         <cache1:CacheDetailsEditor Grid.Column="1" />  
     </Grid>
