@@ -8,6 +8,14 @@ bin/
 obj/
 Properties/
 images/
+.projects/
+.settings/
+.metadata/
+.externalToolBuilders/
+build/
+
+#libraries
+lib/
 
 
 # Local configuration file (sdk path, etc)
@@ -15,7 +23,9 @@ images/
 *.user
 *.suo
 *.csproj
-
+*.classpath
+*.project
+*.lnk
 
 # projects 
 GeoCachingDALConsoleClient/

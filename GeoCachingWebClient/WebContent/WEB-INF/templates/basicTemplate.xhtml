@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+    <title><ui:insert name="title">Default title</ui:insert></title>
+    <h:outputStylesheet name="css/styles.css" />
+</h:head>
+
+<h:body>
+	<div id="header">
+	    <ui:insert name="header">
+	    	<ui:include src="/WEB-INF/templates/header.xhtml"/>
+	    </ui:insert>
+	</div>
+	
+	
+	<div id="content">
+		<ui:insert name="content">
+		    Content area.  See comments below this line in the source.
+		</ui:insert>
+	</div>
+	
+	<div id="footer">
+		<ui:insert name="footer">
+		    <br />
+			<div style="background-color: navy; width: 100%; color: white">
+			    GeoCachingWebClient v1.0
+			</div>
+		</ui:insert>
+	</div>
+</h:body>
+</html>
