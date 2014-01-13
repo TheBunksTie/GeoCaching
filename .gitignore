@@ -28,6 +28,7 @@ lib/
 *.project
 *.lnk
 *.cmd
+build.xml
 
 # projects 
 GeoCachingDALConsoleClient/
