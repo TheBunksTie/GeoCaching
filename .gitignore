@@ -27,6 +27,7 @@ lib/
 *.classpath
 *.project
 *.lnk
+*.cmd
 
 # projects 
 GeoCachingDALConsoleClient/
