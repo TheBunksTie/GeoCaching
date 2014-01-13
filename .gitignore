@@ -1,6 +1,7 @@
 # built application files
 *.exe
 *.dll
+*.class
 packages.config
 
 # generated files
