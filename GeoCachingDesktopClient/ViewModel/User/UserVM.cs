@@ -86,7 +86,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         public string Password {
             get { return user.Password; }
             set {
-                if (user.Password != value) {
+                if ( user.Password != value ) {
                     user.Password = value;
 
                     RaisePropertyChangedEvent(vm => vm.Password);
@@ -118,7 +118,12 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         private void UpdateUser() {
 
             if (Password.Equals(PasswordRepetition)) {
-                userManager.UpdateExistingUser(user);
+                try {
+                    userManager.UpdateExistingUser(user);
+                }
+                catch (Exception e) {
+                    MessageBox.Show(e.Message, "User manager error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             else {
                 MessageBox.Show("Error: Provided passwords do not match", "User manager error", MessageBoxButton.OK, MessageBoxImage.Error);                

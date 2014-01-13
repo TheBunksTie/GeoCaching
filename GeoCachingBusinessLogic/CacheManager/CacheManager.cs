@@ -24,7 +24,15 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         public List<Image> GetImagesForCache(int cacheId) {
             return imageDao.GetAllForCache(cacheId);
         }
-    
+
+        public List<LogEntry> GetLogEntriesforCache(int cacheId) {
+            return logEntryDao.GetLogEntriesForCache(cacheId);
+        }
+
+        public double GetAverageRatingForCache(int cacheId) {
+            return ratingDao.GetAverageCacheRating(cacheId);
+        }
+
         public List<Cache> GetCacheList() {
             return cacheDao.GetAll();
         }
@@ -39,6 +47,15 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
 
         public bool UpdateExisitingCache(Cache c) {
             return cacheDao.Update(c);
+        }
+
+        public bool AddLogEntryForCache(LogEntry entry) {
+            // TODO validation of entry
+            return (logEntryDao.Insert(entry) > 0);
+        }
+
+        public bool AddRatingForCache(Rating rating) {
+            return (ratingDao.Insert(rating) > 0);
         }
 
         public bool DeleteCache(int cacheId) {

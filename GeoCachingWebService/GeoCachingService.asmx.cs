@@ -19,23 +19,71 @@ namespace GeoCaching.Services {
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
     // [System.Web.Script.Services.ScriptService]
     public class GeoCachingService : WebService {
-
-        private IAuthenticationManager authenticationManager = GeoCachingBLFactory.GetAuthentificationManager();
-        private ICacheManager cacheManager = GeoCachingBLFactory.GetCacheManager();
-
+        private readonly IAuthenticationManager authenticationManager = GeoCachingBLFactory.GetAuthentificationManager();
+        private readonly ICacheManager cacheManager = GeoCachingBLFactory.GetCacheManager();
 
         // -------------------------------- Authentication -------------------------------
 
         [WebMethod]
-        public bool AuthenticateUser(string username, string password) {
-            return (authenticationManager.AuthenticateUser(username, password, false) != null);
+        public User AuthenticateUser(string username, string password) {
+            return authenticationManager.AuthenticateUser(username, password, false);
         }
 
-        // -------------------------------- Authentication -------------------------------
+        // ------------------------------------- Caches ----------------------------------
 
         [WebMethod]
         public List<Cache> GetAllCaches() {
             return cacheManager.GetCacheList();
+        }
+
+        [WebMethod]
+        public List<string> GetCacheSizeList() {
+            return cacheManager.GetCacheSizeList();
+        }
+
+        [WebMethod]
+        public List<Cache> FindCachesByCacheDifficulty(FilterOperation operation, string difficulty) {
+            return cacheManager.GetFilteredCacheList(FilterCriterium.CacheDifficulty, operation, difficulty);
+        }
+
+        [WebMethod]
+        public List<Cache> FindCachesByTerrainDifficulty(FilterOperation operation, string difficulty) {
+            return cacheManager.GetFilteredCacheList(FilterCriterium.TerrainDifficulty, operation, difficulty);
+        }
+
+        [WebMethod]
+        public List<Cache> FindCachesBySize(FilterOperation operation, string size) {
+            return cacheManager.GetFilteredCacheList(FilterCriterium.Size, operation, size);
+        }
+
+        [WebMethod]
+        public List<Image> GetAllImagesForCache(int cacheId) {
+            return cacheManager.GetImagesForCache(cacheId);
+        }
+
+        // ----------------------------------- Logentries ---------------------------------
+
+        [WebMethod]
+        public List<LogEntry> GetLogEntriesForCache(int cacheId) {
+            return cacheManager.GetLogEntriesforCache(cacheId);
+        }
+
+        [WebMethod]
+        public bool AddLogEntryForCache(User user, LogEntry logEntry) {
+            // TODO only if user is valid (name + pw hash) = reauthenticate
+            return cacheManager.AddLogEntryForCache(logEntry);
+        }
+
+        [WebMethod]
+        public bool AddRatingForCache(User user, Rating rating) {
+            // TODO only if user is valid (name + pw hash) = reauthenticate
+            return cacheManager.AddRatingForCache(rating);
+        }
+
+        // ------------------------------------ Ratings  ----------------------------------
+        [WebMethod]
+        public double GetRatingForCache(int cacheId) {
+            return cacheManager.GetAverageRatingForCache(cacheId);
         }
     }
 }
