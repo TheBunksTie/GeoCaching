@@ -1,18 +1,15 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
-      
-<h:body>
-    <div style="width:100%;font-size:36px;line-height:48px;background-color:navy;color:white">
-        GeoCachingWeb Client v1.0
-    </div>
+<ui:composition 
+	 xmlns="http://www.w3.org/1999/xhtml"
+	 xmlns:ui="http://java.sun.com/jsf/facelets"
+	 xmlns:h="http://java.sun.com/jsf/html">
+
 <h:form id="navForm">
     <h:panelGrid columns="4">
-        <h:commandButton value="Home" type="submit" action="GoHomeEvent" />
-        <h:commandButton value="Browse Books" type="submit" action="#{WebShopUser.allArticles}" />
-        <h:commandButton value="Show Cart" type="submit" action="ShowCartEvent" />
-        <h:commandButton value="Ceckout" type="submit" action="#{WebShopUser.checkout}" />        
+        <h:commandButton class="logo" image="/resources/img/logo.jpg" type="submit" action="HomeEvent" />
+        <h:commandButton class="navbutton button" value="Find Caches" type="submit" action="FindCachesEvent" />
+        <h:commandButton class="navbutton button" value="Statistics" type="submit" action="StatisticsEvent" />
+        <h:commandButton class="navbutton button" value="Login" type="submit" action="LoginEvent" />        
     </h:panelGrid>
 </h:form>
-</h:body>
-</html>
+	
+</ui:composition>

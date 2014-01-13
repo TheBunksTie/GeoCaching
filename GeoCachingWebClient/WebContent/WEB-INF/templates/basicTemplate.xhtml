@@ -9,26 +9,45 @@
 </h:head>
 
 <h:body>
-	<div id="header">
+	<header>
 	    <ui:insert name="header">
 	    	<ui:include src="/WEB-INF/templates/header.xhtml"/>
 	    </ui:insert>
-	</div>
+	</header>
 	
+	<!-- conditional output of any occure error  -->
+	<ui:fragment rendered="#{ErrorManager.errorOccured}">
+        <div class="error">       
+            <ul>
+               <li>Error:<h:outputText value="&#160;" /><h:outputText value="#{ErrorManager.message}" /></li>
+            </ul>                       
+        </div>
+    </ui:fragment>
 	
-	<div id="content">
+	<!-- conditional output of user status information if any user logged in -->
+	<ui:fragment rendered="#{AuthenticationManager.loggedIn}">
+	    <div class="status">       
+	        <ul>
+	           <li>Welcome. Your are logged in as "<h:outputText value="#{AuthenticationManager.username}" />".</li>
+	           <li>
+	               <h:form>
+                       <h:commandButton class="button rowbutton" value="Logout" action="#{AuthenticationManager.logoutUser}" />
+                   </h:form>                 
+	           </li>
+	        </ul>	       	            
+	    </div>
+    </ui:fragment>
+	
+	<div class="content">
 		<ui:insert name="content">
 		    Content area.  See comments below this line in the source.
 		</ui:insert>
 	</div>
 	
-	<div id="footer">
+	<footer>
 		<ui:insert name="footer">
-		    <br />
-			<div style="background-color: navy; width: 100%; color: white">
-			    GeoCachingWebClient v1.0
-			</div>
+		  GeoCac#ing.Web - A project for WEA5 (supervised by Werner Kurschl at FH Hagenberg winter term 2013) 
 		</ui:insert>
-	</div>
+	</footer>
 </h:body>
 </html>

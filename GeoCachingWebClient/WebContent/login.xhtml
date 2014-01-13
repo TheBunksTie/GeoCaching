@@ -1,0 +1,27 @@
+<ui:composition template="/WEB-INF/templates/basicTemplate.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core">
+	
+	<ui:define name="title">
+	    GeoCachingWebClient - Login
+	</ui:define>
+	<ui:define name="content">
+	    <h1>Login</h1>
+	    <h:outputText rendered="#{!CurrentUser.loggedIn}">Please provide your credentials to log into the GeoCaching System.</h:outputText>
+	    <br />
+	    <h:form id="loginForm">
+	       <h:panelGrid columns="2" rendered="#{!AuthenticationManager.loggedIn}">
+	           <h:outputLabel for="username">Username: </h:outputLabel>
+	           <h:inputText id="username" />
+	           <h:outputLabel for="password">Password: </h:outputLabel>
+               <h:inputSecret id="password" />
+	       </h:panelGrid>
+	       <h:commandButton class="button formbutton" value="Login" action="#{AuthenticationManager.loginUser}" rendered="#{!AuthenticationManager.loggedIn}" />	      	       
+	    </h:form>
+	    <h:outputText rendered="#{AuthenticationManager.loggedIn}">You are already logged in. Please log out before new login.</h:outputText>
+	    
+	    
+	</ui:define>
+</ui:composition>
