@@ -30,8 +30,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "cacheId"
 })
-@XmlRootElement(name = "GetRatingForCache")
-public class GetRatingForCache {
+@XmlRootElement(name = "GetDetailedCache")
+public class GetDetailedCache {
 
     protected int cacheId;
 

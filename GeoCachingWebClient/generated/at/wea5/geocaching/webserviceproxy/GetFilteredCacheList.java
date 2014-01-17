@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="cacheId" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="filter" type="{http://GeoCaching.Services/}CacheFilter" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,27 +28,35 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "cacheId"
+    "filter"
 })
-@XmlRootElement(name = "GetAllImagesForCache")
-public class GetAllImagesForCache {
+@XmlRootElement(name = "GetFilteredCacheList")
+public class GetFilteredCacheList {
 
-    protected int cacheId;
+    protected CacheFilter filter;
 
     /**
-     * Ruft den Wert der cacheId-Eigenschaft ab.
+     * Ruft den Wert der filter-Eigenschaft ab.
      * 
+     * @return
+     *     possible object is
+     *     {@link CacheFilter }
+     *     
      */
-    public int getCacheId() {
-        return cacheId;
+    public CacheFilter getFilter() {
+        return filter;
     }
 
     /**
-     * Legt den Wert der cacheId-Eigenschaft fest.
+     * Legt den Wert der filter-Eigenschaft fest.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link CacheFilter }
+     *     
      */
-    public void setCacheId(int value) {
-        this.cacheId = value;
+    public void setFilter(CacheFilter value) {
+        this.filter = value;
     }
 
 }

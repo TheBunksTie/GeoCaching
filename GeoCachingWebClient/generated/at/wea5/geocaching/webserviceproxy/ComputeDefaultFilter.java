@@ -25,8 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "GetAllCaches")
-public class GetAllCaches {
+@XmlRootElement(name = "ComputeDefaultFilter")
+public class ComputeDefaultFilter {
 
 
 }

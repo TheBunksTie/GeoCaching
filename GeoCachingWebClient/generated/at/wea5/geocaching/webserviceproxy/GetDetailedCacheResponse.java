@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="GetAllCachesResult" type="{http://GeoCaching.Services/}ArrayOfCache" minOccurs="0"/>
+ *         &lt;element name="GetDetailedCacheResult" type="{http://GeoCaching.Services/}CacheDetails" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "getAllCachesResult"
+    "getDetailedCacheResult"
 })
-@XmlRootElement(name = "GetAllCachesResponse")
-public class GetAllCachesResponse {
+@XmlRootElement(name = "GetDetailedCacheResponse")
+public class GetDetailedCacheResponse {
 
-    @XmlElement(name = "GetAllCachesResult")
-    protected ArrayOfCache getAllCachesResult;
+    @XmlElement(name = "GetDetailedCacheResult")
+    protected CacheDetails getDetailedCacheResult;
 
     /**
-     * Ruft den Wert der getAllCachesResult-Eigenschaft ab.
+     * Ruft den Wert der getDetailedCacheResult-Eigenschaft ab.
      * 
      * @return
      *     possible object is
-     *     {@link ArrayOfCache }
+     *     {@link CacheDetails }
      *     
      */
-    public ArrayOfCache getGetAllCachesResult() {
-        return getAllCachesResult;
+    public CacheDetails getGetDetailedCacheResult() {
+        return getDetailedCacheResult;
     }
 
     /**
-     * Legt den Wert der getAllCachesResult-Eigenschaft fest.
+     * Legt den Wert der getDetailedCacheResult-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
-     *     {@link ArrayOfCache }
+     *     {@link CacheDetails }
      *     
      */
-    public void setGetAllCachesResult(ArrayOfCache value) {
-        this.getAllCachesResult = value;
+    public void setGetDetailedCacheResult(CacheDetails value) {
+        this.getDetailedCacheResult = value;
     }
 
 }

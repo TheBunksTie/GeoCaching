@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="GetAllImagesForCacheResult" type="{http://GeoCaching.Services/}ArrayOfImage" minOccurs="0"/>
+ *         &lt;element name="GetFilteredCacheListResult" type="{http://GeoCaching.Services/}ArrayOfCache" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "getAllImagesForCacheResult"
+    "getFilteredCacheListResult"
 })
-@XmlRootElement(name = "GetAllImagesForCacheResponse")
-public class GetAllImagesForCacheResponse {
+@XmlRootElement(name = "GetFilteredCacheListResponse")
+public class GetFilteredCacheListResponse {
 
-    @XmlElement(name = "GetAllImagesForCacheResult")
-    protected ArrayOfImage getAllImagesForCacheResult;
+    @XmlElement(name = "GetFilteredCacheListResult")
+    protected ArrayOfCache getFilteredCacheListResult;
 
     /**
-     * Ruft den Wert der getAllImagesForCacheResult-Eigenschaft ab.
+     * Ruft den Wert der getFilteredCacheListResult-Eigenschaft ab.
      * 
      * @return
      *     possible object is
-     *     {@link ArrayOfImage }
+     *     {@link ArrayOfCache }
      *     
      */
-    public ArrayOfImage getGetAllImagesForCacheResult() {
-        return getAllImagesForCacheResult;
+    public ArrayOfCache getGetFilteredCacheListResult() {
+        return getFilteredCacheListResult;
     }
 
     /**
-     * Legt den Wert der getAllImagesForCacheResult-Eigenschaft fest.
+     * Legt den Wert der getFilteredCacheListResult-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
-     *     {@link ArrayOfImage }
+     *     {@link ArrayOfCache }
      *     
      */
-    public void setGetAllImagesForCacheResult(ArrayOfImage value) {
-        this.getAllImagesForCacheResult = value;
+    public void setGetFilteredCacheListResult(ArrayOfCache value) {
+        this.getFilteredCacheListResult = value;
     }
 
 }

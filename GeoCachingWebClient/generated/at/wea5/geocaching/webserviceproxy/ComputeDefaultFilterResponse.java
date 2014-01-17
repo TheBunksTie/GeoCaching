@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="FindCachesByCacheDifficultyResult" type="{http://GeoCaching.Services/}ArrayOfCache" minOccurs="0"/>
+ *         &lt;element name="ComputeDefaultFilterResult" type="{http://GeoCaching.Services/}CacheFilter" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "findCachesByCacheDifficultyResult"
+    "computeDefaultFilterResult"
 })
-@XmlRootElement(name = "FindCachesByCacheDifficultyResponse")
-public class FindCachesByCacheDifficultyResponse {
+@XmlRootElement(name = "ComputeDefaultFilterResponse")
+public class ComputeDefaultFilterResponse {
 
-    @XmlElement(name = "FindCachesByCacheDifficultyResult")
-    protected ArrayOfCache findCachesByCacheDifficultyResult;
+    @XmlElement(name = "ComputeDefaultFilterResult")
+    protected CacheFilter computeDefaultFilterResult;
 
     /**
-     * Ruft den Wert der findCachesByCacheDifficultyResult-Eigenschaft ab.
+     * Ruft den Wert der computeDefaultFilterResult-Eigenschaft ab.
      * 
      * @return
      *     possible object is
-     *     {@link ArrayOfCache }
+     *     {@link CacheFilter }
      *     
      */
-    public ArrayOfCache getFindCachesByCacheDifficultyResult() {
-        return findCachesByCacheDifficultyResult;
+    public CacheFilter getComputeDefaultFilterResult() {
+        return computeDefaultFilterResult;
     }
 
     /**
-     * Legt den Wert der findCachesByCacheDifficultyResult-Eigenschaft fest.
+     * Legt den Wert der computeDefaultFilterResult-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
-     *     {@link ArrayOfCache }
+     *     {@link CacheFilter }
      *     
      */
-    public void setFindCachesByCacheDifficultyResult(ArrayOfCache value) {
-        this.findCachesByCacheDifficultyResult = value;
+    public void setComputeDefaultFilterResult(CacheFilter value) {
+        this.computeDefaultFilterResult = value;
     }
 
 }
