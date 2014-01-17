@@ -20,7 +20,7 @@ public class ContextListenerInitializer implements ServletContextListener {
           String user = sc.getInitParameter("DB_USER");
           String password = sc.getInitParameter("DB_PASSWORD");
           String delegateClass = sc.getInitParameter("Shop_DELEGATE");
-
+          
           // TODO implement service locator
           //ServiceLocator.getInstance().init(dsn, user, password, delegateClass);
     }

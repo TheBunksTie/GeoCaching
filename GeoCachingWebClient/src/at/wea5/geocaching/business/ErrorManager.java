@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 
 /**
  * stores any error message and provides
@@ -12,7 +12,7 @@ import javax.faces.bean.RequestScoped;
  * 
  */
 @ManagedBean(name = "ErrorManager")
-@RequestScoped
+@SessionScoped
 public class ErrorManager {
 
 //------------------------------------ constructor ------------------------------------

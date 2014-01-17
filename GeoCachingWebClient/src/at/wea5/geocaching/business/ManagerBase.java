@@ -14,6 +14,10 @@ import at.wea5.geocaching.webserviceproxy.GeoCachingServiceSoap;
 
 public abstract class ManagerBase {
 //------------------------------------ constructor ------------------------------------
+    protected ManagerBase() {
+        GeoCachingService factory = new GeoCachingService();
+        geoCachingWsProxy = factory.getGeoCachingServiceSoap();
+    }
 
 //-------------------------------------- public ---------------------------------------
 
@@ -83,6 +87,6 @@ public abstract class ManagerBase {
     private static final String namespaceURI = "http://GeoCaching.Services//";
     private static final String serviceName  = "GeoCachingWebService";
     
-    private GeoCachingServiceSoap geoCachingWsProxy = null;
+    protected GeoCachingServiceSoap geoCachingWsProxy = null;
 
 }

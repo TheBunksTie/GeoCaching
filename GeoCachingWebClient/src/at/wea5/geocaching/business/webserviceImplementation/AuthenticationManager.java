@@ -33,12 +33,12 @@ public class AuthenticationManager extends ManagerBase {
     
     public String loginUser() {
         try {
-            // get passed paramters from session context
+            // get passed parameters from session context
             String username = getRequestParameterValue("username");
             String password = getRequestParameterValue("password");        
                                   
             // use webservice-method  to get user data                      
-            at.wea5.geocaching.webserviceproxy.User user = getWSProxy().authenticateUser(username, password);
+            at.wea5.geocaching.webserviceproxy.User user = geoCachingWsProxy.authenticateUser(username, password);
             
             if (user != null) {
                 FacesContext.getCurrentInstance().getExternalContext().getSession(true);
