@@ -2,111 +2,288 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core">
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 	
 	<ui:define name="title">
 	    GeoCachingWebClient - Find caches by different criteria
 	</ui:define>
 	<ui:define name="content">
-	    <h1>Find caches by different criteria</h1>
-	    <h:form id="searchForm">
-<!-- 	       <h:panelGrid columns="3"> -->
-	        <ul>
-	           <li>
-	           <!-- row for finding caches by name -->
-	           <h:outputLabel for="cachename">Find by cache name: </h:outputLabel>
-	           <h:inputText id="cachename" />
-	           <h:commandButton class="button rowbutton" value="Find" action="#{CacheManager.findCachesByName}"/>
-	           </li>
-	           <li>
-	           <!-- row for finding caches by cache difficulty -->
-               <h:outputLabel for="cachedifficulty">Find by cache difficulty: </h:outputLabel>
-               <h:inputText id="cachedifficulty" />
-               <h:commandButton class="button rowbutton" value="Find" action="#{CacheManager.findCachesByCacheDifficulty}"/>
-               </li>
-               <li>               
-               <!-- row for finding caches by terrain difficulty -->
-               <h:outputLabel for="terraindifficulty">Find by terrain difficulty: </h:outputLabel>
-               <h:inputText id="terraindifficulty" />
-               <h:commandButton class="button rowbutton" value="Find" action="#{CacheManager.findCachesByTerrainDifficulty}"/>
-               </li>
-               <li>
-               <!-- row for finding caches by region -->
-               <h:outputLabel for="regionFrom">Find by terrain difficulty: from </h:outputLabel>
-               <h:inputText id="regionFrom" />
-               <h:commandButton class="button rowbutton" value="Find" action="#{CacheManager.findCachesByRegion}"/>                            
-               </li>
-<!-- 	       </h:panelGrid> -->
-	           <li><h:commandButton class="button formbutton" value="Find all" action="#{CacheManager.findAllCaches}" /></li>
-	        </ul>
-	    </h:form>
+	    <h1>View caches by different filter options</h1>
+<!-- 	    <h:form id="searchForm"> -->
+<!-- 	        <p:panelGrid styleClass="formTable"> -->
+                
+<!-- 	            <p:row> -->
+<!-- 	               row for finding caches by cache difficulty -->
+<!-- 	               <p:column> -->
+<!-- 	                   <p:selectBooleanCheckbox /> -->
+<!-- 	               </p:column> -->
+<!-- 	               <p:column> -->
+<!-- 	                   <h:outputText>filter by cache difficulty</h:outputText> -->
+<!-- 	               </p:column> -->
+	               
+<!-- 	               <p:column> -->
+<!--                        <p:outputLabel for="cacheDifficultyFrom">from</p:outputLabel> -->
+<!--                    </p:column>	                -->
+	               
+<!-- 	               <p:column colspan="2">	                    -->
+<!-- 	                   <p:inputText id="cacheDifficultyFrom" /> -->
+<!-- 	               </p:column> -->
+	               
+<!-- 	               <p:column> -->
+<!--                        <p:outputLabel for="cacheDifficultyTo">to</p:outputLabel> -->
+<!--                    </p:column>                  -->
+                   
+<!--                    <p:column colspan="2">                       -->
+<!--                        <p:inputText id="cacheDifficultyTo" /> -->
+<!--                    </p:column>	               -->
+<!-- 	            </p:row>  -->
+	           
+<!-- 	            <p:row> -->
+<!--                    row for finding caches by terrain difficulty -->
+<!--                    <p:column> -->
+<!--                        <p:selectBooleanCheckbox /> -->
+<!--                    </p:column> -->
+<!--                    <p:column> -->
+<!--                        <h:outputText>filter by terrain difficulty</h:outputText> -->
+<!--                    </p:column> -->
+                   
+<!--                    <p:column> -->
+<!--                        <p:outputLabel for="terrainDifficultyFrom">from</p:outputLabel> -->
+<!--                    </p:column>                  -->
+                   
+<!--                    <p:column colspan="2">                       -->
+<!--                        <p:inputText id="terrainDifficultyFrom" /> -->
+<!--                    </p:column> -->
+                   
+<!--                    <p:column> -->
+<!--                        <p:outputLabel for="terrainDifficultyTo">to</p:outputLabel> -->
+<!--                    </p:column>                  -->
+                   
+<!--                    <p:column colspan="2">                       -->
+<!--                        <p:inputText id="terrainDifficultyTo" /> -->
+<!--                    </p:column>                 -->
+<!--                 </p:row>  -->
+	           
+<!-- 	            <p:row> -->
+<!--                    row for finding caches by region -->
+<!--                    <p:column> -->
+<!--                        <p:selectBooleanCheckbox /> -->
+<!--                    </p:column> -->
+<!--                    <p:column> -->
+<!--                        <h:outputText>filter by region</h:outputText> -->
+<!--                    </p:column> -->
+                   
+<!--                    <p:column> -->
+<!--                        <p:outputLabel for="latitudeFrom">from</p:outputLabel> -->
+<!--                    </p:column>                  -->
+                   
+<!--                    <p:column>                       -->
+<!--                        <p:inputText id="latitudeFrom" /> -->
+<!--                    </p:column> -->
+                   
+<!--                    <p:column>                       -->
+<!--                        <p:inputText id="longitudeFrom" /> -->
+<!--                    </p:column> -->
+                   
+<!--                    <p:column> -->
+<!--                        <p:outputLabel for="latitudeTo">to</p:outputLabel> -->
+<!--                    </p:column>                  -->
+                   
+<!--                    <p:column>                       -->
+<!--                        <p:inputText id="latitudeTo" /> -->
+<!--                    </p:column> -->
+                   
+<!--                    <p:column>                       -->
+<!--                        <p:inputText id="longitudeTo" /> -->
+<!--                    </p:column> -->
+<!--                 </p:row>       -->
+<!--                 <p:row> -->
+<!--                     <p:column colspan="8"> -->
+<!--                         <h:commandButton class="button rowbutton" value="Find" action="#{CacheManager.findCachesByRegion}"/> -->
+<!--                     </p:column>   -->
+<!--                 </p:row>                                                       -->
+<!-- 	       </p:panelGrid>	             -->
+<!-- 	    </h:form> -->
 	    
-	    <!-- only render outcome of search if there was a search requested and there are any results -->
-	    <ui:fragment render="#{CacheCollection.searchResultsReady}">
-	        <div class="searchResult">
-		        <!-- output for empty result list -->
-		        <h2>Search results</h2>
-		        <h3><h:outputText render="#{CacheCollection.resultListEmpty}">Sorry, no matching caches found.</h:outputText></h3>
-		        
-		        <!-- data table for output of all matching caches -->
-		        <h:dataTable value="#{CacheCollection.cacheList}" var="cache" render="#{!CacheCollection.resultListEmpty}">
-	                
-	                <!-- name column -->
-	                <h:column>
-	                      <f:facet name="header">
-                             <h:outputText>Name</h:outputText>
-                          </f:facet>
-	                    
+	     <h:form id="filterForm">
+	     <ul>
+	       <li>
+               <h:selectBooleanCheckbox id="positionFilter" value="#{CacheManager.positionFiltered}"/>
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="checkboxLabel" for="positionFilter" >filter by position</h:outputLabel>
+               
+               <h:outputLabel class="inputLabel" for="latitudeFrom">from</h:outputLabel>               
+               [<h:inputText class="filterInput" id="latitudeFrom" value="#{CacheManager.cacheFilter.fromPosition.latitude}" />;               
+               <h:inputText class="filterInput" id="longitudeFrom" value="#{CacheManager.cacheFilter.fromPosition.longitude}" />]
+               
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="inputLabel" for="latitudeTo">to</h:outputLabel>
+               [<h:inputText class="filterInput" id="latitudeTo" value="#{CacheManager.cacheFilter.toPosition.latitude}" />;
+               <h:inputText class="filterInput" id="longitudeTo" value="#{CacheManager.cacheFilter.toPosition.longitude}" />]
+           </li>           
+	       
+	       <!-- row for finding caches by cache difficulty -->
+	       <li>
+	           <h:selectBooleanCheckbox id="cacheDifficultyFilter" value="#{CacheManager.cacheDifficultyFiltered}"/>
+	           <h:outputText value="&#160;" />
+	           <h:outputLabel class="checkboxLabel" for="cacheDifficultyFilter">filter by cache difficulty</h:outputLabel>
+	           
+	           <h:outputLabel class="inputLabel" for="cacheDifficultyFrom">from</h:outputLabel>
+	           	           
+	           <h:inputText class="filterInput" id="cacheDifficultyFrom" value="#{CacheManager.cacheFilter.fromCacheDifficulty}"/>	           
+	           
+	           <h:outputText value="&#160;" />
+	           <h:outputLabel class="inputLabel" for="cacheDifficultyTo">to</h:outputLabel>	           
+	           <h:inputText class="filterInput" id="cacheDifficultyTo" value="#{CacheManager.cacheFilter.toCacheDifficulty}" />
+	       </li>
+	        <li>
+	           <!-- row for finding caches by terrain difficulty -->
+               <h:selectBooleanCheckbox id="terrainDifficultyFilter" value="#{CacheManager.terrainDifficultyFiltered}"  />
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="checkboxLabel" for="terrainDifficultyFilter">filter by terrain difficulty</h:outputLabel>
+               
+               <h:outputLabel class="inputLabel" for="terrainDifficultyFrom">from</h:outputLabel>
+                              
+               <h:inputText class="filterInput" id="terrainDifficultyFrom" value="#{CacheManager.cacheFilter.fromTerrainDifficulty}" />
+               
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="inputLabel" for="terrainDifficultyTo">to</h:outputLabel>               
+               <h:inputText class="filterInput" id="terrainDifficultyTo" value="#{CacheManager.cacheFilter.toTerrainDifficulty}" />
+           </li>
+            <li>
+               <!-- row for finding caches by size -->
+               <h:selectBooleanCheckbox id="sizeFilter" value="#{CacheManager.sizeFiltered}" />
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="checkboxLabel" for="sizeFilter">filter by size </h:outputLabel>               
+               <h:outputLabel class="inputLabel" for="sizeFrom">from</h:outputLabel>
+               
+               <h:inputText class="filterInput" id="sizeFrom" />               
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="inputLabel" for="sizeTo">to</h:outputLabel>
+               <h:inputText class="filterInput" id="sizeTo" />
+           </li>
+           <li>
+               <h:commandButton class="button formbutton" value="Get Caches" action="#{CacheManager.getFilteredCacheList}"/>
+               <h:outputText value="&#160;" />
+               <h:commandButton class="button formbutton" value="Reset Filter" action="#{CacheManager.resetFilter}"/>
+           </li>           
+	     </ul>
+                
+
+        </h:form>
+	    
+        <div class="searchResult">    
+	        <h2>Search results (<h:outputText value="#{CacheManager.nrOfSearchResults}" />)</h2>
+	        
+            <!-- output for empty result list -->
+	        <h:outputText rendered="#{CacheManager.resultListEmpty}"><h3>Sorry, no matching caches found.</h3></h:outputText>
+	        
+	           <p:dataTable id="searchResultTable" var="cache" value="#{CacheManager.cacheList}"  
+                 styleClass="searchResultTable"
+                 paginator="true" rows="30"  
+                 paginatorTemplate="{CurrentPageReport} {PageLinks} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="30, 50, 100" rendered="#{!CacheManager.resultListEmpty}">
+                    
+                <p:column id="nameColumn" headerText="Name">                          
 	                    <h:outputText value="#{cache.name}"/>
-	                </h:column>
+	               </p:column>
 	                
-	                <!-- position column -->
-                    <h:column>
-                          <f:facet name="header">
-                             <h:outputText>Position</h:outputText>
-                          </f:facet>
-                        
-                        [<h:outputText value="#{cache.position.latitude}"/>;
-                         <h:outputText value="#{cache.position.longitude}"/>]
-                    </h:column>
+                   <!-- position column -->
+                   <p:column>
+	                         <f:facet name="header">
+	                            <h:outputText>Position</h:outputText>
+	                         </f:facet>
+	                       
+	                       [<h:outputText value="#{cache.position.latitude}"/>;
+	                        <h:outputText value="#{cache.position.longitude}"/>]
+                   </p:column>
+	               
+	               <!--                    cache difficulty column -->
+                   <p:column>
+                         <f:facet name="header">
+                            <h:outputText>Cache difficulty</h:outputText>
+                         </f:facet>
+                       
+                       <h:outputText value="#{cache.cacheDifficulty}"/>
+                   </p:column>
+                   
+                   <!-- terrain difficulty column -->
+                   <p:column>
+                         <f:facet name="header">
+                            <h:outputText>Terrain difficulty</h:outputText>
+                         </f:facet>
+                       
+                       <h:outputText value="#{cache.terrainDifficulty}"/>                                                                     
+                   </p:column>
+	               
+	               <!--                    show details action column -->
+                   <p:column>
+                       <h:form id="cacheDetailForm">
+                            <h:commandButton class="button" value="Details" type="submit" action="#{CacheManager.showDetails}" />
+                            <h:inputHidden id="cacheId" value="#{cache.id}" />
+                       </h:form>                                                
+                   </p:column>
+	               
+	           </p:dataTable>
+<!-- 	        data table for output of all matching caches -->
+<!-- 	        <h:dataTable value="#{CacheCollection.cacheList}" var="cache" rendered="#{!CacheCollection.resultListEmpty}"> -->
+                
+<!--                 name column -->
+<!--                 <h:column> -->
+<!--                       <f:facet name="header"> -->
+<!--                             <h:outputText>Name</h:outputText> -->
+<!--                          </f:facet> -->
                     
-                    <!-- cache difficulty column -->
-                    <h:column>
-                          <f:facet name="header">
-                             <h:outputText>Cache difficulty</h:outputText>
-                          </f:facet>
-                        
-                        <h:outputText value="#{cache.cacheDifficulty}"/>
-                    </h:column>
-                    
-                    <!-- terrain difficulty column -->
-                    <h:column>
-                          <f:facet name="header">
-                             <h:outputText>Terrain difficulty</h:outputText>
-                          </f:facet>
-                        
-                        <h:outputText value="#{cache.terrainDifficulty}"/>                                                                     
-                    </h:column>
-                    
-                    <!-- creation date column -->
-                    <h:column>
-                          <f:facet name="header">
-                             <h:outputText>Created on</h:outputText>
-                          </f:facet>
-                        
-                        <h:outputText value="#{cache.creationDate}"/>                                                                     
-                    </h:column>
-                    
-                    <!-- show details action column -->
-                    <h:column>
-                        <h:form id="cacheDetailForm">
-                             <h:commandButton class="button rowbutton" value="Details" type="submit" action="#{CacheCollection.showDetails}" />
-                             <h:inputHidden id="cacheid" value="#{cache.id}" />
-                        </h:form>                                                
-                    </h:column>
-	            </h:dataTable>
-            </div>
-	    </ui:fragment>
+<!--                     <h:outputText value="#{cache.name}"/> -->
+<!--                 </h:column> -->
+                
+<!--                 position column -->
+<!--                    <h:column> -->
+<!--                          <f:facet name="header"> -->
+<!--                             <h:outputText>Position</h:outputText> -->
+<!--                          </f:facet> -->
+                       
+<!--                        [<h:outputText value="#{cache.position.latitude}"/>; -->
+<!--                         <h:outputText value="#{cache.position.longitude}"/>] -->
+<!--                    </h:column> -->
+                   
+<!--                    cache difficulty column -->
+<!--                    <h:column> -->
+<!--                          <f:facet name="header"> -->
+<!--                             <h:outputText>Cache difficulty</h:outputText> -->
+<!--                          </f:facet> -->
+                       
+<!--                        <h:outputText value="#{cache.cacheDifficulty}"/> -->
+<!--                    </h:column> -->
+                   
+<!--                    terrain difficulty column -->
+<!--                    <h:column> -->
+<!--                          <f:facet name="header"> -->
+<!--                             <h:outputText>Terrain difficulty</h:outputText> -->
+<!--                          </f:facet> -->
+                       
+<!--                        <h:outputText value="#{cache.terrainDifficulty}"/>                                                                      -->
+<!--                    </h:column> -->
+                   
+<!--                    creation date column -->
+<!--                    <h:column> -->
+<!--                          <f:facet name="header"> -->
+<!--                             <h:outputText>Created on</h:outputText> -->
+<!--                          </f:facet> -->
+                       
+<!--                        <h:outputText value="#{cache.creationDate}"/>                                                                      -->
+<!--                    </h:column> -->
+                   
+<!--                    show details action column -->
+<!--                    <h:column> -->
+<!--                        <h:form id="cacheDetailForm"> -->
+<!--                             <h:commandButton class="button rowbutton" value="Details" type="submit" action="#{CacheCollection.showDetails}" /> -->
+<!--                             <h:inputHidden id="cacheid" value="#{cache.id}" /> -->
+<!--                        </h:form>                                                 -->
+<!--                    </h:column> -->
+<!--             </h:dataTable> -->
+           </div>
 	    	   	    
 	</ui:define>
 </ui:composition>

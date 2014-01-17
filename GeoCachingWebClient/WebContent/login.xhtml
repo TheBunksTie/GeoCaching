@@ -9,9 +9,11 @@
 	</ui:define>
 	<ui:define name="content">
 	    <h1>Login</h1>
-	    <h:outputText rendered="#{!CurrentUser.loggedIn}">Please provide your credentials to log into the GeoCaching System.</h:outputText>
-	    <br />
-	    <h:form id="loginForm">
+	    
+	    <h:outputText value="Please provide your credentials to log into the GeoCaching System." rendered="#{!AuthenticationManager.loggedIn}" />
+<!-- 	    <br /> -->
+	    
+	    <h:form id="loginForm" rendered="#{!AuthenticationManager.loggedIn}">
 	       <h:panelGrid columns="2" rendered="#{!AuthenticationManager.loggedIn}">
 	           <h:outputLabel for="username">Username: </h:outputLabel>
 	           <h:inputText id="username" />
@@ -20,8 +22,6 @@
 	       </h:panelGrid>
 	       <h:commandButton class="button formbutton" value="Login" action="#{AuthenticationManager.loginUser}" rendered="#{!AuthenticationManager.loggedIn}" />	      	       
 	    </h:form>
-	    <h:outputText rendered="#{AuthenticationManager.loggedIn}">You are already logged in. Please log out before new login.</h:outputText>
-	    
-	    
+	    <h:outputText value="You are already logged in. Please log out before new login." rendered="#{AuthenticationManager.loggedIn}" />	   	    
 	</ui:define>
 </ui:composition>

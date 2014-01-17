@@ -2,14 +2,82 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core">
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 	
 	<ui:define name="title">
 	    GeoCachingWebClient - View details for a certain cache
 	</ui:define>
 	<ui:define name="content">
-	    <h1>All details for cache "<h:outputText value="#{CacheCollection.currentCache.name}" />"</h1>	    
-	    <br />
+	    <h:outputText rendered="#{CacheManager.currentCacheAvailable}">
+	       <h1>Cache details for "<h:outputText value="#{CacheManager.currentCache.cache.name}" />"</h1>
+	    </h:outputText>
+	    <h:outputText rendered="#{!CacheManager.currentCacheAvailable}">
+           <h1>No Cache available due to an error. (see above)</h1>
+        </h:outputText>
+        
+        <p:panelGrid rendered="#{CacheManager.currentCacheAvailable}">
+           <p:row>
+                <p:column>
+                    <h:outputText value="Cache difficulty:" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{CacheManager.currentCache.cache.cacheDifficulty}" />
+                </p:column>
+           </p:row>
+           <p:row>
+                <p:column>
+                    <h:outputText value="Terrain difficulty:" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{CacheManager.currentCache.cache.terrainDifficulty}" />
+                </p:column>
+           </p:row>           
+           <p:row>
+                <p:column>
+                    <h:outputText value="Creation date:" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{CacheManager.currentCache.cache.creationDate}" />
+                </p:column>
+           </p:row>
+           <p:row>
+                <p:column>
+                    <h:outputText value="Rating:" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{CacheManager.currentCache.rating}" />
+                </p:column>
+           </p:row>
+           <p:row>
+                <p:column>
+                    <h:outputText value="Size:" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{CacheManager.currentCache.cache.size}" />
+                </p:column>
+           </p:row>
+           <p:row>
+                <p:column>
+                    <h:outputText value="Position" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="[#{CacheManager.currentCache.cache.position.latitude};" />
+                    <h:outputText value="#{CacheManager.currentCache.cache.position.longitude}]" />
+                </p:column>
+           </p:row>
+           <p:row>
+                <p:column>
+                    <h:outputText value="Description" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{CacheManager.currentCache.cache.description}" />
+                </p:column>
+           </p:row>
+            
+            
+        </p:panelGrid>
+	    	    
 <!-- 	    <h:form id="loginForm"> -->
 <!-- 	       <h:panelGrid columns="2" rendered="#{!AuthenticationManager.loggedIn}"> -->
 <!-- 	           <h:outputLabel for="username">Username: </h:outputLabel> -->
