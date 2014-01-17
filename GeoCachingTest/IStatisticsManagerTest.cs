@@ -20,9 +20,9 @@ namespace GeoCachingTest {
         
         [TestMethod]
         public void GetCacheDistributionByCacheDifficultyTest() {
-            Filter limitation = new Filter {
-                FromDate = new DateTime(2001, 1,20),
-                ToDate = new DateTime(2031, 12, 20),
+            CacheFilter limitation = new CacheFilter {
+                FromCreationDate = new DateTime(2001, 1,20),
+                ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
                 ToPosition = new GeoPosition(48.4719, 14.399167)
             };
@@ -42,9 +42,9 @@ namespace GeoCachingTest {
         
         [TestMethod]
         public void GetCacheDistributionBySizeTest() {
-            Filter limitation = new Filter {
-                FromDate = new DateTime(2001, 1, 20),
-                ToDate = new DateTime(2031, 12, 20),
+            CacheFilter limitation = new CacheFilter {
+                FromCreationDate = new DateTime(2001, 1, 20),
+                ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
                 ToPosition = new GeoPosition(48.4719, 14.399167)
             };
@@ -64,9 +64,9 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetCacheDistributionByTerrainDifficultyTest() {
-            Filter limitation = new Filter {
-                FromDate = new DateTime(2001, 1, 20),
-                ToDate = new DateTime(2031, 12, 20),
+            CacheFilter limitation = new CacheFilter {
+                FromCreationDate = new DateTime(2001, 1, 20),
+                ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
                 ToPosition = new GeoPosition(48.4719, 14.399167)
             };
@@ -86,9 +86,9 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetFoundCachesPerUserTest() {
-            Filter limitation = new Filter {
-                FromDate = new DateTime(2001, 1, 20),
-                ToDate = new DateTime(2031, 12, 20),
+            CacheFilter limitation = new CacheFilter {
+                FromCreationDate = new DateTime(2001, 1, 20),
+                ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
                 ToPosition = new GeoPosition(48.4719, 14.399167)
             };
@@ -109,9 +109,9 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetHiddenCachesPerUserTest() {
-            Filter limitation = new Filter {
-                FromDate = new DateTime(2001, 1, 20),
-                ToDate = new DateTime(2031, 12, 20),
+            CacheFilter limitation = new CacheFilter {
+                FromCreationDate = new DateTime(2001, 1, 20),
+                ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
                 ToPosition = new GeoPosition(48.4719, 14.399167)
             };

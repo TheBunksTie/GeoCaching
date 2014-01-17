@@ -12,7 +12,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
         private readonly IStatisticsManager statisticsManager;
         private StatisticVM currentStatistic;
         private bool dateFilterRequested;
-        private readonly Filter defaultFilter;
+        private readonly CacheFilter defaultFilter;
 
         private ICommand getStatisticsCommand;
 
@@ -86,10 +86,10 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
             CurrentStatistic = AvailableStatistics.First();
         }
 
-        private Filter LoadDefaultFilter() {
-            return new Filter {
-                FromDate = statisticsManager.GetEarliestCacheCreationDate(),
-                ToDate = statisticsManager.GetLatestCacheCreationDate(),
+        private CacheFilter LoadDefaultFilter() {
+            return new CacheFilter {
+                FromCreationDate = statisticsManager.GetEarliestCacheCreationDate(),
+                ToCreationDate = statisticsManager.GetLatestCacheCreationDate(),
                 FromPosition = statisticsManager.GetLowestCachePosition(),
                 ToPosition = statisticsManager.GetHighestCachePosition()
             };
@@ -124,8 +124,8 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
             }
 
             if (!DateFilterRequested) {
-                Filter.FromDate = defaultFilter.FromDate;
-                Filter.ToDate = defaultFilter.ToDate;
+                Filter.FromDate = defaultFilter.FromCreationDate;
+                Filter.ToDate = defaultFilter.ToCreationDate;
             }
         }
     }

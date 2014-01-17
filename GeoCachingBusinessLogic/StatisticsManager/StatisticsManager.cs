@@ -26,37 +26,37 @@ namespace Swk5.GeoCaching.BusinessLogic.StatisticsManager {
             return cacheDao.GetHighestCachePosition();
         }
 
-        public List<StatisticData> GetFoundCachesPerUser(Filter limitation) {
-            return logEntryDao.GetFoundCachesCountPerUser(limitation.FromDate,
-                limitation.ToDate,
+        public List<StatisticData> GetFoundCachesPerUser(CacheFilter limitation) {
+            return logEntryDao.GetFoundCachesCountPerUser(limitation.FromCreationDate,
+                limitation.ToCreationDate,
                 limitation.FromPosition,
                 limitation.ToPosition);
         }
 
-        public List<StatisticData> GetHiddenCachesPerUser(Filter limitation) {
-            return cacheDao.GetHiddenCachesCountPerUser(limitation.FromDate,
-                limitation.ToDate,
+        public List<StatisticData> GetHiddenCachesPerUser(CacheFilter limitation) {
+            return cacheDao.GetHiddenCachesCountPerUser(limitation.FromCreationDate,
+                limitation.ToCreationDate,
                 limitation.FromPosition,
                 limitation.ToPosition);
         }
 
-        public List<StatisticData> GetCacheDistributionBySize(Filter limitation) {
-            return cacheDao.GetCacheDistributionBySize(limitation.FromDate,
-                limitation.ToDate,
+        public List<StatisticData> GetCacheDistributionBySize(CacheFilter limitation) {
+            return cacheDao.GetCacheDistributionBySize(limitation.FromCreationDate,
+                limitation.ToCreationDate,
                 limitation.FromPosition,
                 limitation.ToPosition);
         }
 
-        public List<StatisticData> GetCacheDistributionByCacheDifficulty(Filter limitation) {
-            return cacheDao.GetCacheDistributionByCacheDifficulty(limitation.FromDate,
-                limitation.ToDate,
+        public List<StatisticData> GetCacheDistributionByCacheDifficulty(CacheFilter limitation) {
+            return cacheDao.GetCacheDistributionByCacheDifficulty(limitation.FromCreationDate,
+                limitation.ToCreationDate,
                 limitation.FromPosition,
                 limitation.ToPosition);
         }
 
-        public List<StatisticData> GetCacheDistributionByTerrainDifficulty(Filter limitation) {
-            return cacheDao.GetCacheDistributionByTerrainDifficulty(limitation.FromDate,
-                limitation.ToDate,
+        public List<StatisticData> GetCacheDistributionByTerrainDifficulty(CacheFilter limitation) {
+            return cacheDao.GetCacheDistributionByTerrainDifficulty(limitation.FromCreationDate,
+                limitation.ToCreationDate,
                 limitation.FromPosition,
                 limitation.ToPosition);
         }

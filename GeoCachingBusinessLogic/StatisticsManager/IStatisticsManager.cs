@@ -11,11 +11,11 @@ namespace Swk5.GeoCaching.BusinessLogic.StatisticsManager {
         GeoPosition GetLowestCachePosition();
         GeoPosition GetHighestCachePosition();
 
-        List<StatisticData> GetFoundCachesPerUser(Filter limitation);
-        List<StatisticData> GetHiddenCachesPerUser(Filter limitation);
+        List<StatisticData> GetFoundCachesPerUser(CacheFilter limitation);
+        List<StatisticData> GetHiddenCachesPerUser(CacheFilter limitation);
 
-        List<StatisticData> GetCacheDistributionBySize(Filter limitation);
-        List<StatisticData> GetCacheDistributionByCacheDifficulty(Filter limitation);
-        List<StatisticData> GetCacheDistributionByTerrainDifficulty(Filter limitation);
+        List<StatisticData> GetCacheDistributionBySize(CacheFilter limitation);
+        List<StatisticData> GetCacheDistributionByCacheDifficulty(CacheFilter limitation);
+        List<StatisticData> GetCacheDistributionByTerrainDifficulty(CacheFilter limitation);
     }
 }

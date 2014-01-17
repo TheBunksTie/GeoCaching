@@ -10,6 +10,16 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         // retrieve filtered subset of all caches
         List<Cache> GetFilteredCacheList(FilterCriterium criterium, FilterOperation operation, string filterValue);
 
+        // retrieve filtered subset of all caches
+        List<Cache> GetFilteredCacheList(CacheFilter filter);
+
+        // returns a filter, which "filters" the whole datataset  
+        CacheFilter ComputeDefaultFilter();
+
+        // 
+        Cache GetCacheById(int cacheId);
+
+
         // retrieve look up list of all define cache sizes
         List<string> GetCacheSizeList();
 
@@ -23,8 +33,7 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         double GetAverageRatingForCache(int cacheId);
 
         // upload and associate a certain image with a cache
-        Image UploadImage (int cacheId, Stream imageStream, string fileExtension);
-
+        Image UploadImage(int cacheId, Stream imageStream, string fileExtension);
 
         Cache CreateNewPositionedCache(int ownerId, double latitude, double longitude);
 

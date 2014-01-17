@@ -12,7 +12,30 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         private readonly ILogEntryDao logEntryDao = DalFactory.CreateLogEntryDao(database);
         private readonly IRatingDao ratingDao = DalFactory.CreateRatingDao(database);
         private readonly IUserDao userDao = DalFactory.CreateUserDao(database);
-        
+
+        public List<Cache> GetFilteredCacheList(CacheFilter filter) {
+            return cacheDao.GetCachesMatchingFilter(filter);
+        }
+
+        public CacheFilter ComputeDefaultFilter() {
+            return new CacheFilter {
+                FromPosition = cacheDao.GetLowestCachePosition(),
+                ToPosition = cacheDao.GetHighestCachePosition(),
+                FromCreationDate = cacheDao.GetEarliestCacheCreationDate(),
+                ToCreationDate = cacheDao.GetLatestCacheCreationDate(),
+                FromCacheDifficulty = 1.0,
+                ToCacheDifficulty = 5.0,
+                FromTerrainDifficulty = 1.0,
+                ToTerrainDifficulty = 5.0,
+                FromCacheSize = 1,
+                ToCacheSize = 6
+            };
+        }
+
+        public Cache GetCacheById(int cacheId) {
+            return cacheDao.GetById(cacheId);
+        }
+
         public List<string> GetCacheSizeList() {
             return cacheDao.GetAllCacheSizes();
         }

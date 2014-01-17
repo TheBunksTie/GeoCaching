@@ -5,20 +5,20 @@ using Swk5.GeoCaching.DomainModel;
 namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
     public class FilterVM : AbstractViewModelBase<FilterVM> {
         private const double TOLERANCE = 0.000001;
-        private readonly Filter filter;
+        private readonly CacheFilter filter;
 
-        public FilterVM(Filter filter) {
+        public FilterVM(CacheFilter filter) {
             
             // kind of copy construction
-            this.filter = new Filter() {
+            this.filter = new CacheFilter() {
                 FromPosition = filter.FromPosition,
                 ToPosition = filter.ToPosition,
-                FromDate =  filter.FromDate,
-                ToDate =  filter.ToDate
+                FromCreationDate =  filter.FromCreationDate,
+                ToCreationDate =  filter.ToCreationDate
             };
         }
 
-        public Filter Current {
+        public CacheFilter Current {
             get { return filter; }
         }
 
@@ -62,20 +62,20 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
         }
 
         public DateTime FromDate {
-            get { return filter.FromDate; }
+            get { return filter.FromCreationDate; }
             set {
-                if ( filter.FromDate != value ) {
-                    filter.FromDate = value;
+                if ( filter.FromCreationDate != value ) {
+                    filter.FromCreationDate = value;
                     RaisePropertyChangedEvent(vm => vm.FromDate);
                 }
             }
         }
 
         public DateTime ToDate {
-            get { return filter.ToDate; }
+            get { return filter.ToCreationDate; }
             set {
-                if ( filter.ToDate != value ) {
-                    filter.ToDate = value;
+                if ( filter.ToCreationDate != value ) {
+                    filter.ToCreationDate = value;
                     RaisePropertyChangedEvent(vm => vm.ToDate);
                 }
             }

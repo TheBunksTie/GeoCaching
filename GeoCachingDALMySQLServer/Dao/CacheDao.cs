@@ -44,7 +44,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             }
             return sizes;
         }
-
+      
         public List<Cache> GetByOwner(int id) {
             IDbCommand cmd = database.CreateCommand(
                 "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
@@ -316,6 +316,33 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
             database.DefineParameter(cmd, "id", DbType.Int32, cacheId);
 
             return database.ExecuteNonQuery(cmd) == 1;
+        }
+
+        public List<Cache> GetCachesMatchingFilter(CacheFilter filter) {
+            IDbCommand cmd = database.CreateCommand(
+               "SELECT c.id, c.name, c.creationDate, c.difficultyCache, c.difficultyTerrain, lt.sizeDescription, c.ownerId, c.latitude, c.longitude, c.description " +
+               "FROM cache c INNER JOIN lt_cache_size lt ON c.sizeCode = lt.id " +
+               "WHERE (c.creationDate >= @begin AND c.creationDate <= @end) AND " +
+               "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
+               "(c.longitude >= @longFrom AND c.longitude <= @longTo) AND " +
+               "(c.sizeCode >= @sizeFrom AND c.sizeCode <= @sizeTo) AND " +
+               "(c.difficultyCache >= @cacheDiffFrom AND c.difficultyCache <= @cacheDiffTo) AND " +
+               "(c.difficultyTerrain >= @terrainDiffFrom AND c.difficultyTerrain <= @terrainDiffTo);");
+
+            database.DefineParameter(cmd, "begin", DbType.DateTime, filter.FromCreationDate);
+            database.DefineParameter(cmd, "end", DbType.DateTime, filter.ToCreationDate);
+            database.DefineParameter(cmd, "latFrom", DbType.Double, filter.FromPosition.Latitude);
+            database.DefineParameter(cmd, "latTo", DbType.Double, filter.ToPosition.Latitude);
+            database.DefineParameter(cmd, "longFrom", DbType.Double, filter.FromPosition.Longitude);
+            database.DefineParameter(cmd, "longTo", DbType.Double, filter.ToPosition.Longitude);
+            database.DefineParameter(cmd, "sizeFrom", DbType.Int32, filter.FromCacheSize);
+            database.DefineParameter(cmd, "sizeTo", DbType.Int32, filter.ToCacheSize);
+            database.DefineParameter(cmd, "cacheDiffFrom", DbType.Double, filter.FromCacheDifficulty);
+            database.DefineParameter(cmd, "cacheDiffTo", DbType.Double, filter.ToCacheDifficulty);
+            database.DefineParameter(cmd, "terrainDiffFrom", DbType.Double, filter.FromTerrainDifficulty);
+            database.DefineParameter(cmd, "terrainDiffTo", DbType.Double, filter.ToTerrainDifficulty);
+
+            return GetCacheListFor(cmd);
         }
 
         private int GetIdForSize(string size) {
