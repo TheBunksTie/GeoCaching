@@ -32,9 +32,14 @@
     <param-value>client</param-value>
   </context-param>
   
-   <context-param>
-    <param-name>primefaces.THEME</param-name>
-    <param-value>none</param-value>
+<!--    <context-param> -->
+<!--     <param-name>primefaces.THEME</param-name> -->
+<!--     <param-value>none</param-value> -->
+<!--   </context-param> -->
+  
+  <context-param>
+    <param-name>org.apache.myfaces.ERROR_HANDLING</param-name>
+    <param-value>false</param-value>
   </context-param>
   
   <context-param>

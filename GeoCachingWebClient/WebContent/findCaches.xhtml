@@ -158,10 +158,10 @@
                <h:outputLabel class="checkboxLabel" for="sizeFilter">filter by size </h:outputLabel>               
                <h:outputLabel class="inputLabel" for="sizeFrom">from</h:outputLabel>
                
-               <h:inputText class="filterInput" id="sizeFrom" />               
+               <h:inputText class="filterInput" id="sizeFrom" value="#{CacheManager.cacheFilter.fromCacheSize}" />               
                <h:outputText value="&#160;" />
                <h:outputLabel class="inputLabel" for="sizeTo">to</h:outputLabel>
-               <h:inputText class="filterInput" id="sizeTo" />
+               <h:inputText class="filterInput" id="sizeTo" value="#{CacheManager.cacheFilter.toCacheSize}" />
            </li>
            <li>
                <h:commandButton class="button formbutton" value="Get Caches" action="#{CacheManager.getFilteredCacheList}"/>
@@ -172,6 +172,25 @@
                 
 
         </h:form>
+        
+        <div class="map">
+            <f:view contentType="text/html">
+            <h:form>    
+			    <p:gmap center="48.490257,14.707417" zoom="10" type="ROADMAP" model="#{CacheManager.mapModel}" 
+			            navigationControl="false" style="width:600px;height:400px">  	  
+			        <p:ajax event="overlaySelect" listener="#{CacheManager.onMarkerSelect}" />  		  
+			        <p:gmapInfoWindow>  
+			            <p:outputPanel style="text-align:center;display:block;margin:auto:">  	  	                   
+		                    <h:outputText value="#{CacheManager.currentMarker.title}" />
+		                     <h:form id="cacheDetailForm">
+                                <h:commandButton class="button" value="Details" type="submit" action="#{CacheManager.showDetailsFromMap}" />
+                             </h:form>  	  
+			            </p:outputPanel>  	  
+			        </p:gmapInfoWindow>  
+			    </p:gmap>  	  	       	
+	       	</h:form>  
+            </f:view>
+        </div>
 	    
         <div class="searchResult">    
 	        <h2>Search results (<h:outputText value="#{CacheManager.nrOfSearchResults}" />)</h2>
@@ -220,7 +239,7 @@
 	               <!--                    show details action column -->
                    <p:column>
                        <h:form id="cacheDetailForm">
-                            <h:commandButton class="button" value="Details" type="submit" action="#{CacheManager.showDetails}" />
+                            <h:commandButton class="button" value="Details" type="submit" action="#{CacheManager.showDetailsFromList}" />
                             <h:inputHidden id="cacheId" value="#{cache.id}" />
                        </h:form>                                                
                    </p:column>

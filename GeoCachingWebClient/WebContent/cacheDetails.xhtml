@@ -16,77 +16,128 @@
            <h1>No Cache available due to an error. (see above)</h1>
         </h:outputText>
         
-        <p:panelGrid rendered="#{CacheManager.currentCacheAvailable}">
-           <p:row>
-                <p:column>
-                    <h:outputText value="Cache difficulty:" />
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{CacheManager.currentCache.cache.cacheDifficulty}" />
-                </p:column>
-           </p:row>
-           <p:row>
-                <p:column>
-                    <h:outputText value="Terrain difficulty:" />
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{CacheManager.currentCache.cache.terrainDifficulty}" />
-                </p:column>
-           </p:row>           
-           <p:row>
-                <p:column>
-                    <h:outputText value="Creation date:" />
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{CacheManager.currentCache.cache.creationDate}" />
-                </p:column>
-           </p:row>
-           <p:row>
-                <p:column>
-                    <h:outputText value="Rating:" />
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{CacheManager.currentCache.rating}" />
-                </p:column>
-           </p:row>
-           <p:row>
-                <p:column>
-                    <h:outputText value="Size:" />
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{CacheManager.currentCache.cache.size}" />
-                </p:column>
-           </p:row>
-           <p:row>
-                <p:column>
-                    <h:outputText value="Position" />
-                </p:column>
-                <p:column>
-                    <h:outputText value="[#{CacheManager.currentCache.cache.position.latitude};" />
-                    <h:outputText value="#{CacheManager.currentCache.cache.position.longitude}]" />
-                </p:column>
-           </p:row>
-           <p:row>
-                <p:column>
-                    <h:outputText value="Description" />
-                </p:column>
-                <p:column>
+        <p:panelGrid styleClass="detailsTable" rendered="#{CacheManager.currentCacheAvailable}" >                                  
+			
+			<f:facet name="header">
+			     <p:row>
+                    <p:column>Cache Difficulty</p:column>
+                    <p:column>Terrain Difficulty</p:column>
+                    <p:column>Cache Creation date</p:column>
+                    <p:column>Rating</p:column>
+                    <p:column>Size</p:column>
+                    <p:column>Position</p:column>
+                 </p:row>
+			</f:facet>
+			
+			<p:row>
+					
+			<!-- cache difficulty column -->
+			<p:column headerText="Cache Difficulty">
+			    <h:outputText value="#{CacheManager.currentCache.cache.cacheDifficulty}" />
+			</p:column>
+			 
+			<!-- terrain difficulty column -->
+			<p:column headerText="Terrain Difficulty">
+			     <h:outputText value="#{CacheManager.currentCache.cache.terrainDifficulty}" />                                                                 
+			</p:column>
+			
+			   <p:column headerText="Creation date">
+			        <h:outputText value="#{CacheManager.currentCache.cache.creationDate}" />
+			   </p:column>
+			
+			<p:column headerText="Rating">
+			        <h:outputText value="#{CacheManager.currentCache.rating}" />
+			   </p:column>
+			
+			<p:column headerText="Size">
+			     <h:outputText value="#{CacheManager.currentCache.cache.size}" />
+			</p:column>
+				          
+			<!-- position column -->
+			<p:column headerText="Position">
+			    <h:outputText value="[#{CacheManager.currentCache.cache.position.latitude};" />
+			       <h:outputText value="#{CacheManager.currentCache.cache.position.longitude}]" />
+			</p:column>		
+			</p:row>
+	    </p:panelGrid>
+        <br />
+        <p:panelGrid rendered="#{CacheManager.currentCacheAvailable}" styleClass="descriptionTable">
+	        <f:facet name="header">
+	             <p:row>
+	             <p:column>Description</p:column>
+	             </p:row>
+	        </f:facet>
+            <p:row>
+                 <p:column>
                     <h:outputText value="#{CacheManager.currentCache.cache.description}" />
                 </p:column>
-           </p:row>
-            
-            
+            </p:row>                    
         </p:panelGrid>
+        <br />
+       <p:dataTable value="#{CacheManager.currentCache.images.image}" var="picture">
+       <!-- terrain difficulty column -->
+            <p:column>
+                <f:facet name="header">
+                <h:outputText>Cache ID</h:outputText>
+                </f:facet>
+          
+                <h:outputText value="#{picture.cacheId}"/>                                                                                     
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                <h:outputText>Image</h:outputText>
+                </f:facet>
+                <h:outputText value="#{picture.fileName}" />
+<!--                  <p:graphicImage value="#{picture.image}" />                                                                                      -->
+            </p:column>
+       </p:dataTable>
+<!--        <p:galleria value="#{CacheManager.currentCache.images.image}" var="picture" panelWidth="500" panelHeight="313" showCaption="false"> -->
+<!--            <p:graphicImage value="#{picture.image}" /> -->
+<!--        </p:galleria> -->
+                
+        	       
+        <h:form id="rateForm" rendered="#{AuthenticationManager.loggedIn}">
+                <div class="rating">
+                <h2>Rate this cache</h2>
+                <h:outputLabel class="ratingLabel" for="cacheRating">Your rating:</h:outputLabel>                 
+                <h:inputText class="filterInput" id="cacheRating" />
+                <h:outputText value="&#160;" />
+                <h:commandButton class="button formbutton" value="Rate" action="#{CacheManager.rateCurrentCache}" />
+           </div>
+        </h:form>        
+                
+        <div class="comment">
+            <h2>Log book</h2>
+            <ui:repeat var="entry" value="#{CacheManager.currentCache.logEntries.logEntry}">                
+                <div>
+                    <h3 class="commentatorLine">
+	                    <h:outputText value="by #{entry.creatorName}" />
+	                    <h:outputText value=" on #{entry.creationDate}" />
+	                    <h:outputText value=" (found)" rendered="#{entry.isFound}" />
+	                    <h:outputText value=" (not found)" rendered="#{!entry.isFound}" />
+                    </h3>
+                    <p>
+                        <h:outputText value="#{entry.comment}" />
+                    </p>
+                </div>
+            </ui:repeat>
+           
+           <br/>
+           <h:outputText rendered="#{AuthenticationManager.loggedIn}"><h2>Log this cache</h2></h:outputText>
+           <h:form id="logEntryForm" rendered="#{AuthenticationManager.loggedIn}">
+                <h:selectBooleanCheckbox id="cacheFound" value="#{CacheManager.cacheFound}"/>
+                <h:outputText value="&#160;" />
+                <h:outputLabel for="cacheFound">I found this cache.</h:outputLabel>
+                <br />               
+                <h:inputTextarea id="comment" />
+                <br/>
+                <h:commandButton class="button formbutton" value="Enter" action="#{CacheManager.addLogEntry}" />                   
+            </h:form>
+            
+        </div>
+        	  	  	    
 	    	    
-<!-- 	    <h:form id="loginForm"> -->
-<!-- 	       <h:panelGrid columns="2" rendered="#{!AuthenticationManager.loggedIn}"> -->
-<!-- 	           <h:outputLabel for="username">Username: </h:outputLabel> -->
-<!-- 	           <h:inputText id="username" /> -->
-<!-- 	           <h:outputLabel for="password">Password: </h:outputLabel> -->
-<!--                <h:inputSecret id="password" /> -->
-<!-- 	       </h:panelGrid> -->
-<!-- 	       <h:commandButton class="button formbutton" value="Login" action="#{AuthenticationManager.loginUser}" rendered="#{!AuthenticationManager.loggedIn}" />	      	        -->
-<!-- 	    </h:form> -->
+
 <!-- 	    <h:outputText rendered="#{AuthenticationManager.loggedIn}">You are already logged in. Please log out before new login.</h:outputText> -->
 	    
 	    
