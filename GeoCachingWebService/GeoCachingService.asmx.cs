@@ -89,15 +89,16 @@ namespace GeoCaching.Services {
         public bool AddLogEntryForCache(User user, LogEntry logEntry) {
             // TODO only if user is valid (name + pw hash) = reauthenticate
             return cacheManager.AddLogEntryForCache(logEntry);
-        }
+        }       
 
+        // ------------------------------------ Ratings  ----------------------------------
+        
         [WebMethod]
-        public bool AddRatingForCache(User user, Rating rating) {
+        public bool AddRatingForCache ( User user, Rating rating ) {
             // TODO only if user is valid (name + pw hash) = reauthenticate
             return cacheManager.AddRatingForCache(rating);
         }
-
-        // ------------------------------------ Ratings  ----------------------------------
+        
         //[WebMethod]
         //public double GetRatingForCache(int cacheId) {
         //    return cacheManager.GetAverageRatingForCache(cacheId);

@@ -2,17 +2,32 @@ package at.wea5.geocaching.business.webserviceImplementation;
 
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.primefaces.event.map.OverlaySelectEvent;
+import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
 
 import at.wea5.geocaching.business.ManagerBase;
+import at.wea5.geocaching.business.exception.NoCurrentUserException;
 import at.wea5.geocaching.webserviceproxy.Cache;
 import at.wea5.geocaching.webserviceproxy.CacheDetails;
 import at.wea5.geocaching.webserviceproxy.CacheFilter;
 import at.wea5.geocaching.webserviceproxy.GeoPosition;
+import at.wea5.geocaching.webserviceproxy.LogEntry;
+import at.wea5.geocaching.webserviceproxy.Rating;
+import at.wea5.geocaching.webserviceproxy.User;
 
 @ManagedBean(name="CacheManager", eager=true)
 @SessionScoped
@@ -24,33 +39,40 @@ public class CacheManager extends ManagerBase {
         // retrieve default filter and load whole cache list        
         loadDefaultFilter();
         loadCaches();
+        fillMapModel();
     }
 
 //-------------------------------------- public ---------------------------------------
           
-    public String showDetails() {        
+    public String showDetailsFromMap() {
         try {
             // read id of requested cache and retrieve all details via webservice
-            currentCache = geoCachingWsProxy.getDetailedCache(Integer.parseInt(getRequestParameterValue("cacheId")));
-            
-            if (currentCache == null) {
-                setErrorMessage("The requested cache could not be found.");
-            }
+            int cacheId = ((Cache)currentMarker.getData()).getId();
+            return showDetails(cacheId);
+        }
+        catch (Exception e) {            
+            log.severe(e.getMessage());
+            setErrorMessage("Unable to show requested details for cache.");            
+        }
+        return "FindCachesEvent";
+    }    
+    
+    public String showDetailsFromList() {
+        try {
+            // read id of requested cache and retrieve all details via webservice
+            return showDetails(Integer.parseInt(getRequestParameterValue("cacheId")));
         }
         catch (NumberFormatException ne) {            
             setErrorMessage("The id of the request cache is not a number.");            
         }
-        catch (Exception e) {
-            log.severe(e.getMessage());
-            setErrorMessage("Unable to perform requested action.");
-        }            
-        return "CacheDetailsEvent";
+        return "FindCachesEvent";
     }
-    
-          
+             
     public String getFilteredCacheList() {        
         
         // reset filter to default values
+        //setFilterToDefault();
+        
         filter = defaultFilter;
         
         try {
@@ -104,6 +126,107 @@ public class CacheManager extends ManagerBase {
         
         return "FindCachesEvent";
     }
+    
+    public String rateCurrentCache() {
+        try {            
+            // check entered rating value
+            int grade = Integer.parseInt(getRequestParameterValue("cacheRating"));
+            
+            if (grade >= 1 && grade <= 10) {
+                Rating rating = new Rating();
+                
+                // add time: today
+                calendar.setTime(new Date());                     
+                XMLGregorianCalendar xml = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
+                rating.setCreationDate(xml);
+                               
+                // add creator: currently logged in user
+                User currentUser = getCurrentUser();                
+                rating.setCreatorId(currentUser.getId());
+                
+                // add related cache
+                rating.setCacheId(currentCache.getCache().getId());
+
+                // add rating itself
+                rating.setGrade(grade);
+                
+                // send back to data-backend via webservice
+                geoCachingWsProxy.addRatingForCache(currentUser, rating);
+                
+                // refresh data of current cache
+                currentCache = geoCachingWsProxy.getDetailedCache(currentCache.getCache().getId());
+                
+            }
+            else {
+                setErrorMessage("Provide rating ist invalid. Must be a number between 1 and 10.");
+            }
+        }
+        catch (NoCurrentUserException ue) {
+            setErrorMessage("You need to be logged in to rate a cache.");
+        }
+        catch (DatatypeConfigurationException de) {
+            setErrorMessage(de.getMessage());
+        }
+        catch(NumberFormatException e) {
+            setErrorMessage("Provide rating ist invalid. Must be a number between 1 and 10.");
+        }
+        return "CacheDetailsEvent";
+    }
+    
+    public String addLogEntry() {
+        try {            
+            // get entered comment
+            String comment = getRequestParameterValue("comment");
+            
+            LogEntry logEntry = new LogEntry();
+            
+            // add time: today
+            calendar.setTime(new Date());                     
+            XMLGregorianCalendar xml = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
+            logEntry.setCreationDate(xml);
+                           
+            // add creator: currently logged in user
+            User currentUser = getCurrentUser();                
+            logEntry.setCreatorId(currentUser.getId());
+            
+            // add related cache
+            logEntry.setCacheId(currentCache.getCache().getId());
+
+            // add found flag
+            logEntry.setIsFound(cacheFound);
+
+            // add optional comment
+            logEntry.setComment(comment);
+            
+            // send back to data-backend via webservice
+            geoCachingWsProxy.addLogEntryForCache(currentUser, logEntry);
+            
+            // refresh data of current cache
+            currentCache = geoCachingWsProxy.getDetailedCache(currentCache.getCache().getId());
+                
+        }
+        catch (NoCurrentUserException ue) {
+            setErrorMessage("You need to be logged in to rate a cache.");
+        }
+        catch (DatatypeConfigurationException de) {
+            setErrorMessage(de.getMessage());
+        }
+        return "CacheDetailsEvent";        
+    }
+    
+    public void onMarkerSelect(OverlaySelectEvent event) {  
+        currentMarker = (Marker) event.getOverlay();  
+    }  
+    
+    
+    public MapModel getMapModel() {
+        return mapModel;
+        
+    }
+    
+    public Marker getCurrentMarker() {  
+        return currentMarker;  
+    }  
     
     public boolean getCurrentCacheAvailable() {
         return (currentCache != null);
@@ -160,9 +283,46 @@ public class CacheManager extends ManagerBase {
 
     public void setTerrainDifficultyFiltered(boolean terrainDifficultyFiltered) {
         this.terrainDifficultyFiltered = terrainDifficultyFiltered;
-    } 
+    }
+    
+    public void setCacheFound(boolean value) {
+        this.cacheFound = value;
+    }
+    
+    public boolean getCacheFound() {
+        return cacheFound;
+    }
         
 //------------------------------------- private ---------------------------------------
+    
+    private String showDetails(int id) {        
+        try {
+            // read id of requested cache and retrieve all details via webservice
+            currentCache = geoCachingWsProxy.getDetailedCache(id);
+            
+            if (currentCache == null) {
+                setErrorMessage("The requested cache could not be found.");
+            }
+        }       
+        catch (Exception e) {
+            log.severe(e.getMessage());
+            setErrorMessage("Unable to show requested details for cache.");
+        }            
+        return "CacheDetailsEvent";
+    }
+    
+    private User getCurrentUser() throws NoCurrentUserException {
+        AuthenticationManager authenticationManager = (AuthenticationManager) getSessionVariable("AuthenticationManager");
+        
+        User user = authenticationManager.getCurrentUser();
+        
+        if (user != null) {
+            return user;
+        }
+        else {
+            throw new NoCurrentUserException();
+        }
+    }
     
     private void loadCaches() {        
         caches.clear();        
@@ -170,21 +330,64 @@ public class CacheManager extends ManagerBase {
     }
     
     private void loadDefaultFilter() {
-        defaultFilter = geoCachingWsProxy.computeDefaultFilter();
+        defaultFilter = geoCachingWsProxy.computeDefaultFilter();        
+        
         filter = defaultFilter;
+        //setFilterToDefault();
+    }
+    
+    private void fillMapModel() {
+        mapModel = new DefaultMapModel();
+        
+        for (Cache c : caches) {
+            mapModel.addOverlay(new Marker(new LatLng(c.getPosition().getLatitude(), c.getPosition().getLongitude()), 
+                                           c.getName(), c));
+        }
+        
+    }
+    
+    private void setFilterToDefault() {
+        filter.setFromCacheDifficulty(defaultFilter.getFromCacheDifficulty());
+        filter.setToCacheDifficulty(defaultFilter.getToCacheDifficulty());
+        
+        filter.setFromTerrainDifficulty(defaultFilter.getFromTerrainDifficulty());
+        filter.setToTerrainDifficulty(defaultFilter.getToTerrainDifficulty());
+        
+        filter.setFromCacheSize(defaultFilter.getFromCacheSize());
+        filter.setToCacheSize(defaultFilter.getToCacheSize());
+        
+        GeoPosition from = new GeoPosition();
+        from.setLatitude(defaultFilter.getFromPosition().getLatitude());
+        from.setLongitude(defaultFilter.getFromPosition().getLongitude());
+        
+        filter.setFromPosition(from);
+        
+        GeoPosition to = new GeoPosition();
+        to.setLatitude(defaultFilter.getToPosition().getLatitude());
+        to.setLongitude(defaultFilter.getToPosition().getLongitude());
+        
+        filter.setToPosition(to);
     }
 
 //-------------------------------------- members --------------------------------------
-    
+        
     private CacheDetails currentCache;
     private List<Cache> caches = new ArrayList<Cache>();
-    private CacheFilter filter;
+    private CacheFilter filter = new CacheFilter();
     private CacheFilter defaultFilter;
-        
+    
+    private Marker currentMarker;
+    private MapModel mapModel;
+    
     private boolean positionFiltered = false;
     private boolean sizeFiltered = false;
     private boolean cacheDifficultyFiltered = false;
     private boolean terrainDifficultyFiltered = false;
+    
+    private boolean cacheFound;
+    
+    private GregorianCalendar calendar = new GregorianCalendar();            
+
     
     private static final Logger log = Logger.getLogger(CacheManager.class.getName());
     

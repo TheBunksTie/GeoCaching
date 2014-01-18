@@ -8,7 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import at.wea5.geocaching.business.ManagerBase;
-import at.wea5.geocaching.domainmodel.User;
+import at.wea5.geocaching.webserviceproxy.User;
 
 /**
  * represents the business logic part of de/authenticating a user
@@ -38,14 +38,11 @@ public class AuthenticationManager extends ManagerBase {
             String password = getRequestParameterValue("password");        
                                   
             // use webservice-method  to get user data                      
-            at.wea5.geocaching.webserviceproxy.User user = geoCachingWsProxy.authenticateUser(username, password);
+            userdata = geoCachingWsProxy.authenticateUser(username, password);
             
-            if (user != null) {
+            if (userdata != null) {
                 FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-                
-                // store user data
-                userdata = new User(user);
-                
+                                
                 return "HomeEvent";
             }
             else {
@@ -62,6 +59,10 @@ public class AuthenticationManager extends ManagerBase {
             return "LoginEvent";            
         }
     }
+    
+    public User getCurrentUser() {
+        return userdata;
+    }
 
     public String logoutUser() {
         userdata = null;
@@ -74,5 +75,6 @@ public class AuthenticationManager extends ManagerBase {
         
 //-------------------------------------- members --------------------------------------
     private static final Logger log = Logger.getLogger(AuthenticationManager.class.getName());
+    
     private User userdata;
 }
