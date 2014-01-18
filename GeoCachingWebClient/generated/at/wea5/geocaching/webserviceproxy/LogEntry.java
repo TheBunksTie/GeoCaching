@@ -22,6 +22,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="Id" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="CacheId" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="CreatorId" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="CreatorName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="CreationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *         &lt;element name="IsFound" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="Comment" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -38,6 +39,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "id",
     "cacheId",
     "creatorId",
+    "creatorName",
     "creationDate",
     "isFound",
     "comment"
@@ -50,6 +52,8 @@ public class LogEntry {
     protected int cacheId;
     @XmlElement(name = "CreatorId")
     protected int creatorId;
+    @XmlElement(name = "CreatorName")
+    protected String creatorName;
     @XmlElement(name = "CreationDate", required = true)
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar creationDate;
@@ -107,6 +111,30 @@ public class LogEntry {
     }
 
     /**
+     * Ruft den Wert der creatorName-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    /**
+     * Legt den Wert der creatorName-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCreatorName(String value) {
+        this.creatorName = value;
+    }
+
+    /**
      * Ruft den Wert der creationDate-Eigenschaft ab.
      * 
      * @return
@@ -135,6 +163,10 @@ public class LogEntry {
      * 
      */
     public boolean isIsFound() {
+        return isFound;
+    }
+    
+    public boolean getIsFound() {
         return isFound;
     }
 

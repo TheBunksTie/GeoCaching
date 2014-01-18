@@ -1,10 +1,18 @@
 
 package at.wea5.geocaching.webserviceproxy;
 
+import java.io.ByteArrayInputStream;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 
 /**
@@ -36,6 +44,8 @@ import javax.xml.bind.annotation.XmlType;
     "cacheId",
     "fileName"
 })
+@ManagedBean
+@SessionScoped
 public class Image {
 
     @XmlElement(name = "ImageData")
@@ -47,6 +57,45 @@ public class Image {
     @XmlElement(name = "FileName")
     protected String fileName;
 
+    
+//    public String getImageAsFile() {
+//        //FileWriter w = new FileWriter(fileName)
+//    }
+    
+    public String getImageAsString() {
+        StringBuilder sb = new StringBuilder(100000);
+        
+        for (byte b : imageData) {
+            sb.append(b);
+        }
+        return sb.toString();
+    }
+    
+    public StreamedContent getImage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+            // So, we're rendering the HTML. Return a stub StreamedContent so that it will generate right URL.
+            return new DefaultStreamedContent();
+        } 
+        else {
+//            try {
+                
+                return new DefaultStreamedContent(new ByteArrayInputStream(this.imageData), "image/png");
+//            } 
+//            catch (Exception ex) {
+//                ex.printStackTrace();
+
+                //Logger.getLogger(DetailCache.class.getName()).log(Level.SEVERE, null, ex);
+
+//            }
+        }
+//        return new DefaultStreamedContent();
+    }
+    
+    public StreamedContent getImageSource() {
+        return new DefaultStreamedContent(new ByteArrayInputStream(imageData), "image/png");
+    }
+    
     /**
      * Ruft den Wert der imageData-Eigenschaft ab.
      * 
