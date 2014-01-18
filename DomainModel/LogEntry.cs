@@ -16,9 +16,10 @@ namespace Swk5.GeoCaching.DomainModel {
         public int Id { get; set; }
         public int CacheId { get; set; }
         public int CreatorId { get; set; }
+        public string CreatorName { get; set; }
         public DateTime CreationDate { get; set; }
         public bool IsFound { get; set; }
-        public string Comment { get; set; }
+        public string Comment { get; set; }        
 
         public bool Equals(LogEntry other) {
             if (ReferenceEquals(null, other)) {

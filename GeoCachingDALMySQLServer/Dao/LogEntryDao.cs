@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DomainModel;
@@ -12,8 +11,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public List<LogEntry> GetAll() {
             return GetLogEntryListFor(database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
-                "FROM cache_log l;"));
+                "SELECT l.id, l.cacheId, l.creatorId, u.name, l.creationDate, l.found, l.comment " +
+                "FROM cache_log l INNER JOIN user u ON l.creatorId = user.id;"));
         }
 
         public LogEntry GetById(int id) {
@@ -33,8 +32,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public List<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, int userId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
-                "FROM cache_log l " +
+                "SELECT l.id, l.cacheId, l.creatorId, u.name, l.creationDate, l.found, l.comment " +
+                "FROM cache_log l INNER JOIN user u ON l.creatorId = u.id " +
                 "WHERE cacheId = @cacheId AND creatorId = @creatorId;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
             database.DefineParameter(cmd, "creatorId", DbType.Int32, userId);
@@ -71,9 +70,10 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public List<LogEntry> GetLogEntriesForCache(int cacheId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
-                "FROM cache_log l " +
-                "WHERE l.cacheId = @cacheId;");
+                "SELECT l.id, l.cacheId, l.creatorId, u.name, l.creationDate, l.found, l.comment " +
+                "FROM cache_log l INNER JOIN user u ON l.creatorId = u.id " +
+                "WHERE l.cacheId = @cacheId " +
+                "ORDER BY l.creationDate DESC;");
             database.DefineParameter(cmd, "cacheId", DbType.Int32, cacheId);
 
             return GetLogEntryListFor(cmd);
@@ -81,8 +81,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public List<LogEntry> GetLogentriesForUser(int userId) {
             IDbCommand cmd = database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
-                "FROM cache_log l " +
+                "SELECT l.id, l.cacheId, l.creatorId, u.name, l.creationDate, l.found, l.comment " +
+                "FROM cache_log l INNER JOIN user u ON l.creatorId = u.id " +
                 "WHERE l.creatorId = @creatorId;");
             database.DefineParameter(cmd, "creatorId", DbType.Int32, userId);
 
@@ -116,13 +116,14 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                 var entries = new List<LogEntry>();
 
                 while (reader.Read()) {
-                    entries.Add(new LogEntry(
-                        ( int ) reader["id"],
-                        ( int ) reader["cacheId"],
-                        ( int ) reader["creatorId"],
-                        DateTime.Parse(reader["creationDate"].ToString()),
-                        ( bool ) reader["found"],
-                        reader["comment"].ToString()));
+                    entries.Add(new LogEntry {
+                        Id = ( int ) reader["id"],
+                        CacheId = ( int ) reader["cacheId"],
+                        CreatorId = ( int ) reader["creatorId"],
+                        CreatorName = reader["name"].ToString(),
+                        CreationDate = DateTime.Parse(reader["creationDate"].ToString()),
+                        IsFound = ( bool ) reader["found"],
+                        Comment = reader["comment"].ToString()});
                 }
                 return entries;
             }

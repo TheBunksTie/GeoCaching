@@ -16,7 +16,7 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         // returns a filter, which "filters" the whole datataset  
         CacheFilter ComputeDefaultFilter();
 
-        // 
+        // get a cache by its id
         Cache GetCacheById(int cacheId);
 
 

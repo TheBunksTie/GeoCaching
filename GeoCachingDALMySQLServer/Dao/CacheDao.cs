@@ -327,7 +327,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                "(c.longitude >= @longFrom AND c.longitude <= @longTo) AND " +
                "(c.sizeCode >= @sizeFrom AND c.sizeCode <= @sizeTo) AND " +
                "(c.difficultyCache >= @cacheDiffFrom AND c.difficultyCache <= @cacheDiffTo) AND " +
-               "(c.difficultyTerrain >= @terrainDiffFrom AND c.difficultyTerrain <= @terrainDiffTo);");
+               "(c.difficultyTerrain >= @terrainDiffFrom AND c.difficultyTerrain <= @terrainDiffTo) " +
+               "ORDER BY c.creationDate ASC;;");
 
             database.DefineParameter(cmd, "begin", DbType.DateTime, filter.FromCreationDate);
             database.DefineParameter(cmd, "end", DbType.DateTime, filter.ToCreationDate);
