@@ -5,12 +5,12 @@ using Swk5.GeoCaching.DomainModel;
 namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
     public class FilterVM : AbstractViewModelBase<FilterVM> {
         private const double TOLERANCE = 0.000001;
-        private readonly CacheFilter filter;
+        private readonly DataFilter filter;
 
-        public FilterVM(CacheFilter filter) {
+        public FilterVM(DataFilter filter) {
             
             // kind of copy construction
-            this.filter = new CacheFilter() {
+            this.filter = new DataFilter() {
                 FromPosition = filter.FromPosition,
                 ToPosition = filter.ToPosition,
                 FromCreationDate =  filter.FromCreationDate,
@@ -18,7 +18,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
             };
         }
 
-        public CacheFilter Current {
+        public DataFilter Current {
             get { return filter; }
         }
 
