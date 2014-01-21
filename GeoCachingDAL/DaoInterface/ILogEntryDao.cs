@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
@@ -12,11 +11,12 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         List<LogEntry> GetLogentriesForUser(int userId);
         List<LogEntry> GetLogEntriesForCacheAndUser(int cacheId, int userId);
 
-        List<StatisticData> GetFoundCachesCountPerUser(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
+        List<StatisticData> GetFoundCachesCountPerUser(DataFilter filter);
+        List<StatisticData> GetMostLoggedCaches(DataFilter filter);
 
         // write
         int Insert(LogEntry logEntry);
         // no update needed because user can add as many log entries for each cache as he wants
-        // no deletion allowed
+        // no deletion allowed        
     }
 }

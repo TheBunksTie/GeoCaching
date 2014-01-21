@@ -20,7 +20,7 @@ namespace GeoCachingTest {
         
         [TestMethod]
         public void GetCacheDistributionByCacheDifficultyTest() {
-            CacheFilter limitation = new CacheFilter {
+            DataFilter limitation = new DataFilter {
                 FromCreationDate = new DateTime(2001, 1,20),
                 ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
@@ -32,7 +32,7 @@ namespace GeoCachingTest {
                 new StatisticData { Name = "1,5", Value = "22,2000"}
             };
             
-            List<StatisticData> actual = statManager.GetCacheDistributionByCacheDifficulty(limitation);
+            List<StatisticData> actual = statManager.GetCacheDistributionByCacheDifficulty(limitation).Data;
             
             Assert.AreEqual(9, actual.Count);
             foreach ( var data in expected ) {
@@ -42,7 +42,7 @@ namespace GeoCachingTest {
         
         [TestMethod]
         public void GetCacheDistributionBySizeTest() {
-            CacheFilter limitation = new CacheFilter {
+            DataFilter limitation = new DataFilter {
                 FromCreationDate = new DateTime(2001, 1, 20),
                 ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
@@ -54,7 +54,7 @@ namespace GeoCachingTest {
                 new StatisticData { Name = "None", Value = "6,2000"}
             };
 
-            List<StatisticData> actual = statManager.GetCacheDistributionBySize(limitation);
+            List<StatisticData> actual = statManager.GetCacheDistributionBySize(limitation).Data;
             Assert.AreEqual(6, actual.Count);
 
             foreach ( var data in expected ) {
@@ -64,7 +64,7 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetCacheDistributionByTerrainDifficultyTest() {
-            CacheFilter limitation = new CacheFilter {
+            DataFilter limitation = new DataFilter {
                 FromCreationDate = new DateTime(2001, 1, 20),
                 ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
@@ -76,7 +76,7 @@ namespace GeoCachingTest {
                 new StatisticData { Name = "1", Value = "11,6000"}
             };
 
-            List<StatisticData> actual = statManager.GetCacheDistributionByTerrainDifficulty(limitation);
+            List<StatisticData> actual = statManager.GetCacheDistributionByTerrainDifficulty(limitation).Data;
             Assert.AreEqual(9, actual.Count);
 
             foreach ( var data in expected ) {
@@ -86,7 +86,7 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetFoundCachesPerUserTest() {
-            CacheFilter limitation = new CacheFilter {
+            DataFilter limitation = new DataFilter {
                 FromCreationDate = new DateTime(2001, 1, 20),
                 ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
@@ -99,7 +99,7 @@ namespace GeoCachingTest {
                 new StatisticData { Name = "Sandra359", Value = "27"}
             };
 
-            List<StatisticData> actual = statManager.GetFoundCachesPerUser(limitation);
+            List<StatisticData> actual = statManager.GetFoundCachesByUser(limitation).Data;
             Assert.AreEqual(214, actual.Count);
 
             foreach ( var data in expected ) {
@@ -109,7 +109,7 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetHiddenCachesPerUserTest() {
-            CacheFilter limitation = new CacheFilter {
+            DataFilter limitation = new DataFilter {
                 FromCreationDate = new DateTime(2001, 1, 20),
                 ToCreationDate = new DateTime(2031, 12, 20),
                 FromPosition = new GeoPosition(46.966667, 12.1913),
@@ -121,7 +121,7 @@ namespace GeoCachingTest {
                 new StatisticData { Name = "Barbara921", Value = "13"}
             };
 
-            List<StatisticData> actual = statManager.GetHiddenCachesPerUser(limitation);
+            List<StatisticData> actual = statManager.GetHiddenCachesByUser(limitation).Data;
             Assert.AreEqual(40, actual.Count);
 
             foreach ( var data in expected ) {
@@ -129,32 +129,32 @@ namespace GeoCachingTest {
             }                       
         }
 
-        [TestMethod]
-        public void GetEarliestCacheCreationDateTest ( ) {
-            var expected = new DateTime(2001, 1, 20);
-            DateTime actual = statManager.GetEarliestCacheCreationDate();
-            Assert.AreEqual(expected, actual);
-        }
+        //[TestMethod]
+        //public void GetEarliestCacheCreationDateTest ( ) {
+        //    var expected = new DateTime(2001, 1, 20);
+        //    DateTime actual = statManager.GetEarliestCacheCreationDate();
+        //    Assert.AreEqual(expected, actual);
+        //}
         
-        [TestMethod]
-        public void GetHighestCachePositionTest() {
-            var expected = new GeoPosition(48.4719, 14.399167);
-            GeoPosition actual = statManager.GetHighestCachePosition();
-            Assert.AreEqual(expected, actual);
-        }
+        //[TestMethod]
+        //public void GetHighestCachePositionTest() {
+        //    var expected = new GeoPosition(48.4719, 14.399167);
+        //    GeoPosition actual = statManager.GetHighestCachePosition();
+        //    Assert.AreEqual(expected, actual);
+        //}
 
-        [TestMethod]
-        public void GetLatestCacheCreationDateTest() {
-            var expected = new DateTime(2031,12,20); 
-            DateTime actual = statManager.GetLatestCacheCreationDate();
-            Assert.AreEqual(expected, actual);
-        }
+        //[TestMethod]
+        //public void GetLatestCacheCreationDateTest() {
+        //    var expected = new DateTime(2031,12,20); 
+        //    DateTime actual = statManager.GetLatestCacheCreationDate();
+        //    Assert.AreEqual(expected, actual);
+        //}
         
-        [TestMethod]
-        public void GetLowestCachePositionTest() {
-            var expected = new GeoPosition(46.966667, 12.1913);
-            GeoPosition actual = statManager.GetLowestCachePosition();
-            Assert.AreEqual(expected, actual);
-        }
+        //[TestMethod]
+        //public void GetLowestCachePositionTest() {
+        //    var expected = new GeoPosition(46.966667, 12.1913);
+        //    GeoPosition actual = statManager.GetLowestCachePosition();
+        //    Assert.AreEqual(expected, actual);
+        //}
     }
 }

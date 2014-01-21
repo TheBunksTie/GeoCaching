@@ -10,7 +10,7 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
 
         List<string> GetAllCacheSizes();
 
-        List<Cache> GetCachesMatchingFilter(CacheFilter filter);
+        List<Cache> GetCachesMatchingFilter(DataFilter filter);
 
         // for finding caches on web plattform
         List<Cache> GetByOwner(int userId);
@@ -25,25 +25,11 @@ namespace Swk5.GeoCaching.DAL.Common.DaoInterface {
         GeoPosition GetLowestCachePosition();
         GeoPosition GetHighestCachePosition();
 
-        List<StatisticData> GetHiddenCachesCountPerUser(DateTime fromDate,
-            DateTime toDate,
-            GeoPosition fromPosition,
-            GeoPosition toPosition);
-
-        List<StatisticData> GetCacheDistributionBySize(DateTime fromDate,
-            DateTime toDate,
-            GeoPosition fromPosition,
-            GeoPosition toPosition);
-
-        List<StatisticData> GetCacheDistributionByCacheDifficulty(DateTime fromDate,
-            DateTime toDate,
-            GeoPosition fromPosition,
-            GeoPosition toPosition);
-
-        List<StatisticData> GetCacheDistributionByTerrainDifficulty(DateTime fromDate,
-            DateTime toDate,
-            GeoPosition fromPosition,
-            GeoPosition toPosition);
+        List<StatisticData> GetHiddenCachesCountPerUser(DataFilter filter);
+        List<StatisticData> GetCacheDistributionBySize(DataFilter filter);
+        List<StatisticData> GetCacheDistributionByCacheDifficulty(DataFilter filter);
+        List<StatisticData> GetCacheDistributionByTerrainDifficulty(DataFilter filter);
+        List<StatisticData> GetBestRatedCaches(DataFilter filter);
 
         List<Cache> GetInRegionCreatedBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);
         List<Cache> GetInRegionFoundBetween(DateTime begin, DateTime end, GeoPosition from, GeoPosition to);

@@ -1,7 +1,10 @@
 ﻿using System;
 
 namespace Swk5.GeoCaching.DomainModel {
-    public class CacheFilter {
+    public class DataFilter {
+
+        public String CacheName { get; set; }
+        
         public GeoPosition FromPosition { get; set; }
         public GeoPosition ToPosition { get; set; }
         

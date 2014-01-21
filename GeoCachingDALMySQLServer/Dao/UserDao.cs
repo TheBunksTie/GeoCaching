@@ -9,18 +9,18 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         public UserDao(IDatabase database) : base(database) {}
 
         public List<User> GetAll() {
-            return GetUserListFor(database.CreateCommand(
+            return GetUserListFor(Database.CreateCommand(
                 "SELECT u.id, u.name, u.password, u.email, u.latitude, u.longitude, lt.roleDescription " +
                 "FROM user u INNER JOIN lt_user_role lt ON u.roleCode = lt.id " +
                 "ORDER BY u.name ASC;"));
         }
 
         public User GetByName(string name) {
-            IDbCommand cmd = database.CreateCommand(
+            IDbCommand cmd = Database.CreateCommand(
                 "SELECT u.id, u.name, u.password, u.email, u.latitude, u.longitude, lt.roleDescription " +
                 "FROM user u INNER JOIN lt_user_role lt ON u.roleCode = lt.id " +
                 "WHERE u.name = @name;");
-            database.DefineParameter(cmd, "name", DbType.String, name);
+            Database.DefineParameter(cmd, "name", DbType.String, name);
 
             IList<User> list = GetUserListFor(cmd);
 
@@ -31,11 +31,11 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         public User GetById(int id) {
-            IDbCommand cmd = database.CreateCommand(
+            IDbCommand cmd = Database.CreateCommand(
                 "SELECT u.id, u.name, u.password, u.email, u.latitude, u.longitude, lt.roleDescription " +
                 "FROM user u INNER JOIN lt_user_role lt ON u.roleCode = lt.id " +
                 "WHERE u.id = @id;");
-            database.DefineParameter(cmd, "id", DbType.Int32, id);
+            Database.DefineParameter(cmd, "id", DbType.Int32, id);
 
             IList<User> list = GetUserListFor(cmd);
 
@@ -46,30 +46,30 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         public List<string> GetAllUserRoles() {
-            return GetRoleListFor(database.CreateCommand("SELECT roleDescription FROM lt_user_role;"));
+            return GetRoleListFor(Database.CreateCommand("SELECT roleDescription FROM lt_user_role;"));
         }
 
         public List<string> GetPrivilegedRoles() {
-            return GetRoleListFor(database.CreateCommand("SELECT roleDescription FROM lt_user_role WHERE id > 1;"));
+            return GetRoleListFor(Database.CreateCommand("SELECT roleDescription FROM lt_user_role WHERE id > 1;"));
         }
 
         public int Insert(User user) {
             int roleCode = GetIdForRole(user.Role);
 
-            IDbCommand cmd = database.CreateCommand(
+            IDbCommand cmd = Database.CreateCommand(
                 "INSERT INTO user (name, password, email, latitude, longitude, roleCode) " +
                 "VALUES (@name, @password, @email, @latitude, @longitude, @roleCode);");
-            database.DefineParameter(cmd, "name", DbType.String, user.Name);
-            database.DefineParameter(cmd, "password", DbType.String, user.Password);
-            database.DefineParameter(cmd, "email", DbType.String, user.Email);
-            database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
-            database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
-            database.DefineParameter(cmd, "roleCode", DbType.Int32, roleCode);
+            Database.DefineParameter(cmd, "name", DbType.String, user.Name);
+            Database.DefineParameter(cmd, "password", DbType.String, user.Password);
+            Database.DefineParameter(cmd, "email", DbType.String, user.Email);
+            Database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
+            Database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
+            Database.DefineParameter(cmd, "roleCode", DbType.Int32, roleCode);
 
-            if ( database.ExecuteNonQuery(cmd) == 1 ) {
+            if ( Database.ExecuteNonQuery(cmd) == 1 ) {
                 // retrieve id of just generated database entry and store in in cache
-                IDbCommand idCmd = database.CreateCommand("SELECT last_insert_id();");
-                user.Id = ( int ) database.ExecuteScalarQuery<long>(idCmd);
+                IDbCommand idCmd = Database.CreateCommand("SELECT last_insert_id();");
+                user.Id = ( int ) Database.ExecuteScalarQuery<long>(idCmd);
             }
             else {
                 user.Id = -1;
@@ -80,48 +80,48 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         public bool Update(User user) {
             int roleCode = GetIdForRole(user.Role);
 
-            IDbCommand cmd = database.CreateCommand(
+            IDbCommand cmd = Database.CreateCommand(
                 "UPDATE user SET name = @name, password = @password, email = @email, latitude =  @latitude, longitude = @longitude, roleCode = @roleCode " +
                 "WHERE id = @id;");
-            database.DefineParameter(cmd, "name", DbType.String, user.Name);
-            database.DefineParameter(cmd, "password", DbType.String, user.Password);
-            database.DefineParameter(cmd, "email", DbType.String, user.Email);
-            database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
-            database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
-            database.DefineParameter(cmd, "roleCode", DbType.Int32, roleCode);
+            Database.DefineParameter(cmd, "name", DbType.String, user.Name);
+            Database.DefineParameter(cmd, "password", DbType.String, user.Password);
+            Database.DefineParameter(cmd, "email", DbType.String, user.Email);
+            Database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
+            Database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
+            Database.DefineParameter(cmd, "roleCode", DbType.Int32, roleCode);
             // primary key
-            database.DefineParameter(cmd, "id", DbType.Int32, user.Id);
+            Database.DefineParameter(cmd, "id", DbType.Int32, user.Id);
 
-            return database.ExecuteNonQuery(cmd) == 1;
+            return Database.ExecuteNonQuery(cmd) == 1;
         }
 
         public bool Delete(string userName) {
-            IDbCommand cmd = database.CreateCommand(
+            IDbCommand cmd = Database.CreateCommand(
                 "DELETE FROM user WHERE name = @name;");
 
-            database.DefineParameter(cmd, "name", DbType.String, userName);
+            Database.DefineParameter(cmd, "name", DbType.String, userName);
 
-            return database.ExecuteNonQuery(cmd) == 1;
+            return Database.ExecuteNonQuery(cmd) == 1;
         }
 
         public bool DeleteById(int id) {
-            IDbCommand cmd = database.CreateCommand(
+            IDbCommand cmd = Database.CreateCommand(
                 "DELETE FROM user WHERE id = @id;");
 
-            database.DefineParameter(cmd, "id", DbType.Int32, id);
+            Database.DefineParameter(cmd, "id", DbType.Int32, id);
 
-            return database.ExecuteNonQuery(cmd) == 1;
+            return Database.ExecuteNonQuery(cmd) == 1;
         }
 
         private int GetIdForRole(string role) {
-            IDbCommand cmd = database.CreateCommand("SELECT id FROM lt_user_role WHERE roleDescription = @role;");
-            database.DefineParameter(cmd, "role", DbType.String, role);
+            IDbCommand cmd = Database.CreateCommand("SELECT id FROM lt_user_role WHERE roleDescription = @role;");
+            Database.DefineParameter(cmd, "role", DbType.String, role);
 
-            return database.ExecuteScalarQuery<int>(cmd);
+            return Database.ExecuteScalarQuery<int>(cmd);
         }
 
         private List<User> GetUserListFor(IDbCommand cmd) {
-            using (IDataReader reader = database.ExecuteReader(cmd)) {
+            using (IDataReader reader = Database.ExecuteReader(cmd)) {
                 var users = new List<User>();
 
                 while (reader.Read()) {
@@ -139,7 +139,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         private List<string> GetRoleListFor(IDbCommand cmd) {
-            using ( IDataReader reader = database.ExecuteReader(cmd) ) {                
+            using ( IDataReader reader = Database.ExecuteReader(cmd) ) {                
                 List<string> roles = new List<string>();
                 
                 while ( reader.Read() ) {
