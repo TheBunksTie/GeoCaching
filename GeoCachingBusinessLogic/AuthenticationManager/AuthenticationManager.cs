@@ -37,6 +37,12 @@ namespace Swk5.GeoCaching.BusinessLogic.AuthenticationManager {
             return null;
         }
 
+        // reauthenticate user by comparing password hashes
+        public bool ReauthenticateUser(User u) {
+            User expectedUser = userDao.GetById(u.Id);
+            return (expectedUser != null && u.Password.Equals(expectedUser.Password));
+        }
+
         public void LogoutUser() {
             authenticatedUser = null;
         }

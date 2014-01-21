@@ -11,14 +11,13 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         List<Cache> GetFilteredCacheList(FilterCriterium criterium, FilterOperation operation, string filterValue);
 
         // retrieve filtered subset of all caches
-        List<Cache> GetFilteredCacheList(CacheFilter filter);
+        List<Cache> GetFilteredCacheList(DataFilter filter);
 
-        // returns a filter, which "filters" the whole datataset  
-        CacheFilter ComputeDefaultFilter();
+        // returns a default filter for the whole cache dataset
+        DataFilter GetDefaultFilter();
 
         // get a cache by its id
         Cache GetCacheById(int cacheId);
-
 
         // retrieve look up list of all define cache sizes
         List<string> GetCacheSizeList();

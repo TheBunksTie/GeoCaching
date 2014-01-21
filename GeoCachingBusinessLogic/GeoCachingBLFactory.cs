@@ -1,5 +1,6 @@
 ﻿using Swk5.GeoCaching.BusinessLogic.AuthenticationManager;
 using Swk5.GeoCaching.BusinessLogic.CacheManager;
+using Swk5.GeoCaching.BusinessLogic.FilterManager;
 using Swk5.GeoCaching.BusinessLogic.StatisticsManager;
 using Swk5.GeoCaching.BusinessLogic.UserManager;
 
@@ -9,6 +10,7 @@ namespace Swk5.GeoCaching.BusinessLogic {
         private static ICacheManager cacheManager;
         private static IStatisticsManager statisticsManager;
         private static IUserManager userManager;
+        private static IFilterManager filterManager;
 
         public static IAuthenticationManager GetAuthentificationManager() {
             return authenticationManager ?? (authenticationManager = new AuthenticationManager.AuthenticationManager());
@@ -24,6 +26,10 @@ namespace Swk5.GeoCaching.BusinessLogic {
 
         public static IUserManager GetUserManager() {
             return userManager ?? (userManager = new UserManager.UserManager());
+        }
+
+        public static IFilterManager GetFilterManager() {
+            return filterManager ?? (filterManager = new FilterManager.FilterManager());
         }
     }
 }

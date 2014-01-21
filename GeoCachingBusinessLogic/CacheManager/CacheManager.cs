@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Swk5.GeoCaching.BusinessLogic.FilterManager;
 using Swk5.GeoCaching.DAL.Common;
 using Swk5.GeoCaching.DAL.Common.DaoInterface;
 using Swk5.GeoCaching.DomainModel;
@@ -12,24 +13,14 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         private readonly ILogEntryDao logEntryDao = DalFactory.CreateLogEntryDao(database);
         private readonly IRatingDao ratingDao = DalFactory.CreateRatingDao(database);
         private readonly IUserDao userDao = DalFactory.CreateUserDao(database);
+        private readonly IFilterManager filterManager = GeoCachingBLFactory.GetFilterManager();
 
-        public List<Cache> GetFilteredCacheList(CacheFilter filter) {
+        public List<Cache> GetFilteredCacheList(DataFilter filter) {
             return cacheDao.GetCachesMatchingFilter(filter);
         }
 
-        public CacheFilter ComputeDefaultFilter() {
-            return new CacheFilter {
-                FromPosition = cacheDao.GetLowestCachePosition(),
-                ToPosition = cacheDao.GetHighestCachePosition(),
-                FromCreationDate = cacheDao.GetEarliestCacheCreationDate(),
-                ToCreationDate = cacheDao.GetLatestCacheCreationDate(),
-                FromCacheDifficulty = 1.0,
-                ToCacheDifficulty = 5.0,
-                FromTerrainDifficulty = 1.0,
-                ToTerrainDifficulty = 5.0,
-                FromCacheSize = 1,
-                ToCacheSize = 6
-            };
+        public DataFilter GetDefaultFilter() {
+            return filterManager.GetDefaultFilter();
         }
 
         public Cache GetCacheById(int cacheId) {
