@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="filter" type="{http://GeoCaching.Services/}CacheFilter" minOccurs="0"/>
+ *         &lt;element name="filter" type="{http://GeoCaching.Services/}DataFilter" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "GetFilteredCacheList")
 public class GetFilteredCacheList {
 
-    protected CacheFilter filter;
+    protected DataFilter filter;
 
     /**
      * Ruft den Wert der filter-Eigenschaft ab.
      * 
      * @return
      *     possible object is
-     *     {@link CacheFilter }
+     *     {@link DataFilter }
      *     
      */
-    public CacheFilter getFilter() {
+    public DataFilter getFilter() {
         return filter;
     }
 
@@ -52,10 +52,10 @@ public class GetFilteredCacheList {
      * 
      * @param value
      *     allowed object is
-     *     {@link CacheFilter }
+     *     {@link DataFilter }
      *     
      */
-    public void setFilter(CacheFilter value) {
+    public void setFilter(DataFilter value) {
         this.filter = value;
     }
 

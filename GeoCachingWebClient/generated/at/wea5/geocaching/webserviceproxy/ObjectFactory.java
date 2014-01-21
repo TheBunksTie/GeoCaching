@@ -54,22 +54,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetFilteredCacheList }
-     * 
-     */
-    public GetFilteredCacheList createGetFilteredCacheList() {
-        return new GetFilteredCacheList();
-    }
-
-    /**
-     * Create an instance of {@link CacheFilter }
-     * 
-     */
-    public CacheFilter createCacheFilter() {
-        return new CacheFilter();
-    }
-
-    /**
      * Create an instance of {@link ComputeDefaultFilter }
      * 
      */
@@ -78,27 +62,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetCachesFoundByUser }
+     * 
+     */
+    public GetCachesFoundByUser createGetCachesFoundByUser() {
+        return new GetCachesFoundByUser();
+    }
+
+    /**
+     * Create an instance of {@link DataFilter }
+     * 
+     */
+    public DataFilter createDataFilter() {
+        return new DataFilter();
+    }
+
+    /**
      * Create an instance of {@link AuthenticateUserResponse }
      * 
      */
     public AuthenticateUserResponse createAuthenticateUserResponse() {
         return new AuthenticateUserResponse();
-    }
-
-    /**
-     * Create an instance of {@link AddRatingForCache }
-     * 
-     */
-    public AddRatingForCache createAddRatingForCache() {
-        return new AddRatingForCache();
-    }
-
-    /**
-     * Create an instance of {@link Rating }
-     * 
-     */
-    public Rating createRating() {
-        return new Rating();
     }
 
     /**
@@ -118,11 +102,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ComputeDefaultFilterResponse }
+     * Create an instance of {@link AddRatingForCache }
      * 
      */
-    public ComputeDefaultFilterResponse createComputeDefaultFilterResponse() {
-        return new ComputeDefaultFilterResponse();
+    public AddRatingForCache createAddRatingForCache() {
+        return new AddRatingForCache();
+    }
+
+    /**
+     * Create an instance of {@link Rating }
+     * 
+     */
+    public Rating createRating() {
+        return new Rating();
+    }
+
+    /**
+     * Create an instance of {@link GetCacheDistributionByTerrainDifficulty }
+     * 
+     */
+    public GetCacheDistributionByTerrainDifficulty createGetCacheDistributionByTerrainDifficulty() {
+        return new GetCacheDistributionByTerrainDifficulty();
     }
 
     /**
@@ -134,11 +134,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AddRatingForCacheResponse }
+     * Create an instance of {@link GetMostLoggedCaches }
      * 
      */
-    public AddRatingForCacheResponse createAddRatingForCacheResponse() {
-        return new AddRatingForCacheResponse();
+    public GetMostLoggedCaches createGetMostLoggedCaches() {
+        return new GetMostLoggedCaches();
     }
 
     /**
@@ -147,14 +147,6 @@ public class ObjectFactory {
      */
     public GetDetailedCache createGetDetailedCache() {
         return new GetDetailedCache();
-    }
-
-    /**
-     * Create an instance of {@link AddLogEntryForCacheResponse }
-     * 
-     */
-    public AddLogEntryForCacheResponse createAddLogEntryForCacheResponse() {
-        return new AddLogEntryForCacheResponse();
     }
 
     /**
@@ -174,11 +166,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AuthenticateUser }
+     * Create an instance of {@link GetBestRatedCacheResponse }
      * 
      */
-    public AuthenticateUser createAuthenticateUser() {
-        return new AuthenticateUser();
+    public GetBestRatedCacheResponse createGetBestRatedCacheResponse() {
+        return new GetBestRatedCacheResponse();
+    }
+
+    /**
+     * Create an instance of {@link StatisticDataset }
+     * 
+     */
+    public StatisticDataset createStatisticDataset() {
+        return new StatisticDataset();
+    }
+
+    /**
+     * Create an instance of {@link GetCacheDistributionByTerrainDifficultyResponse }
+     * 
+     */
+    public GetCacheDistributionByTerrainDifficultyResponse createGetCacheDistributionByTerrainDifficultyResponse() {
+        return new GetCacheDistributionByTerrainDifficultyResponse();
     }
 
     /**
@@ -195,6 +203,134 @@ public class ObjectFactory {
      */
     public CacheDetails createCacheDetails() {
         return new CacheDetails();
+    }
+
+    /**
+     * Create an instance of {@link GetMostLoggedCachesResponse }
+     * 
+     */
+    public GetMostLoggedCachesResponse createGetMostLoggedCachesResponse() {
+        return new GetMostLoggedCachesResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetCachesHiddenByUser }
+     * 
+     */
+    public GetCachesHiddenByUser createGetCachesHiddenByUser() {
+        return new GetCachesHiddenByUser();
+    }
+
+    /**
+     * Create an instance of {@link GetFilteredCacheList }
+     * 
+     */
+    public GetFilteredCacheList createGetFilteredCacheList() {
+        return new GetFilteredCacheList();
+    }
+
+    /**
+     * Create an instance of {@link GetCacheDistributionByCacheDifficulty }
+     * 
+     */
+    public GetCacheDistributionByCacheDifficulty createGetCacheDistributionByCacheDifficulty() {
+        return new GetCacheDistributionByCacheDifficulty();
+    }
+
+    /**
+     * Create an instance of {@link GetBestRatedCache }
+     * 
+     */
+    public GetBestRatedCache createGetBestRatedCache() {
+        return new GetBestRatedCache();
+    }
+
+    /**
+     * Create an instance of {@link ComputeDefaultFilterResponse }
+     * 
+     */
+    public ComputeDefaultFilterResponse createComputeDefaultFilterResponse() {
+        return new ComputeDefaultFilterResponse();
+    }
+
+    /**
+     * Create an instance of {@link AddLogEntryForCacheResponse }
+     * 
+     */
+    public AddLogEntryForCacheResponse createAddLogEntryForCacheResponse() {
+        return new AddLogEntryForCacheResponse();
+    }
+
+    /**
+     * Create an instance of {@link AddRatingForCacheResponse }
+     * 
+     */
+    public AddRatingForCacheResponse createAddRatingForCacheResponse() {
+        return new AddRatingForCacheResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetCacheDistributionBySizeResponse }
+     * 
+     */
+    public GetCacheDistributionBySizeResponse createGetCacheDistributionBySizeResponse() {
+        return new GetCacheDistributionBySizeResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetCacheDistributionBySize }
+     * 
+     */
+    public GetCacheDistributionBySize createGetCacheDistributionBySize() {
+        return new GetCacheDistributionBySize();
+    }
+
+    /**
+     * Create an instance of {@link AuthenticateUser }
+     * 
+     */
+    public AuthenticateUser createAuthenticateUser() {
+        return new AuthenticateUser();
+    }
+
+    /**
+     * Create an instance of {@link GetCacheDistributionByCacheDifficultyResponse }
+     * 
+     */
+    public GetCacheDistributionByCacheDifficultyResponse createGetCacheDistributionByCacheDifficultyResponse() {
+        return new GetCacheDistributionByCacheDifficultyResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetCachesHiddenByUserResponse }
+     * 
+     */
+    public GetCachesHiddenByUserResponse createGetCachesHiddenByUserResponse() {
+        return new GetCachesHiddenByUserResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetCachesFoundByUserResponse }
+     * 
+     */
+    public GetCachesFoundByUserResponse createGetCachesFoundByUserResponse() {
+        return new GetCachesFoundByUserResponse();
+    }
+
+    /**
+     * Create an instance of {@link Cache }
+     * 
+     */
+    public Cache createCache() {
+        return new Cache();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfImage }
+     * 
+     */
+    public ArrayOfImage createArrayOfImage() {
+        return new ArrayOfImage();
     }
 
     /**
@@ -222,19 +358,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Cache }
+     * Create an instance of {@link StatisticData }
      * 
      */
-    public Cache createCache() {
-        return new Cache();
+    public StatisticData createStatisticData() {
+        return new StatisticData();
     }
 
     /**
-     * Create an instance of {@link ArrayOfImage }
+     * Create an instance of {@link ArrayOfStatisticData }
      * 
      */
-    public ArrayOfImage createArrayOfImage() {
-        return new ArrayOfImage();
+    public ArrayOfStatisticData createArrayOfStatisticData() {
+        return new ArrayOfStatisticData();
     }
 
 }

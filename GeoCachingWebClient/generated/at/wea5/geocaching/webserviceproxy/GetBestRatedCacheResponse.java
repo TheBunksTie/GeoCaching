@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="ComputeDefaultFilterResult" type="{http://GeoCaching.Services/}DataFilter" minOccurs="0"/>
+ *         &lt;element name="GetBestRatedCacheResult" type="{http://GeoCaching.Services/}StatisticDataset" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "computeDefaultFilterResult"
+    "getBestRatedCacheResult"
 })
-@XmlRootElement(name = "ComputeDefaultFilterResponse")
-public class ComputeDefaultFilterResponse {
+@XmlRootElement(name = "GetBestRatedCacheResponse")
+public class GetBestRatedCacheResponse {
 
-    @XmlElement(name = "ComputeDefaultFilterResult")
-    protected DataFilter computeDefaultFilterResult;
+    @XmlElement(name = "GetBestRatedCacheResult")
+    protected StatisticDataset getBestRatedCacheResult;
 
     /**
-     * Ruft den Wert der computeDefaultFilterResult-Eigenschaft ab.
+     * Ruft den Wert der getBestRatedCacheResult-Eigenschaft ab.
      * 
      * @return
      *     possible object is
-     *     {@link DataFilter }
+     *     {@link StatisticDataset }
      *     
      */
-    public DataFilter getComputeDefaultFilterResult() {
-        return computeDefaultFilterResult;
+    public StatisticDataset getGetBestRatedCacheResult() {
+        return getBestRatedCacheResult;
     }
 
     /**
-     * Legt den Wert der computeDefaultFilterResult-Eigenschaft fest.
+     * Legt den Wert der getBestRatedCacheResult-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
-     *     {@link DataFilter }
+     *     {@link StatisticDataset }
      *     
      */
-    public void setComputeDefaultFilterResult(DataFilter value) {
-        this.computeDefaultFilterResult = value;
+    public void setGetBestRatedCacheResult(StatisticDataset value) {
+        this.getBestRatedCacheResult = value;
     }
 
 }

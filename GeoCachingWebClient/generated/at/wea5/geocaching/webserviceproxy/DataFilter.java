@@ -10,15 +10,16 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java-Klasse für CacheFilter complex type.
+ * <p>Java-Klasse für DataFilter complex type.
  * 
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
- * &lt;complexType name="CacheFilter">
+ * &lt;complexType name="DataFilter">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="CacheName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="FromPosition" type="{http://GeoCaching.Services/}GeoPosition"/>
  *         &lt;element name="ToPosition" type="{http://GeoCaching.Services/}GeoPosition"/>
  *         &lt;element name="FromCreationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
@@ -38,7 +39,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CacheFilter", propOrder = {
+@XmlType(name = "DataFilter", propOrder = {
+    "cacheName",
     "fromPosition",
     "toPosition",
     "fromCreationDate",
@@ -50,8 +52,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "fromTerrainDifficulty",
     "toTerrainDifficulty"
 })
-public class CacheFilter {
+public class DataFilter {
 
+    @XmlElement(name = "CacheName")
+    protected String cacheName;
     @XmlElement(name = "FromPosition", required = true)
     protected GeoPosition fromPosition;
     @XmlElement(name = "ToPosition", required = true)
@@ -74,6 +78,30 @@ public class CacheFilter {
     protected double fromTerrainDifficulty;
     @XmlElement(name = "ToTerrainDifficulty")
     protected double toTerrainDifficulty;
+
+    /**
+     * Ruft den Wert der cacheName-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCacheName() {
+        return cacheName;
+    }
+
+    /**
+     * Legt den Wert der cacheName-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCacheName(String value) {
+        this.cacheName = value;
+    }
 
     /**
      * Ruft den Wert der fromPosition-Eigenschaft ab.

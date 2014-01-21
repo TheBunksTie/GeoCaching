@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="ComputeDefaultFilterResult" type="{http://GeoCaching.Services/}DataFilter" minOccurs="0"/>
+ *         &lt;element name="GetCachesFoundByUserResult" type="{http://GeoCaching.Services/}StatisticDataset" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "computeDefaultFilterResult"
+    "getCachesFoundByUserResult"
 })
-@XmlRootElement(name = "ComputeDefaultFilterResponse")
-public class ComputeDefaultFilterResponse {
+@XmlRootElement(name = "GetCachesFoundByUserResponse")
+public class GetCachesFoundByUserResponse {
 
-    @XmlElement(name = "ComputeDefaultFilterResult")
-    protected DataFilter computeDefaultFilterResult;
+    @XmlElement(name = "GetCachesFoundByUserResult")
+    protected StatisticDataset getCachesFoundByUserResult;
 
     /**
-     * Ruft den Wert der computeDefaultFilterResult-Eigenschaft ab.
+     * Ruft den Wert der getCachesFoundByUserResult-Eigenschaft ab.
      * 
      * @return
      *     possible object is
-     *     {@link DataFilter }
+     *     {@link StatisticDataset }
      *     
      */
-    public DataFilter getComputeDefaultFilterResult() {
-        return computeDefaultFilterResult;
+    public StatisticDataset getGetCachesFoundByUserResult() {
+        return getCachesFoundByUserResult;
     }
 
     /**
-     * Legt den Wert der computeDefaultFilterResult-Eigenschaft fest.
+     * Legt den Wert der getCachesFoundByUserResult-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
-     *     {@link DataFilter }
+     *     {@link StatisticDataset }
      *     
      */
-    public void setComputeDefaultFilterResult(DataFilter value) {
-        this.computeDefaultFilterResult = value;
+    public void setGetCachesFoundByUserResult(StatisticDataset value) {
+        this.getCachesFoundByUserResult = value;
     }
 
 }

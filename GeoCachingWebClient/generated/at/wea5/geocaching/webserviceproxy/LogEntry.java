@@ -165,10 +165,6 @@ public class LogEntry {
     public boolean isIsFound() {
         return isFound;
     }
-    
-    public boolean getIsFound() {
-        return isFound;
-    }
 
     /**
      * Legt den Wert der isFound-Eigenschaft fest.

@@ -70,9 +70,5 @@ public class GeoPosition {
     public void setLongitude(double value) {
         this.longitude = value;
     }
-    
-    public String getAsPoint() {
-        return latitude + "," + longitude;
-    }
 
 }

@@ -52,18 +52,18 @@ public interface GeoCachingServiceSoap {
     @ResponseWrapper(localName = "GetFilteredCacheListResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetFilteredCacheListResponse")
     public ArrayOfCache getFilteredCacheList(
         @WebParam(name = "filter", targetNamespace = "http://GeoCaching.Services/")
-        CacheFilter filter);
+        DataFilter filter);
 
     /**
      * 
      * @return
-     *     returns at.wea5.geocaching.webserviceproxy.CacheFilter
+     *     returns at.wea5.geocaching.webserviceproxy.DataFilter
      */
     @WebMethod(operationName = "ComputeDefaultFilter", action = "http://GeoCaching.Services/ComputeDefaultFilter")
     @WebResult(name = "ComputeDefaultFilterResult", targetNamespace = "http://GeoCaching.Services/")
     @RequestWrapper(localName = "ComputeDefaultFilter", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.ComputeDefaultFilter")
     @ResponseWrapper(localName = "ComputeDefaultFilterResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.ComputeDefaultFilterResponse")
-    public CacheFilter computeDefaultFilter();
+    public DataFilter computeDefaultFilter();
 
     /**
      * 
@@ -93,7 +93,7 @@ public interface GeoCachingServiceSoap {
     /**
      * 
      * @param logEntry
-     * @param user
+     * @param requestingUser
      * @return
      *     returns boolean
      */
@@ -102,15 +102,15 @@ public interface GeoCachingServiceSoap {
     @RequestWrapper(localName = "AddLogEntryForCache", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.AddLogEntryForCache")
     @ResponseWrapper(localName = "AddLogEntryForCacheResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.AddLogEntryForCacheResponse")
     public boolean addLogEntryForCache(
-        @WebParam(name = "user", targetNamespace = "http://GeoCaching.Services/")
-        User user,
+        @WebParam(name = "requestingUser", targetNamespace = "http://GeoCaching.Services/")
+        User requestingUser,
         @WebParam(name = "logEntry", targetNamespace = "http://GeoCaching.Services/")
         LogEntry logEntry);
 
     /**
      * 
+     * @param requestingUser
      * @param rating
-     * @param user
      * @return
      *     returns boolean
      */
@@ -119,9 +119,107 @@ public interface GeoCachingServiceSoap {
     @RequestWrapper(localName = "AddRatingForCache", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.AddRatingForCache")
     @ResponseWrapper(localName = "AddRatingForCacheResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.AddRatingForCacheResponse")
     public boolean addRatingForCache(
-        @WebParam(name = "user", targetNamespace = "http://GeoCaching.Services/")
-        User user,
+        @WebParam(name = "requestingUser", targetNamespace = "http://GeoCaching.Services/")
+        User requestingUser,
         @WebParam(name = "rating", targetNamespace = "http://GeoCaching.Services/")
         Rating rating);
+
+    /**
+     * 
+     * @param filter
+     * @return
+     *     returns at.wea5.geocaching.webserviceproxy.StatisticDataset
+     */
+    @WebMethod(operationName = "GetCachesFoundByUser", action = "http://GeoCaching.Services/GetCachesFoundByUser")
+    @WebResult(name = "GetCachesFoundByUserResult", targetNamespace = "http://GeoCaching.Services/")
+    @RequestWrapper(localName = "GetCachesFoundByUser", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCachesFoundByUser")
+    @ResponseWrapper(localName = "GetCachesFoundByUserResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCachesFoundByUserResponse")
+    public StatisticDataset getCachesFoundByUser(
+        @WebParam(name = "filter", targetNamespace = "http://GeoCaching.Services/")
+        DataFilter filter);
+
+    /**
+     * 
+     * @param filter
+     * @return
+     *     returns at.wea5.geocaching.webserviceproxy.StatisticDataset
+     */
+    @WebMethod(operationName = "GetCachesHiddenByUser", action = "http://GeoCaching.Services/GetCachesHiddenByUser")
+    @WebResult(name = "GetCachesHiddenByUserResult", targetNamespace = "http://GeoCaching.Services/")
+    @RequestWrapper(localName = "GetCachesHiddenByUser", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCachesHiddenByUser")
+    @ResponseWrapper(localName = "GetCachesHiddenByUserResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCachesHiddenByUserResponse")
+    public StatisticDataset getCachesHiddenByUser(
+        @WebParam(name = "filter", targetNamespace = "http://GeoCaching.Services/")
+        DataFilter filter);
+
+    /**
+     * 
+     * @param filter
+     * @return
+     *     returns at.wea5.geocaching.webserviceproxy.StatisticDataset
+     */
+    @WebMethod(operationName = "GetCacheDistributionBySize", action = "http://GeoCaching.Services/GetCacheDistributionBySize")
+    @WebResult(name = "GetCacheDistributionBySizeResult", targetNamespace = "http://GeoCaching.Services/")
+    @RequestWrapper(localName = "GetCacheDistributionBySize", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCacheDistributionBySize")
+    @ResponseWrapper(localName = "GetCacheDistributionBySizeResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCacheDistributionBySizeResponse")
+    public StatisticDataset getCacheDistributionBySize(
+        @WebParam(name = "filter", targetNamespace = "http://GeoCaching.Services/")
+        DataFilter filter);
+
+    /**
+     * 
+     * @param filter
+     * @return
+     *     returns at.wea5.geocaching.webserviceproxy.StatisticDataset
+     */
+    @WebMethod(operationName = "GetCacheDistributionByCacheDifficulty", action = "http://GeoCaching.Services/GetCacheDistributionByCacheDifficulty")
+    @WebResult(name = "GetCacheDistributionByCacheDifficultyResult", targetNamespace = "http://GeoCaching.Services/")
+    @RequestWrapper(localName = "GetCacheDistributionByCacheDifficulty", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCacheDistributionByCacheDifficulty")
+    @ResponseWrapper(localName = "GetCacheDistributionByCacheDifficultyResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCacheDistributionByCacheDifficultyResponse")
+    public StatisticDataset getCacheDistributionByCacheDifficulty(
+        @WebParam(name = "filter", targetNamespace = "http://GeoCaching.Services/")
+        DataFilter filter);
+
+    /**
+     * 
+     * @param filter
+     * @return
+     *     returns at.wea5.geocaching.webserviceproxy.StatisticDataset
+     */
+    @WebMethod(operationName = "GetCacheDistributionByTerrainDifficulty", action = "http://GeoCaching.Services/GetCacheDistributionByTerrainDifficulty")
+    @WebResult(name = "GetCacheDistributionByTerrainDifficultyResult", targetNamespace = "http://GeoCaching.Services/")
+    @RequestWrapper(localName = "GetCacheDistributionByTerrainDifficulty", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCacheDistributionByTerrainDifficulty")
+    @ResponseWrapper(localName = "GetCacheDistributionByTerrainDifficultyResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetCacheDistributionByTerrainDifficultyResponse")
+    public StatisticDataset getCacheDistributionByTerrainDifficulty(
+        @WebParam(name = "filter", targetNamespace = "http://GeoCaching.Services/")
+        DataFilter filter);
+
+    /**
+     * 
+     * @param filter
+     * @return
+     *     returns at.wea5.geocaching.webserviceproxy.StatisticDataset
+     */
+    @WebMethod(operationName = "GetBestRatedCache", action = "http://GeoCaching.Services/GetBestRatedCache")
+    @WebResult(name = "GetBestRatedCacheResult", targetNamespace = "http://GeoCaching.Services/")
+    @RequestWrapper(localName = "GetBestRatedCache", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetBestRatedCache")
+    @ResponseWrapper(localName = "GetBestRatedCacheResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetBestRatedCacheResponse")
+    public StatisticDataset getBestRatedCache(
+        @WebParam(name = "filter", targetNamespace = "http://GeoCaching.Services/")
+        DataFilter filter);
+
+    /**
+     * 
+     * @param filter
+     * @return
+     *     returns at.wea5.geocaching.webserviceproxy.StatisticDataset
+     */
+    @WebMethod(operationName = "GetMostLoggedCaches", action = "http://GeoCaching.Services/GetMostLoggedCaches")
+    @WebResult(name = "GetMostLoggedCachesResult", targetNamespace = "http://GeoCaching.Services/")
+    @RequestWrapper(localName = "GetMostLoggedCaches", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetMostLoggedCaches")
+    @ResponseWrapper(localName = "GetMostLoggedCachesResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.GetMostLoggedCachesResponse")
+    public StatisticDataset getMostLoggedCaches(
+        @WebParam(name = "filter", targetNamespace = "http://GeoCaching.Services/")
+        DataFilter filter);
 
 }
