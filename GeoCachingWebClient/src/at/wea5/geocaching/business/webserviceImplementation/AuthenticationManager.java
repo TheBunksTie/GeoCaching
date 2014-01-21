@@ -77,4 +77,10 @@ public class AuthenticationManager extends ManagerBase {
     private static final Logger log = Logger.getLogger(AuthenticationManager.class.getName());
     
     private User userdata;
+
+    @Override
+    public String resetFilter() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

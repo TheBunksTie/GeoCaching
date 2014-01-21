@@ -9,19 +9,32 @@ import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
+import at.wea5.geocaching.webserviceproxy.DataFilter;
 import at.wea5.geocaching.webserviceproxy.GeoCachingService;
 import at.wea5.geocaching.webserviceproxy.GeoCachingServiceSoap;
+import at.wea5.geocaching.webserviceproxy.GeoPosition;
 
 public abstract class ManagerBase {
 //------------------------------------ constructor ------------------------------------
     protected ManagerBase() {
         GeoCachingService factory = new GeoCachingService();
         geoCachingWsProxy = factory.getGeoCachingServiceSoap();
+        
+        defaultFilter = geoCachingWsProxy.computeDefaultFilter();
+        
+        // copy values from defaultFilter to active filter
+        activeFilter = defaultFilter;        
     }
 
 //-------------------------------------- public ---------------------------------------
-
+    
+    public DataFilter getFilter() {
+        return activeFilter;
+    }
+    
 //------------------------------------ protected --------------------------------------
+    
+    public abstract String resetFilter();
     
     protected GeoCachingServiceSoap getWSProxy() {
         
@@ -78,6 +91,36 @@ public abstract class ManagerBase {
         error.addErrorMessage(message);
     }
     
+    protected void loadDefaultFilter() {
+        defaultFilter = geoCachingWsProxy.computeDefaultFilter();        
+        
+        activeFilter = defaultFilter;
+        //setFilterToDefault();
+    }
+    
+    protected void setFilterToDefault() {
+        activeFilter.setFromCacheDifficulty(defaultFilter.getFromCacheDifficulty());
+        activeFilter.setToCacheDifficulty(defaultFilter.getToCacheDifficulty());
+        
+        activeFilter.setFromTerrainDifficulty(defaultFilter.getFromTerrainDifficulty());
+        activeFilter.setToTerrainDifficulty(defaultFilter.getToTerrainDifficulty());
+        
+        activeFilter.setFromCacheSize(defaultFilter.getFromCacheSize());
+        activeFilter.setToCacheSize(defaultFilter.getToCacheSize());
+        
+        GeoPosition from = new GeoPosition();
+        from.setLatitude(defaultFilter.getFromPosition().getLatitude());
+        from.setLongitude(defaultFilter.getFromPosition().getLongitude());
+        
+        activeFilter.setFromPosition(from);
+        
+        GeoPosition to = new GeoPosition();
+        to.setLatitude(defaultFilter.getToPosition().getLatitude());
+        to.setLongitude(defaultFilter.getToPosition().getLongitude());
+        
+        activeFilter.setToPosition(to);
+    }
+    
 //-------------------------------------- members --------------------------------------
     //private static final Logger log = Logger.getLogger(ManagerBase.class.getName());
     
@@ -88,5 +131,7 @@ public abstract class ManagerBase {
     private static final String serviceName  = "GeoCachingWebService";
     
     protected GeoCachingServiceSoap geoCachingWsProxy = null;
+    protected DataFilter activeFilter = new DataFilter();
+    protected DataFilter defaultFilter;
 
 }

@@ -23,7 +23,6 @@ import at.wea5.geocaching.business.ManagerBase;
 import at.wea5.geocaching.business.exception.NoCurrentUserException;
 import at.wea5.geocaching.webserviceproxy.Cache;
 import at.wea5.geocaching.webserviceproxy.CacheDetails;
-import at.wea5.geocaching.webserviceproxy.CacheFilter;
 import at.wea5.geocaching.webserviceproxy.GeoPosition;
 import at.wea5.geocaching.webserviceproxy.LogEntry;
 import at.wea5.geocaching.webserviceproxy.Rating;
@@ -36,8 +35,10 @@ public class CacheManager extends ManagerBase {
 //------------------------------------ constructor ------------------------------------
     
     public CacheManager() {
-        // retrieve default filter and load whole cache list        
-        loadDefaultFilter();
+        // loads default filter
+        super();
+        
+        // load whole cache list        
         loadCaches();
         fillMapModel();
     }
@@ -73,7 +74,7 @@ public class CacheManager extends ManagerBase {
         // reset filter to default values
         //setFilterToDefault();
         
-        filter = defaultFilter;
+        activeFilter = defaultFilter;
         
         try {
             // process requested filters            
@@ -82,30 +83,30 @@ public class CacheManager extends ManagerBase {
                 GeoPosition from = new GeoPosition();                                                
                 from.setLatitude(Double.parseDouble(getRequestParameterValue("latitudeFrom")));
                 from.setLongitude(Double.parseDouble(getRequestParameterValue("longitudeFrom")));                
-                filter.setFromPosition(from);
+                activeFilter.setFromPosition(from);
                 
                 GeoPosition to = new GeoPosition();                                                
                 to.setLatitude(Double.parseDouble(getRequestParameterValue("latitudeTo")));
                 to.setLongitude(Double.parseDouble(getRequestParameterValue("longitudeTo")));
-                filter.setToPosition(to);
+                activeFilter.setToPosition(to);
             }
             
             if (cacheDifficultyFiltered) {
                 // get passed paramters from session context
-                filter.setFromCacheDifficulty(Double.parseDouble(getRequestParameterValue("cacheDifficultyFrom")));
-                filter.setToCacheDifficulty(Double.parseDouble(getRequestParameterValue("cacheDifficultyTo")));
+                activeFilter.setFromCacheDifficulty(Double.parseDouble(getRequestParameterValue("cacheDifficultyFrom")));
+                activeFilter.setToCacheDifficulty(Double.parseDouble(getRequestParameterValue("cacheDifficultyTo")));
             }
             
             if (terrainDifficultyFiltered) {
                 // get passed paramters from session context
-                filter.setFromTerrainDifficulty(Double.parseDouble(getRequestParameterValue("terrainDifficultyFrom")));
-                filter.setToTerrainDifficulty(Double.parseDouble(getRequestParameterValue("terrainDifficultyTo")));
+                activeFilter.setFromTerrainDifficulty(Double.parseDouble(getRequestParameterValue("terrainDifficultyFrom")));
+                activeFilter.setToTerrainDifficulty(Double.parseDouble(getRequestParameterValue("terrainDifficultyTo")));
             }
             
             if (sizeFiltered) {
                 // get passed paramters from session context
-                filter.setFromCacheSize(Integer.parseInt(getRequestParameterValue("sizeFrom")));
-                filter.setToCacheSize(Integer.parseInt(getRequestParameterValue("sizeTo")));
+                activeFilter.setFromCacheSize(Integer.parseInt(getRequestParameterValue("sizeFrom")));
+                activeFilter.setToCacheSize(Integer.parseInt(getRequestParameterValue("sizeTo")));
             }
             
             loadCaches();
@@ -120,6 +121,7 @@ public class CacheManager extends ManagerBase {
         return "FindCachesEvent";        
     }
     
+    @Override
     public String resetFilter() {        
         loadDefaultFilter();        
         loadCaches();
@@ -235,11 +237,7 @@ public class CacheManager extends ManagerBase {
     public CacheDetails getCurrentCache() {
         return currentCache;
     }
-    
-    public CacheFilter getCacheFilter() {
-        return filter;
-    }
-      
+         
     public List<Cache> getCacheList() {
         // TODO check if running
         return caches;
@@ -326,16 +324,9 @@ public class CacheManager extends ManagerBase {
     
     private void loadCaches() {        
         caches.clear();        
-        caches = geoCachingWsProxy.getFilteredCacheList(filter).getCache();
+        caches = geoCachingWsProxy.getFilteredCacheList(activeFilter).getCache();
     }
-    
-    private void loadDefaultFilter() {
-        defaultFilter = geoCachingWsProxy.computeDefaultFilter();        
-        
-        filter = defaultFilter;
-        //setFilterToDefault();
-    }
-    
+       
     private void fillMapModel() {
         mapModel = new DefaultMapModel();
         
@@ -346,35 +337,10 @@ public class CacheManager extends ManagerBase {
         
     }
     
-    private void setFilterToDefault() {
-        filter.setFromCacheDifficulty(defaultFilter.getFromCacheDifficulty());
-        filter.setToCacheDifficulty(defaultFilter.getToCacheDifficulty());
-        
-        filter.setFromTerrainDifficulty(defaultFilter.getFromTerrainDifficulty());
-        filter.setToTerrainDifficulty(defaultFilter.getToTerrainDifficulty());
-        
-        filter.setFromCacheSize(defaultFilter.getFromCacheSize());
-        filter.setToCacheSize(defaultFilter.getToCacheSize());
-        
-        GeoPosition from = new GeoPosition();
-        from.setLatitude(defaultFilter.getFromPosition().getLatitude());
-        from.setLongitude(defaultFilter.getFromPosition().getLongitude());
-        
-        filter.setFromPosition(from);
-        
-        GeoPosition to = new GeoPosition();
-        to.setLatitude(defaultFilter.getToPosition().getLatitude());
-        to.setLongitude(defaultFilter.getToPosition().getLongitude());
-        
-        filter.setToPosition(to);
-    }
-
 //-------------------------------------- members --------------------------------------
         
     private CacheDetails currentCache;
     private List<Cache> caches = new ArrayList<Cache>();
-    private CacheFilter filter = new CacheFilter();
-    private CacheFilter defaultFilter;
     
     private Marker currentMarker;
     private MapModel mapModel;
