@@ -1,0 +1,148 @@
+<ui:composition template="/WEB-INF/templates/basicTemplate.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="title">
+	    GeoCachingWebClient - View different statistics
+	</ui:define>
+	<ui:define name="content">
+	    <h1>View statistics filtered by different criteria</h1>
+	    	    
+	    <h:form id="filterForm">
+	    <ul>
+	      <li>
+	          <h:selectOneRadio value="#{StatisticsManager.requestStatistic}">
+			     <f:selectItem itemValue="foundCaches" itemLabel="Found caches per user" />
+			     <f:selectItem itemValue="hiddenCaches" itemLabel="Hidden caches per user" />
+		         <f:selectItem itemValue="cachesBySize" itemLabel="Distribution of caches by size" />
+			     <f:selectItem itemValue="cachesByCacheDifficulty" itemLabel="Distribution of caches by cache difficulty" />
+			     <f:selectItem itemValue="cachesByTerrainDifficulty" itemLabel="Distribution of caches by terrain difficulty"/>
+                 <f:selectItem itemValue="bestRatedCache" itemLabel="Caches by rating" />                        
+		         <f:selectItem itemValue="mostloggedCache" itemLabel="Caches by logs" />
+		      </h:selectOneRadio>
+	      </li>
+	      <li>
+              <h:selectOneRadio id="positionFilter" value="#{StatisticsManager.positionFiltered}"/>
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="checkboxLabel" for="positionFilter" >filter by position</h:outputLabel>
+               
+               <h:outputLabel class="inputLabel" for="latitudeFrom">from</h:outputLabel>               
+               [<h:inputText class="filterInput" id="latitudeFrom" value="#{StatisticsManager.filter.fromPosition.latitude}" />;               
+               <h:inputText class="filterInput" id="longitudeFrom" value="#{StatisticsManager.filter.fromPosition.longitude}" />]
+               
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="inputLabel" for="latitudeTo">to</h:outputLabel>
+               [<h:inputText class="filterInput" id="latitudeTo" value="#{StatisticsManager.filter.toPosition.latitude}" />;
+               <h:inputText class="filterInput" id="longitudeTo" value="#{StatisticsManager.filter.toPosition.longitude}" />]
+           </li>
+           <li>
+              <h:selectOneRadio id="dateFilter" value="#{StatisticsManager.dateFiltered}"/>
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="checkboxLabel" for="positionFilter" >filter by date</h:outputLabel>
+               
+               <h:outputLabel class="inputLabel" for="dateFrom">from</h:outputLabel>               
+               <p:calendar class="filterInput" id="dateFrom" value="#{StatisticsManager.filter.fromCreationDate}" />                              
+               
+               <h:outputText value="&#160;" />
+               <h:outputLabel class="inputLabel" for="dateTo">to</h:outputLabel>
+               <p:calendar class="filterInput" id="dateTo" value="#{StatisticsManager.filter.toCreationDate}" />
+           </li>                     	     	      
+           <li>
+               <h:commandButton class="button formbutton" value="Get Statistic" action="#{StatisticsManager.getRequestedStatistics}"/>
+               <h:outputText value="&#160;" />
+               <h:commandButton class="button formbutton" value="Reset Filter" action="#{StatisticsManager.resetFilter}"/>
+           </li>           
+	     </ul>
+        </h:form>
+        	    
+        <div class="searchResult">    
+	        <h2>Statistical data (<h:outputText value="#{StatisticsManager.nrOfData}" />)</h2>
+	        
+            <!-- output for empty result list -->
+	        <h:outputText rendered="#{StatisticsManager.isCurrentDatasetEmpty}"><h3>Sorry, no data for filter found.</h3></h:outputText>
+	           
+	           <h3><h:outputText rendered="#{!StatisticsManager.isCurrentDatasetEmpty}" value="#{StatisticsManager.statisticDataset.caption}" /></h3>
+	           <p:dataTable id="searchResultTable" var="dataRow" value="#{StatisticsManager.statisticDataset.data.statisticData}"  
+                 styleClass="searchResultTable"
+                 paginator="true" rows="30"  
+                 paginatorTemplate="{CurrentPageReport} {PageLinks} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="30, 50, 100" rendered="#{!StatisticsManager.isCurrentDatasetEmpty}">
+                    
+                    <p:column id="column1" headerText="Nr.">                          
+	                    <h:outputText value="#{dataRow.Nr}"/>
+	               </p:column>
+	                
+                   <!-- position column -->
+                   <p:column id="column2" headerText="#{StatisticsManager.statisticDataset.columnCaption2}">                          
+                        <h:outputText value="#{dataRow.Name}"/>
+                   </p:column>
+	               
+	               <p:column id="column3" headerText="#{StatisticsManager.statisticDataset.columnCaption3}">                          
+                        <h:outputText value="#{dataRow.Value}"/>
+                   </p:column>
+	               
+	           </p:dataTable>
+<!-- 	        data table for output of all matching caches -->
+<!-- 	        <h:dataTable value="#{CacheCollection.cacheList}" var="cache" rendered="#{!CacheCollection.resultListEmpty}"> -->
+                
+<!--                 name column -->
+<!--                 <h:column> -->
+<!--                       <f:facet name="header"> -->
+<!--                             <h:outputText>Name</h:outputText> -->
+<!--                          </f:facet> -->
+                    
+<!--                     <h:outputText value="#{cache.name}"/> -->
+<!--                 </h:column> -->
+                
+<!--                 position column -->
+<!--                    <h:column> -->
+<!--                          <f:facet name="header"> -->
+<!--                             <h:outputText>Position</h:outputText> -->
+<!--                          </f:facet> -->
+                       
+<!--                        [<h:outputText value="#{cache.position.latitude}"/>; -->
+<!--                         <h:outputText value="#{cache.position.longitude}"/>] -->
+<!--                    </h:column> -->
+                   
+<!--                    cache difficulty column -->
+<!--                    <h:column> -->
+<!--                          <f:facet name="header"> -->
+<!--                             <h:outputText>Cache difficulty</h:outputText> -->
+<!--                          </f:facet> -->
+                       
+<!--                        <h:outputText value="#{cache.cacheDifficulty}"/> -->
+<!--                    </h:column> -->
+                   
+<!--                    terrain difficulty column -->
+<!--                    <h:column> -->
+<!--                          <f:facet name="header"> -->
+<!--                             <h:outputText>Terrain difficulty</h:outputText> -->
+<!--                          </f:facet> -->
+                       
+<!--                        <h:outputText value="#{cache.terrainDifficulty}"/>                                                                      -->
+<!--                    </h:column> -->
+                   
+<!--                    creation date column -->
+<!--                    <h:column> -->
+<!--                          <f:facet name="header"> -->
+<!--                             <h:outputText>Created on</h:outputText> -->
+<!--                          </f:facet> -->
+                       
+<!--                        <h:outputText value="#{cache.creationDate}"/>                                                                      -->
+<!--                    </h:column> -->
+                   
+<!--                    show details action column -->
+<!--                    <h:column> -->
+<!--                        <h:form id="cacheDetailForm"> -->
+<!--                             <h:commandButton class="button rowbutton" value="Details" type="submit" action="#{CacheCollection.showDetails}" /> -->
+<!--                             <h:inputHidden id="cacheid" value="#{cache.id}" /> -->
+<!--                        </h:form>                                                 -->
+<!--                    </h:column> -->
+<!--             </h:dataTable> -->
+           </div>
+	    	   	    
+	</ui:define>
+</ui:composition>

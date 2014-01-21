@@ -114,13 +114,13 @@
                <h:outputLabel class="checkboxLabel" for="positionFilter" >filter by position</h:outputLabel>
                
                <h:outputLabel class="inputLabel" for="latitudeFrom">from</h:outputLabel>               
-               [<h:inputText class="filterInput" id="latitudeFrom" value="#{CacheManager.cacheFilter.fromPosition.latitude}" />;               
-               <h:inputText class="filterInput" id="longitudeFrom" value="#{CacheManager.cacheFilter.fromPosition.longitude}" />]
+               [<h:inputText class="filterInput" id="latitudeFrom" value="#{CacheManager.filter.fromPosition.latitude}" />;               
+               <h:inputText class="filterInput" id="longitudeFrom" value="#{CacheManager.filter.fromPosition.longitude}" />]
                
                <h:outputText value="&#160;" />
                <h:outputLabel class="inputLabel" for="latitudeTo">to</h:outputLabel>
-               [<h:inputText class="filterInput" id="latitudeTo" value="#{CacheManager.cacheFilter.toPosition.latitude}" />;
-               <h:inputText class="filterInput" id="longitudeTo" value="#{CacheManager.cacheFilter.toPosition.longitude}" />]
+               [<h:inputText class="filterInput" id="latitudeTo" value="#{CacheManager.filter.toPosition.latitude}" />;
+               <h:inputText class="filterInput" id="longitudeTo" value="#{CacheManager.filter.toPosition.longitude}" />]
            </li>           
 	       
 	       <!-- row for finding caches by cache difficulty -->
@@ -131,11 +131,11 @@
 	           
 	           <h:outputLabel class="inputLabel" for="cacheDifficultyFrom">from</h:outputLabel>
 	           	           
-	           <h:inputText class="filterInput" id="cacheDifficultyFrom" value="#{CacheManager.cacheFilter.fromCacheDifficulty}"/>	           
+	           <h:inputText class="filterInput" id="cacheDifficultyFrom" value="#{CacheManager.filter.fromCacheDifficulty}"/>	           
 	           
 	           <h:outputText value="&#160;" />
 	           <h:outputLabel class="inputLabel" for="cacheDifficultyTo">to</h:outputLabel>	           
-	           <h:inputText class="filterInput" id="cacheDifficultyTo" value="#{CacheManager.cacheFilter.toCacheDifficulty}" />
+	           <h:inputText class="filterInput" id="cacheDifficultyTo" value="#{CacheManager.filter.toCacheDifficulty}" />
 	       </li>
 	        <li>
 	           <!-- row for finding caches by terrain difficulty -->
@@ -145,11 +145,11 @@
                
                <h:outputLabel class="inputLabel" for="terrainDifficultyFrom">from</h:outputLabel>
                               
-               <h:inputText class="filterInput" id="terrainDifficultyFrom" value="#{CacheManager.cacheFilter.fromTerrainDifficulty}" />
+               <h:inputText class="filterInput" id="terrainDifficultyFrom" value="#{CacheManager.filter.fromTerrainDifficulty}" />
                
                <h:outputText value="&#160;" />
                <h:outputLabel class="inputLabel" for="terrainDifficultyTo">to</h:outputLabel>               
-               <h:inputText class="filterInput" id="terrainDifficultyTo" value="#{CacheManager.cacheFilter.toTerrainDifficulty}" />
+               <h:inputText class="filterInput" id="terrainDifficultyTo" value="#{CacheManager.filter.toTerrainDifficulty}" />
            </li>
             <li>
                <!-- row for finding caches by size -->
@@ -158,10 +158,10 @@
                <h:outputLabel class="checkboxLabel" for="sizeFilter">filter by size </h:outputLabel>               
                <h:outputLabel class="inputLabel" for="sizeFrom">from</h:outputLabel>
                
-               <h:inputText class="filterInput" id="sizeFrom" value="#{CacheManager.cacheFilter.fromCacheSize}" />               
+               <h:inputText class="filterInput" id="sizeFrom" value="#{CacheManager.filter.fromCacheSize}" />               
                <h:outputText value="&#160;" />
                <h:outputLabel class="inputLabel" for="sizeTo">to</h:outputLabel>
-               <h:inputText class="filterInput" id="sizeTo" value="#{CacheManager.cacheFilter.toCacheSize}" />
+               <h:inputText class="filterInput" id="sizeTo" value="#{CacheManager.filter.toCacheSize}" />
            </li>
            <li>
                <h:commandButton class="button formbutton" value="Get Caches" action="#{CacheManager.getFilteredCacheList}"/>
