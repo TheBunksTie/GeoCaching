@@ -20,5 +20,7 @@ namespace Swk5.GeoCaching.DomainModel {
         public double FromTerrainDifficulty { get; set; }
         public double ToTerrainDifficulty { get; set; }
 
+        public int Limit { get; set; }
+
     }
 }

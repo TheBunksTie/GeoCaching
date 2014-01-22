@@ -14,49 +14,65 @@ namespace GeoCaching.Services {
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [ToolboxItem(false)]
     public class GeoCachingService : WebService {
-        private readonly IAuthenticationManager authenticationManager = GeoCachingBLFactory.GetAuthentificationManager();
-        private readonly ICacheManager cacheManager = GeoCachingBLFactory.GetCacheManager();
-        private readonly IStatisticsManager statisticsManager = GeoCachingBLFactory.GetStatisticsManager();
+        private readonly IAuthenticationManager authenticationManager;
+        private readonly bool backendRunning;
+        private readonly ICacheManager cacheManager;
+        private readonly IStatisticsManager statisticsManager;
+
+        public GeoCachingService() {
+            try {
+                authenticationManager = GeoCachingBLFactory.GetAuthentificationManager();
+                cacheManager = GeoCachingBLFactory.GetCacheManager();
+                statisticsManager = GeoCachingBLFactory.GetStatisticsManager();
+            }
+            catch {
+                // in case of any exception when creating "connection" to backend, set flag 
+                // and do not provide access from outside
+                backendRunning = false;
+            }
+        }
 
         // -------------------------------- Authentication -------------------------------
 
         [WebMethod]
         public User AuthenticateUser(string username, string password) {
-            return authenticationManager.AuthenticateUser(username, password, false);
+            return backendRunning ? authenticationManager.AuthenticateUser(username, password, false) : null;
         }
 
         // ------------------------------------- Caches ----------------------------------
 
         [WebMethod]
         public List<Cache> GetFilteredCacheList(DataFilter filter) {
-            return cacheManager.GetFilteredCacheList(filter);
+            return backendRunning ? cacheManager.GetFilteredCacheList(filter) : null;
         }
 
         [WebMethod]
         public DataFilter ComputeDefaultFilter() {
-            return cacheManager.GetDefaultFilter();
+            return backendRunning ? cacheManager.GetDefaultFilter() : null;
         }
 
         [WebMethod]
         public List<string> GetCacheSizeList() {
-            return cacheManager.GetCacheSizeList();
+            return backendRunning ? cacheManager.GetCacheSizeList() : null;
         }
 
         [WebMethod]
         public CacheDetails GetDetailedCache(int cacheId) {
-            return new CacheDetails {
-                Cache = cacheManager.GetCacheById(cacheId),
-                Images = cacheManager.GetImagesForCache(cacheId),
-                LogEntries = cacheManager.GetLogEntriesforCache(cacheId),
-                Rating = cacheManager.GetAverageRatingForCache(cacheId)
-            };
+            return backendRunning
+                ? new CacheDetails {
+                    Cache = cacheManager.GetCacheById(cacheId),
+                    Images = cacheManager.GetImagesForCache(cacheId),
+                    LogEntries = cacheManager.GetLogEntriesforCache(cacheId),
+                    Rating = cacheManager.GetAverageRatingForCache(cacheId)
+                }
+                : null;
         }
 
         // ----------------------------------- Logentries ---------------------------------
 
         [WebMethod]
         public bool AddLogEntryForCache(User requestingUser, LogEntry logEntry) {
-            return authenticationManager.ReauthenticateUser(requestingUser) &&
+            return backendRunning && authenticationManager.ReauthenticateUser(requestingUser) &&
                    cacheManager.AddLogEntryForCache(logEntry);
         }
 
@@ -64,44 +80,47 @@ namespace GeoCaching.Services {
 
         [WebMethod]
         public bool AddRatingForCache(User requestingUser, Rating rating) {
-            return authenticationManager.ReauthenticateUser(requestingUser) && cacheManager.AddRatingForCache(rating);
+            return backendRunning && authenticationManager.ReauthenticateUser(requestingUser) &&
+                   cacheManager.AddRatingForCache(rating);
         }
-
-        // ----------------------------------- Statistics ---------------------------------
+        
+        // ------------------------------ Statistics: Top Lists ----------------------------
+        
+        [WebMethod]
+        public StatisticDataset GetUserByFoundCaches(DataFilter filter) {
+            return backendRunning ? statisticsManager.GetFoundCachesByUser(filter) : null;
+        }
 
         [WebMethod]
-        public StatisticDataset GetCachesFoundByUser(DataFilter filter) {
-            return statisticsManager.GetFoundCachesByUser(filter);
+        public StatisticDataset GetUserByHiddenCaches(DataFilter filter) {
+            return backendRunning ? statisticsManager.GetHiddenCachesByUser(filter) : null;
         }
 
         [WebMethod]
-        public StatisticDataset GetCachesHiddenByUser(DataFilter filter) {
-            return statisticsManager.GetHiddenCachesByUser(filter);
+        public StatisticDataset GetBestRatedCache ( DataFilter filter ) {
+            return backendRunning ? statisticsManager.GetBestRatedCaches(filter) : null;
         }
+
+        [WebMethod]
+        public StatisticDataset GetMostLoggedCaches ( DataFilter filter ) {
+            return backendRunning ? statisticsManager.GetMostLoggedCaches(filter) : null;
+        }
+
+        // ---------------------------- Statistics: Distributions --------------------------
 
         [WebMethod]
         public StatisticDataset GetCacheDistributionBySize(DataFilter filter) {
-            return statisticsManager.GetCacheDistributionBySize(filter);
+            return backendRunning ? statisticsManager.GetCacheDistributionBySize(filter) : null;
         }
 
         [WebMethod]
         public StatisticDataset GetCacheDistributionByCacheDifficulty(DataFilter filter) {
-            return statisticsManager.GetCacheDistributionByCacheDifficulty(filter);
+            return backendRunning ? statisticsManager.GetCacheDistributionByCacheDifficulty(filter) : null;
         }
 
         [WebMethod]
         public StatisticDataset GetCacheDistributionByTerrainDifficulty(DataFilter filter) {
-            return statisticsManager.GetCacheDistributionByTerrainDifficulty(filter);
-        }
-
-        [WebMethod]
-        public StatisticDataset GetBestRatedCache(DataFilter filter) {
-            return statisticsManager.GetBestRatedCaches(filter);
-        }
-
-        [WebMethod]
-        public StatisticDataset GetMostLoggedCaches(DataFilter filter) {
-            return statisticsManager.GetMostLoggedCaches(filter);
-        }
+            return backendRunning ? statisticsManager.GetCacheDistributionByTerrainDifficulty(filter) : null;
+        }       
     }
 }
