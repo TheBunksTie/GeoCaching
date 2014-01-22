@@ -9,157 +9,52 @@
 	    GeoCachingWebClient - Find caches by different criteria
 	</ui:define>
 	<ui:define name="content">
-	    <h1>View caches by different filter options</h1>
-<!-- 	    <h:form id="searchForm"> -->
-<!-- 	        <p:panelGrid styleClass="formTable"> -->
-                
-<!-- 	            <p:row> -->
-<!-- 	               row for finding caches by cache difficulty -->
-<!-- 	               <p:column> -->
-<!-- 	                   <p:selectBooleanCheckbox /> -->
-<!-- 	               </p:column> -->
-<!-- 	               <p:column> -->
-<!-- 	                   <h:outputText>filter by cache difficulty</h:outputText> -->
-<!-- 	               </p:column> -->
-	               
-<!-- 	               <p:column> -->
-<!--                        <p:outputLabel for="cacheDifficultyFrom">from</p:outputLabel> -->
-<!--                    </p:column>	                -->
-	               
-<!-- 	               <p:column colspan="2">	                    -->
-<!-- 	                   <p:inputText id="cacheDifficultyFrom" /> -->
-<!-- 	               </p:column> -->
-	               
-<!-- 	               <p:column> -->
-<!--                        <p:outputLabel for="cacheDifficultyTo">to</p:outputLabel> -->
-<!--                    </p:column>                  -->
-                   
-<!--                    <p:column colspan="2">                       -->
-<!--                        <p:inputText id="cacheDifficultyTo" /> -->
-<!--                    </p:column>	               -->
-<!-- 	            </p:row>  -->
-	           
-<!-- 	            <p:row> -->
-<!--                    row for finding caches by terrain difficulty -->
-<!--                    <p:column> -->
-<!--                        <p:selectBooleanCheckbox /> -->
-<!--                    </p:column> -->
-<!--                    <p:column> -->
-<!--                        <h:outputText>filter by terrain difficulty</h:outputText> -->
-<!--                    </p:column> -->
-                   
-<!--                    <p:column> -->
-<!--                        <p:outputLabel for="terrainDifficultyFrom">from</p:outputLabel> -->
-<!--                    </p:column>                  -->
-                   
-<!--                    <p:column colspan="2">                       -->
-<!--                        <p:inputText id="terrainDifficultyFrom" /> -->
-<!--                    </p:column> -->
-                   
-<!--                    <p:column> -->
-<!--                        <p:outputLabel for="terrainDifficultyTo">to</p:outputLabel> -->
-<!--                    </p:column>                  -->
-                   
-<!--                    <p:column colspan="2">                       -->
-<!--                        <p:inputText id="terrainDifficultyTo" /> -->
-<!--                    </p:column>                 -->
-<!--                 </p:row>  -->
-	           
-<!-- 	            <p:row> -->
-<!--                    row for finding caches by region -->
-<!--                    <p:column> -->
-<!--                        <p:selectBooleanCheckbox /> -->
-<!--                    </p:column> -->
-<!--                    <p:column> -->
-<!--                        <h:outputText>filter by region</h:outputText> -->
-<!--                    </p:column> -->
-                   
-<!--                    <p:column> -->
-<!--                        <p:outputLabel for="latitudeFrom">from</p:outputLabel> -->
-<!--                    </p:column>                  -->
-                   
-<!--                    <p:column>                       -->
-<!--                        <p:inputText id="latitudeFrom" /> -->
-<!--                    </p:column> -->
-                   
-<!--                    <p:column>                       -->
-<!--                        <p:inputText id="longitudeFrom" /> -->
-<!--                    </p:column> -->
-                   
-<!--                    <p:column> -->
-<!--                        <p:outputLabel for="latitudeTo">to</p:outputLabel> -->
-<!--                    </p:column>                  -->
-                   
-<!--                    <p:column>                       -->
-<!--                        <p:inputText id="latitudeTo" /> -->
-<!--                    </p:column> -->
-                   
-<!--                    <p:column>                       -->
-<!--                        <p:inputText id="longitudeTo" /> -->
-<!--                    </p:column> -->
-<!--                 </p:row>       -->
-<!--                 <p:row> -->
-<!--                     <p:column colspan="8"> -->
-<!--                         <h:commandButton class="button rowbutton" value="Find" action="#{CacheManager.findCachesByRegion}"/> -->
-<!--                     </p:column>   -->
-<!--                 </p:row>                                                       -->
-<!-- 	       </p:panelGrid>	             -->
-<!-- 	    </h:form> -->
-	    
+	    <h1>View caches</h1>	    
 	     <h:form id="filterForm">
 	     <ul>
+	       <li><h3>Available Filters</h3></li>
 	       <li>
                <h:selectBooleanCheckbox id="positionFilter" value="#{CacheManager.positionFiltered}"/>
-               <h:outputText value="&#160;" />
-               <h:outputLabel class="checkboxLabel" for="positionFilter" >filter by position</h:outputLabel>
+               <h:outputLabel class="checkboxLabel" for="positionFilter" >Filter by cache position</h:outputLabel>
                
-               <h:outputLabel class="inputLabel" for="latitudeFrom">from</h:outputLabel>               
-               [<h:inputText class="filterInput" id="latitudeFrom" value="#{CacheManager.filter.fromPosition.latitude}" />;               
+               <h:outputLabel class="inputLabel" for="latitudeFrom">from</h:outputLabel>[
+               <h:inputText class="filterInput" id="latitudeFrom" value="#{CacheManager.filter.fromPosition.latitude}" />;               
                <h:inputText class="filterInput" id="longitudeFrom" value="#{CacheManager.filter.fromPosition.longitude}" />]
                
-               <h:outputText value="&#160;" />
-               <h:outputLabel class="inputLabel" for="latitudeTo">to</h:outputLabel>
-               [<h:inputText class="filterInput" id="latitudeTo" value="#{CacheManager.filter.toPosition.latitude}" />;
+               <h:outputLabel class="inputLabel" for="latitudeTo">to</h:outputLabel>[
+               <h:inputText class="filterInput" id="latitudeTo" value="#{CacheManager.filter.toPosition.latitude}" />;
                <h:inputText class="filterInput" id="longitudeTo" value="#{CacheManager.filter.toPosition.longitude}" />]
            </li>           
 	       
 	       <!-- row for finding caches by cache difficulty -->
 	       <li>
 	           <h:selectBooleanCheckbox id="cacheDifficultyFilter" value="#{CacheManager.cacheDifficultyFiltered}"/>
-	           <h:outputText value="&#160;" />
-	           <h:outputLabel class="checkboxLabel" for="cacheDifficultyFilter">filter by cache difficulty</h:outputLabel>
+	           <h:outputLabel class="checkboxLabel" for="cacheDifficultyFilter">Filter by cache difficulty</h:outputLabel>	          
 	           
-	           <h:outputLabel class="inputLabel" for="cacheDifficultyFrom">from</h:outputLabel>
-	           	           
+	           <h:outputLabel class="inputLabel" for="cacheDifficultyFrom">from</h:outputLabel>	           	           
 	           <h:inputText class="filterInput" id="cacheDifficultyFrom" value="#{CacheManager.filter.fromCacheDifficulty}"/>	           
 	           
-	           <h:outputText value="&#160;" />
 	           <h:outputLabel class="inputLabel" for="cacheDifficultyTo">to</h:outputLabel>	           
 	           <h:inputText class="filterInput" id="cacheDifficultyTo" value="#{CacheManager.filter.toCacheDifficulty}" />
 	       </li>
 	        <li>
 	           <!-- row for finding caches by terrain difficulty -->
-               <h:selectBooleanCheckbox id="terrainDifficultyFilter" value="#{CacheManager.terrainDifficultyFiltered}"  />
-               <h:outputText value="&#160;" />
-               <h:outputLabel class="checkboxLabel" for="terrainDifficultyFilter">filter by terrain difficulty</h:outputLabel>
+               <h:selectBooleanCheckbox id="terrainDifficultyFilter" value="#{CacheManager.terrainDifficultyFiltered}"  />               
+               <h:outputLabel class="checkboxLabel" for="terrainDifficultyFilter">Filter by terrain difficulty</h:outputLabel>
                
-               <h:outputLabel class="inputLabel" for="terrainDifficultyFrom">from</h:outputLabel>
-                              
+               <h:outputLabel class="inputLabel" for="terrainDifficultyFrom">from</h:outputLabel>                              
                <h:inputText class="filterInput" id="terrainDifficultyFrom" value="#{CacheManager.filter.fromTerrainDifficulty}" />
                
-               <h:outputText value="&#160;" />
                <h:outputLabel class="inputLabel" for="terrainDifficultyTo">to</h:outputLabel>               
                <h:inputText class="filterInput" id="terrainDifficultyTo" value="#{CacheManager.filter.toTerrainDifficulty}" />
            </li>
             <li>
                <!-- row for finding caches by size -->
                <h:selectBooleanCheckbox id="sizeFilter" value="#{CacheManager.sizeFiltered}" />
-               <h:outputText value="&#160;" />
-               <h:outputLabel class="checkboxLabel" for="sizeFilter">filter by size </h:outputLabel>               
+               <h:outputLabel class="checkboxLabel" for="sizeFilter">Filter by size </h:outputLabel>               
                <h:outputLabel class="inputLabel" for="sizeFrom">from</h:outputLabel>
                
                <h:inputText class="filterInput" id="sizeFrom" value="#{CacheManager.filter.fromCacheSize}" />               
-               <h:outputText value="&#160;" />
                <h:outputLabel class="inputLabel" for="sizeTo">to</h:outputLabel>
                <h:inputText class="filterInput" id="sizeTo" value="#{CacheManager.filter.toCacheSize}" />
            </li>
@@ -168,23 +63,20 @@
                <h:outputText value="&#160;" />
                <h:commandButton class="button formbutton" value="Reset Filter" action="#{CacheManager.resetFilter}"/>
            </li>           
-	     </ul>
-                
-
+	     </ul>               
         </h:form>
         
         <div class="map">
+            <h2>Caches on map</h2>
             <f:view contentType="text/html">
-            <h:form>    
-			    <p:gmap center="48.490257,14.707417" zoom="10" type="ROADMAP" model="#{CacheManager.mapModel}" 
+            <h:form id="cacheDetailsForm">    
+			    <p:gmap center="48.190257,14.227417" zoom="10" type="ROADMAP" model="#{CacheManager.mapModel}" 
 			            navigationControl="false" style="width:600px;height:400px">  	  
 			        <p:ajax event="overlaySelect" listener="#{CacheManager.onMarkerSelect}" />  		  
 			        <p:gmapInfoWindow>  
 			            <p:outputPanel style="text-align:center;display:block;margin:auto:">  	  	                   
-		                    <h:outputText value="#{CacheManager.currentMarker.title}" />
-		                     <h:form id="cacheDetailForm">
-                                <h:commandButton class="button" value="Details" type="submit" action="#{CacheManager.showDetailsFromMap}" />
-                             </h:form>  	  
+		                    <h:outputText value="#{CacheManager.currentMarker.title}" />	                     
+                            <h:commandButton class="button" value="Details" type="submit" action="#{CacheManager.showDetailsFromMap}" />                             	  
 			            </p:outputPanel>  	  
 			        </p:gmapInfoWindow>  
 			    </p:gmap>  	  	       	

@@ -5,10 +5,11 @@
 
 <h:form id="navForm">
     <h:panelGrid columns="4">
-        <h:commandButton class="logo" image="/resources/img/logo.jpg" type="submit" action="HomeEvent" />
-        <h:commandButton class="navbutton button" value="Caches" type="submit" action="FindCachesEvent" />
-        <h:commandButton class="navbutton button" value="Statistics" type="submit" action="StatisticsEvent" />
-        <h:commandButton class="navbutton button" value="Login" type="submit" action="LoginEvent" />        
+        <h:commandButton class="logo" image="/resources/img/logo.jpg" type="submit" action="#{Settings.getHomeView}" />
+        <h:commandButton class="navbutton button" value="Caches" type="submit" action="#{Settings.getCacheView}" />
+        <h:commandButton class="navbutton button" value="Statistics" type="submit" action="#{Settings.getStatisticsView}" />
+        <h:commandButton class="navbutton button" value="Login" type="submit" action="#{Settings.getLoginView}" rendered="#{!AuthenticationManager.loggedIn}" />
+        <h:commandButton class="navbutton button" value="Logout" type="submit" action="#{AuthenticationManager.logoutUser}" rendered="#{AuthenticationManager.loggedIn}" />                
     </h:panelGrid>
 </h:form>
 	
