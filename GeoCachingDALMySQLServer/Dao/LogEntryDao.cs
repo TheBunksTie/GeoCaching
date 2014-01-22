@@ -55,9 +55,13 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                                               "(longitude >= @longFrom AND longitude <= @longTo ))" +
                      "GROUP BY creatorId) as s " +
                 "ON u.id = s.creatorId " +
-                "ORDER BY s.count DESC;");
+                "ORDER BY s.count DESC " +
+                "LIMIT @limit;");
 
-            AddLimitationParameters(cmd, filter);
+            AddGeneralFilterParameters(cmd, filter);
+
+            // add special filter parameters
+            Database.DefineParameter(cmd, "limit", DbType.Int32, filter.Limit);
             return GetStatisticsDataFor(cmd);
         }
 
@@ -71,8 +75,12 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                                                     "WHERE (c.creationDate >= @begin AND c.creationDate <= @end) AND " +
                                                           "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
                                                           "(c.longitude >= @longFrom AND c.longitude <= @longTo) " +
-                                                    "ORDER BY l.cnt DESC;");
-            AddLimitationParameters(cmd, filter);
+                                                    "ORDER BY l.cnt DESC " +
+                                                    "LIMIT @limit;");
+            AddGeneralFilterParameters(cmd, filter);
+
+            // add special filter parameters
+            Database.DefineParameter(cmd, "limit", DbType.Int32, filter.Limit);
             return GetStatisticsDataFor(cmd);
         }
 

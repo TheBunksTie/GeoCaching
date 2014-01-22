@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Transactions;
 using MySql.Data.MySqlClient;
@@ -65,9 +66,15 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
         /// <param name="connectionString">connection string of the connection</param>
         /// <returns>A <see cref="DbConnection" /> instance </returns>
         private static DbConnection CreateOpenConnection(string connectionString) {
-            DbConnection connection = new MySqlConnection(connectionString);
-            connection.Open();
-            return connection;
+            try {
+                DbConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+                return connection;
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.StackTrace);
+            }
+            return null;
         }
 
         /// <summary>

@@ -97,7 +97,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
             get { return localImageRepository; }
         }
 
-        protected DbConnection GetOpenConnection() {
+        private DbConnection GetOpenConnection() {
             // uses connection utils to manage connections
             return ConnectionUtils.GetOpenConnection(connectionString);
         }

@@ -87,11 +87,9 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
 
         public GeoPosition GetLowestCachePosition() {
             var geoPosition = new GeoPosition {
-                Latitude =
-                    Database.ExecuteScalarDoubleQuery(
+                Latitude = Database.ExecuteScalarDoubleQuery(
                         Database.CreateCommand("SELECT c.latitude FROM cache c ORDER BY c.latitude ASC LIMIT 1;")),
-                Longitude =
-                    Database.ExecuteScalarDoubleQuery(
+                Longitude = Database.ExecuteScalarDoubleQuery(
                         Database.CreateCommand("SELECT c.longitude FROM cache c ORDER BY c.longitude ASC LIMIT 1;"))
             };
 
@@ -122,13 +120,17 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                          "(longitude >= @longFrom AND longitude <= @longTo) " +
                    "GROUP BY ownerId) AS s " +
               "ON u.id = s.ownerId " +
-              "ORDER BY s.count DESC;");
+              "ORDER BY s.count DESC " +
+              "LIMIT @limit;");
 
-            AddLimitationParameters(cmd, filter);
+            AddGeneralFilterParameters(cmd, filter);
+
+            // add special filter parameters
+            Database.DefineParameter(cmd, "limit", DbType.Int32, filter.Limit);
             return GetStatisticsDataFor(cmd);
         }
 
-        public List<StatisticData> GetCacheDistributionBySize ( DataFilter filter ) {
+        public List<StatisticData> GetCacheDistributionBySize(DataFilter filter)  {
             IDbCommand cmd = Database.CreateCommand("SELECT cs.sizeDescription, " +
                                                      "(c.count / " +
                                                          "(SELECT COUNT(id) " +
@@ -145,11 +147,11 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                                                             "GROUP BY sizeCode) AS c " +
                                                      "ON cs.id = c.sizeCode " +
                                                      "ORDER BY percent DESC;");
-            AddLimitationParameters(cmd, filter);
+            AddGeneralFilterParameters(cmd, filter);
             return GetStatisticsDataFor(cmd);
         }
 
-        public List<StatisticData> GetCacheDistributionByCacheDifficulty ( DataFilter filter ) {
+        public List<StatisticData> GetCacheDistributionByCacheDifficulty(DataFilter filter) {
             IDbCommand cmd = Database.CreateCommand("SELECT difficultyCache, " +
                                                      "(COUNT(difficultyCache) / " +
                                                          "(SELECT COUNT(id) " +
@@ -164,11 +166,11 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                                                      "GROUP BY difficultyCache " +                                                     
                                                      "ORDER BY percent DESC;");
 
-            AddLimitationParameters(cmd, filter);
+            AddGeneralFilterParameters(cmd, filter);
             return GetStatisticsDataFor(cmd);
         }
 
-        public List<StatisticData> GetCacheDistributionByTerrainDifficulty ( DataFilter filter ) {
+        public List<StatisticData> GetCacheDistributionByTerrainDifficulty(DataFilter filter) {
             IDbCommand cmd = Database.CreateCommand("SELECT difficultyTerrain, " +
                                                      "(COUNT(difficultyCache) / " +
                                                          "(SELECT COUNT(id) " +
@@ -183,7 +185,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                                                     "GROUP BY difficultyTerrain " +
                                                     "ORDER BY percent DESC;");
 
-            AddLimitationParameters(cmd, filter);
+            AddGeneralFilterParameters(cmd, filter);
             return GetStatisticsDataFor(cmd);
         }
 
@@ -197,9 +199,13 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                                                    "WHERE (c.creationDate >= @begin AND c.creationDate <= @end) AND " +
                                                          "(c.latitude >= @latFrom AND c.latitude <= @latTo) AND " +
                                                          "(c.longitude >= @longFrom AND c.longitude <= @longTo) " +
-                                                   "ORDER BY r.grade DESC;");
+                                                   "ORDER BY r.grade DESC " +
+                                                   "LIMIT @limit;");
 
-            AddLimitationParameters(cmd, filter);
+            AddGeneralFilterParameters(cmd, filter);
+            
+            // add special filter parameters
+            Database.DefineParameter(cmd, "limit", DbType.Int32, filter.Limit);
             return GetStatisticsDataFor(cmd);
         }
 
