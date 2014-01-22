@@ -30,8 +30,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "filter"
 })
-@XmlRootElement(name = "GetCachesHiddenByUser")
-public class GetCachesHiddenByUser {
+@XmlRootElement(name = "GetUserByFoundCaches")
+public class GetUserByFoundCaches {
 
     protected DataFilter filter;
 

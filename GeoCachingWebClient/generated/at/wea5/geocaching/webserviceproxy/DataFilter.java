@@ -1,12 +1,17 @@
 
 package at.wea5.geocaching.webserviceproxy;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import at.wea5.geocaching.Util;
 
 
 /**
@@ -30,6 +35,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="ToCacheDifficulty" type="{http://www.w3.org/2001/XMLSchema}double"/>
  *         &lt;element name="FromTerrainDifficulty" type="{http://www.w3.org/2001/XMLSchema}double"/>
  *         &lt;element name="ToTerrainDifficulty" type="{http://www.w3.org/2001/XMLSchema}double"/>
+ *         &lt;element name="Limit" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -50,7 +56,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "fromCacheDifficulty",
     "toCacheDifficulty",
     "fromTerrainDifficulty",
-    "toTerrainDifficulty"
+    "toTerrainDifficulty",
+    "limit"
 })
 public class DataFilter {
 
@@ -78,6 +85,8 @@ public class DataFilter {
     protected double fromTerrainDifficulty;
     @XmlElement(name = "ToTerrainDifficulty")
     protected double toTerrainDifficulty;
+    @XmlElement(name = "Limit")
+    protected int limit;
 
     /**
      * Ruft den Wert der cacheName-Eigenschaft ab.
@@ -187,6 +196,28 @@ public class DataFilter {
         return toCreationDate;
     }
 
+    // -------------------- manually added getter/setter for better data-format handling
+    
+    public Date getFromJavaDate() {        
+        return fromCreationDate.toGregorianCalendar().getTime();
+    }
+    
+    public void setFromJavaDate(Date value) throws DatatypeConfigurationException {        
+        this.fromCreationDate = Util.convertToXML(value);
+    }
+
+    public Date getToJavaDate() {
+        return toCreationDate.toGregorianCalendar().getTime();
+    }
+
+    public void setToJavaDate(Date value) throws DatatypeConfigurationException {
+        this.toCreationDate = Util.convertToXML(value);
+    }
+        
+    // -------------------------------------------------------------------------------------------
+    
+    
+    
     /**
      * Legt den Wert der toCreationDate-Eigenschaft fest.
      * 
@@ -293,6 +324,22 @@ public class DataFilter {
      */
     public void setToTerrainDifficulty(double value) {
         this.toTerrainDifficulty = value;
+    }
+
+    /**
+     * Ruft den Wert der limit-Eigenschaft ab.
+     * 
+     */
+    public int getLimit() {
+        return limit;
+    }
+
+    /**
+     * Legt den Wert der limit-Eigenschaft fest.
+     * 
+     */
+    public void setLimit(int value) {
+        this.limit = value;
     }
 
 }

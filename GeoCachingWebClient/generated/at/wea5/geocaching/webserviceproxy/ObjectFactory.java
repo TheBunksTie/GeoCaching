@@ -54,19 +54,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ComputeDefaultFilter }
+     * Create an instance of {@link GetUserByHiddenCaches }
      * 
      */
-    public ComputeDefaultFilter createComputeDefaultFilter() {
-        return new ComputeDefaultFilter();
-    }
-
-    /**
-     * Create an instance of {@link GetCachesFoundByUser }
-     * 
-     */
-    public GetCachesFoundByUser createGetCachesFoundByUser() {
-        return new GetCachesFoundByUser();
+    public GetUserByHiddenCaches createGetUserByHiddenCaches() {
+        return new GetUserByHiddenCaches();
     }
 
     /**
@@ -75,6 +67,14 @@ public class ObjectFactory {
      */
     public DataFilter createDataFilter() {
         return new DataFilter();
+    }
+
+    /**
+     * Create an instance of {@link ComputeDefaultFilter }
+     * 
+     */
+    public ComputeDefaultFilter createComputeDefaultFilter() {
+        return new ComputeDefaultFilter();
     }
 
     /**
@@ -134,19 +134,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetMostLoggedCaches }
-     * 
-     */
-    public GetMostLoggedCaches createGetMostLoggedCaches() {
-        return new GetMostLoggedCaches();
-    }
-
-    /**
      * Create an instance of {@link GetDetailedCache }
      * 
      */
     public GetDetailedCache createGetDetailedCache() {
         return new GetDetailedCache();
+    }
+
+    /**
+     * Create an instance of {@link GetMostLoggedCaches }
+     * 
+     */
+    public GetMostLoggedCaches createGetMostLoggedCaches() {
+        return new GetMostLoggedCaches();
     }
 
     /**
@@ -166,11 +166,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetBestRatedCacheResponse }
+     * Create an instance of {@link GetCacheDistributionByTerrainDifficultyResponse }
      * 
      */
-    public GetBestRatedCacheResponse createGetBestRatedCacheResponse() {
-        return new GetBestRatedCacheResponse();
+    public GetCacheDistributionByTerrainDifficultyResponse createGetCacheDistributionByTerrainDifficultyResponse() {
+        return new GetCacheDistributionByTerrainDifficultyResponse();
     }
 
     /**
@@ -182,11 +182,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetCacheDistributionByTerrainDifficultyResponse }
+     * Create an instance of {@link GetBestRatedCacheResponse }
      * 
      */
-    public GetCacheDistributionByTerrainDifficultyResponse createGetCacheDistributionByTerrainDifficultyResponse() {
-        return new GetCacheDistributionByTerrainDifficultyResponse();
+    public GetBestRatedCacheResponse createGetBestRatedCacheResponse() {
+        return new GetBestRatedCacheResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetUserByHiddenCachesResponse }
+     * 
+     */
+    public GetUserByHiddenCachesResponse createGetUserByHiddenCachesResponse() {
+        return new GetUserByHiddenCachesResponse();
     }
 
     /**
@@ -214,19 +222,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetCachesHiddenByUser }
+     * Create an instance of {@link GetUserByFoundCaches }
      * 
      */
-    public GetCachesHiddenByUser createGetCachesHiddenByUser() {
-        return new GetCachesHiddenByUser();
-    }
-
-    /**
-     * Create an instance of {@link GetFilteredCacheList }
-     * 
-     */
-    public GetFilteredCacheList createGetFilteredCacheList() {
-        return new GetFilteredCacheList();
+    public GetUserByFoundCaches createGetUserByFoundCaches() {
+        return new GetUserByFoundCaches();
     }
 
     /**
@@ -235,6 +235,14 @@ public class ObjectFactory {
      */
     public GetCacheDistributionByCacheDifficulty createGetCacheDistributionByCacheDifficulty() {
         return new GetCacheDistributionByCacheDifficulty();
+    }
+
+    /**
+     * Create an instance of {@link GetFilteredCacheList }
+     * 
+     */
+    public GetFilteredCacheList createGetFilteredCacheList() {
+        return new GetFilteredCacheList();
     }
 
     /**
@@ -286,14 +294,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AuthenticateUser }
-     * 
-     */
-    public AuthenticateUser createAuthenticateUser() {
-        return new AuthenticateUser();
-    }
-
-    /**
      * Create an instance of {@link GetCacheDistributionByCacheDifficultyResponse }
      * 
      */
@@ -302,19 +302,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetCachesHiddenByUserResponse }
+     * Create an instance of {@link AuthenticateUser }
      * 
      */
-    public GetCachesHiddenByUserResponse createGetCachesHiddenByUserResponse() {
-        return new GetCachesHiddenByUserResponse();
+    public AuthenticateUser createAuthenticateUser() {
+        return new AuthenticateUser();
     }
 
     /**
-     * Create an instance of {@link GetCachesFoundByUserResponse }
+     * Create an instance of {@link GetUserByFoundCachesResponse }
      * 
      */
-    public GetCachesFoundByUserResponse createGetCachesFoundByUserResponse() {
-        return new GetCachesFoundByUserResponse();
+    public GetUserByFoundCachesResponse createGetUserByFoundCachesResponse() {
+        return new GetUserByFoundCachesResponse();
     }
 
     /**

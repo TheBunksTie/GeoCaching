@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="GetCachesFoundByUserResult" type="{http://GeoCaching.Services/}StatisticDataset" minOccurs="0"/>
+ *         &lt;element name="GetUserByFoundCachesResult" type="{http://GeoCaching.Services/}StatisticDataset" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "getCachesFoundByUserResult"
+    "getUserByFoundCachesResult"
 })
-@XmlRootElement(name = "GetCachesFoundByUserResponse")
-public class GetCachesFoundByUserResponse {
+@XmlRootElement(name = "GetUserByFoundCachesResponse")
+public class GetUserByFoundCachesResponse {
 
-    @XmlElement(name = "GetCachesFoundByUserResult")
-    protected StatisticDataset getCachesFoundByUserResult;
+    @XmlElement(name = "GetUserByFoundCachesResult")
+    protected StatisticDataset getUserByFoundCachesResult;
 
     /**
-     * Ruft den Wert der getCachesFoundByUserResult-Eigenschaft ab.
+     * Ruft den Wert der getUserByFoundCachesResult-Eigenschaft ab.
      * 
      * @return
      *     possible object is
      *     {@link StatisticDataset }
      *     
      */
-    public StatisticDataset getGetCachesFoundByUserResult() {
-        return getCachesFoundByUserResult;
+    public StatisticDataset getGetUserByFoundCachesResult() {
+        return getUserByFoundCachesResult;
     }
 
     /**
-     * Legt den Wert der getCachesFoundByUserResult-Eigenschaft fest.
+     * Legt den Wert der getUserByFoundCachesResult-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
      *     {@link StatisticDataset }
      *     
      */
-    public void setGetCachesFoundByUserResult(StatisticDataset value) {
-        this.getCachesFoundByUserResult = value;
+    public void setGetUserByFoundCachesResult(StatisticDataset value) {
+        this.getUserByFoundCachesResult = value;
     }
 
 }

@@ -3,7 +3,6 @@ package at.wea5.geocaching.webserviceproxy;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -18,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="GetCachesHiddenByUserResult" type="{http://GeoCaching.Services/}StatisticDataset" minOccurs="0"/>
+ *         &lt;element name="filter" type="{http://GeoCaching.Services/}DataFilter" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +28,35 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "getCachesHiddenByUserResult"
+    "filter"
 })
-@XmlRootElement(name = "GetCachesHiddenByUserResponse")
-public class GetCachesHiddenByUserResponse {
+@XmlRootElement(name = "GetUserByHiddenCaches")
+public class GetUserByHiddenCaches {
 
-    @XmlElement(name = "GetCachesHiddenByUserResult")
-    protected StatisticDataset getCachesHiddenByUserResult;
+    protected DataFilter filter;
 
     /**
-     * Ruft den Wert der getCachesHiddenByUserResult-Eigenschaft ab.
+     * Ruft den Wert der filter-Eigenschaft ab.
      * 
      * @return
      *     possible object is
-     *     {@link StatisticDataset }
+     *     {@link DataFilter }
      *     
      */
-    public StatisticDataset getGetCachesHiddenByUserResult() {
-        return getCachesHiddenByUserResult;
+    public DataFilter getFilter() {
+        return filter;
     }
 
     /**
-     * Legt den Wert der getCachesHiddenByUserResult-Eigenschaft fest.
+     * Legt den Wert der filter-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
-     *     {@link StatisticDataset }
+     *     {@link DataFilter }
      *     
      */
-    public void setGetCachesHiddenByUserResult(StatisticDataset value) {
-        this.getCachesHiddenByUserResult = value;
+    public void setFilter(DataFilter value) {
+        this.filter = value;
     }
 
 }
