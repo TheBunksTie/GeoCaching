@@ -7,6 +7,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import at.wea5.geocaching.Settings;
 import at.wea5.geocaching.business.ManagerBase;
 import at.wea5.geocaching.webserviceproxy.User;
 
@@ -56,7 +57,7 @@ public class AuthenticationManager extends ManagerBase {
             log.severe(e.getMessage());
             setErrorMessage("Unable to perform requested action.");
             
-            return "LoginEvent";            
+            return Settings.LoginView;            
         }
     }
     
@@ -67,7 +68,7 @@ public class AuthenticationManager extends ManagerBase {
     public String logoutUser() {
         userdata = null;
         ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).invalidate();
-        return "HomeEvent";
+        return Settings.HomeView;
     }
 
     
@@ -78,9 +79,4 @@ public class AuthenticationManager extends ManagerBase {
     
     private User userdata;
 
-    @Override
-    public String resetFilter() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

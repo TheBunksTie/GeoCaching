@@ -34,8 +34,6 @@ public abstract class ManagerBase {
     
 //------------------------------------ protected --------------------------------------
     
-    public abstract String resetFilter();
-    
     protected GeoCachingServiceSoap getWSProxy() {
         
         if (geoCachingWsProxy == null) {

@@ -1,17 +1,13 @@
 package at.wea5.geocaching.business.webserviceImplementation;
 
-
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
@@ -19,6 +15,8 @@ import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Marker;
 
+import at.wea5.geocaching.Settings;
+import at.wea5.geocaching.Util;
 import at.wea5.geocaching.business.ManagerBase;
 import at.wea5.geocaching.business.exception.NoCurrentUserException;
 import at.wea5.geocaching.webserviceproxy.Cache;
@@ -55,7 +53,7 @@ public class CacheManager extends ManagerBase {
             log.severe(e.getMessage());
             setErrorMessage("Unable to show requested details for cache.");            
         }
-        return "FindCachesEvent";
+        return Settings.CacheView;
     }    
     
     public String showDetailsFromList() {
@@ -66,7 +64,7 @@ public class CacheManager extends ManagerBase {
         catch (NumberFormatException ne) {            
             setErrorMessage("The id of the request cache is not a number.");            
         }
-        return "FindCachesEvent";
+        return Settings.CacheView;
     }
              
     public String getFilteredCacheList() {        
@@ -79,7 +77,7 @@ public class CacheManager extends ManagerBase {
         try {
             // process requested filters            
             if (positionFiltered) {
-                // get passed paramters from session context
+                // get passed parameters from session context
                 GeoPosition from = new GeoPosition();                                                
                 from.setLatitude(Double.parseDouble(getRequestParameterValue("latitudeFrom")));
                 from.setLongitude(Double.parseDouble(getRequestParameterValue("longitudeFrom")));                
@@ -112,21 +110,20 @@ public class CacheManager extends ManagerBase {
             loadCaches();
         }
         catch (NumberFormatException ne) {            
-            setErrorMessage("One of the entered filter values is invalid.");            
+            setErrorMessage("One (or more) of the entered filter values is invalid.");            
         }
         catch (Exception e) {
             log.severe(e.getMessage());
             setErrorMessage("Unable to perform requested action.");
         }                
-        return "FindCachesEvent";        
+        return Settings.CacheView;
     }
     
-    @Override
     public String resetFilter() {        
         loadDefaultFilter();        
         loadCaches();
         
-        return "FindCachesEvent";
+        return Settings.CacheView;
     }
     
     public String rateCurrentCache() {
@@ -137,10 +134,8 @@ public class CacheManager extends ManagerBase {
             if (grade >= 1 && grade <= 10) {
                 Rating rating = new Rating();
                 
-                // add time: today
-                calendar.setTime(new Date());                     
-                XMLGregorianCalendar xml = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
-                rating.setCreationDate(xml);
+                // add time: today               
+                rating.setCreationDate(Util.convertToXML(new Date()));
                                
                 // add creator: currently logged in user
                 User currentUser = getCurrentUser();                
@@ -172,7 +167,7 @@ public class CacheManager extends ManagerBase {
         catch(NumberFormatException e) {
             setErrorMessage("Provide rating ist invalid. Must be a number between 1 and 10.");
         }
-        return "CacheDetailsEvent";
+        return Settings.CacheDetailsView;
     }
     
     public String addLogEntry() {
@@ -182,10 +177,8 @@ public class CacheManager extends ManagerBase {
             
             LogEntry logEntry = new LogEntry();
             
-            // add time: today
-            calendar.setTime(new Date());                     
-            XMLGregorianCalendar xml = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
-            logEntry.setCreationDate(xml);
+            // add time: today            
+            logEntry.setCreationDate(Util.convertToXML(new Date()));
                            
             // add creator: currently logged in user
             User currentUser = getCurrentUser();                
@@ -213,7 +206,7 @@ public class CacheManager extends ManagerBase {
         catch (DatatypeConfigurationException de) {
             setErrorMessage(de.getMessage());
         }
-        return "CacheDetailsEvent";        
+        return Settings.CacheDetailsView;    
     }
     
     public void onMarkerSelect(OverlaySelectEvent event) {  
@@ -306,7 +299,7 @@ public class CacheManager extends ManagerBase {
             log.severe(e.getMessage());
             setErrorMessage("Unable to show requested details for cache.");
         }            
-        return "CacheDetailsEvent";
+        return Settings.CacheDetailsView;
     }
     
     private User getCurrentUser() throws NoCurrentUserException {
@@ -351,9 +344,6 @@ public class CacheManager extends ManagerBase {
     private boolean terrainDifficultyFiltered = false;
     
     private boolean cacheFound;
-    
-    private GregorianCalendar calendar = new GregorianCalendar();            
-
     
     private static final Logger log = Logger.getLogger(CacheManager.class.getName());
     
