@@ -12,7 +12,7 @@ namespace Swk5.GeoCaching.BusinessLogic {
         private static IUserManager userManager;
         private static IFilterManager filterManager;
 
-        public static IAuthenticationManager GetAuthentificationManager() {
+        public static IAuthenticationManager GetAuthenticationManager() {
             return authenticationManager ?? (authenticationManager = new AuthenticationManager.AuthenticationManager());
         }
 

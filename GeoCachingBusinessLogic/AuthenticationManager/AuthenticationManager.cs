@@ -8,39 +8,38 @@ namespace Swk5.GeoCaching.BusinessLogic.AuthenticationManager {
         private static readonly IUserDao userDao = DalFactory.CreateUserDao(database);
         private static User authenticatedUser;
 
-        public User AuthenticateUser(string username, string password, bool priviligedRequired) {
+        public User AuthenticateUser(string username, string password, LoginMode mode) {
             // reset authentication indicator
             authenticatedUser = null;
-            
-            // hash password
+
+            // encrypt password
             string passwordHash = password.Encrypt();
 
             // look for requested user
-            User u = userDao.GetByName(username);
+            User user = userDao.GetByName(username);
 
-            // do the checks
-            if (u != null) {
+            // checks if all conditions for access are fullfilled
+            if (user != null) {
                 // check if a special privilege is required to login 
-                if (priviligedRequired) {
+                if (mode == LoginMode.PrivilegeRequired) {
                     List<string> privilegedRoles = userDao.GetPrivilegedRoles();
 
-                    if (!privilegedRoles.Contains(u.Role)) {
+                    if (!privilegedRoles.Contains(user.Role)) {
                         return null;
                     }
                 }
 
-                if (u.Password.Equals(passwordHash)) {
-                    authenticatedUser = u;
-                    return u;
+                if (user.PasswordHash.Equals(passwordHash)) {
+                    authenticatedUser = user;
                 }
             }
-            return null;
+            return authenticatedUser;
         }
 
         // reauthenticate user by comparing password hashes
         public bool ReauthenticateUser(User u) {
             User expectedUser = userDao.GetById(u.Id);
-            return (expectedUser != null && u.Password.Equals(expectedUser.Password));
+            return (expectedUser != null && u.PasswordHash.Equals(expectedUser.PasswordHash));
         }
 
         public void LogoutUser() {

@@ -4,14 +4,14 @@ namespace Swk5.GeoCaching.BusinessLogic.StatisticsManager {
     public interface IStatisticsManager {
         DataFilter GetDefaultFilter();
 
-        StatisticDataset GetFoundCachesByUser(DataFilter filter);
-        StatisticDataset GetHiddenCachesByUser(DataFilter filter);
+        StatisticDataset GetUsersByFoundCaches(DataFilter filter);
+        StatisticDataset GetUsersByHiddenCaches(DataFilter filter);
+
+        StatisticDataset GetCachesByRating(DataFilter filter);
+        StatisticDataset GetCachesByLogCount(DataFilter filter);
 
         StatisticDataset GetCacheDistributionBySize(DataFilter filter);
         StatisticDataset GetCacheDistributionByCacheDifficulty(DataFilter filter);
         StatisticDataset GetCacheDistributionByTerrainDifficulty(DataFilter filter);
-
-        StatisticDataset GetBestRatedCaches(DataFilter filter);
-        StatisticDataset GetMostLoggedCaches(DataFilter filter);
     }
 }

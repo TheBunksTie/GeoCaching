@@ -7,7 +7,10 @@ using Swk5.GeoCaching.DomainModel;
 namespace Swk5.GeoCaching.BusinessLogic.UserManager {
     public class UserManager : AbstractManagerBase, IUserManager {       
         private readonly IUserDao userDao = DalFactory.CreateUserDao(database);
-
+        private readonly ILogEntryDao logEntryDao = DalFactory.CreateLogEntryDao(database);
+        private readonly IRatingDao ratingDao = DalFactory.CreateRatingDao(database);
+        private readonly ICacheDao cacheDao = DalFactory.CreateCacheDao(database);
+        
         public List<User> GetUserList() {
             return userDao.GetAll();
         }
@@ -16,12 +19,13 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
             return userDao.GetAllUserRoles();
         }
 
-        public bool UpdateExistingUser(User u) {
-            // encrypt password
-            u.Password = u.Password.Encrypt();
-
+        public bool UpdateExistingUser(User u, bool passwordChanged) {
+            // encrypt password only if changed (if not pw is still hashed)
+            if (passwordChanged) {
+                u.PasswordHash = u.PasswordHash.Encrypt();
+            }
             // validate user input concerning empty fields
-            ValidateUserInput(u);
+            ValidateUser(u);
 
             if (userDao.GetById(u.Id) != null) {
                 // name must be unique, so check if user has not choosen an already exisiting name
@@ -36,41 +40,42 @@ namespace Swk5.GeoCaching.BusinessLogic.UserManager {
 
         public User CreateNewDefaultUser() {
             const string defaultName = "<new user>";
-            User u = null;
 
             // check if there is another "default" user with default name in database
             if (userDao.GetByName(defaultName) == null) {
-                u = new User{Id = -1, Name = defaultName, Password = "".Encrypt(), Email = "my.mail@domain.com", Position = new GeoPosition(47.123, 18.123), Role = "Finder"};
+                User u = new User { Id = -1, Name = defaultName, PasswordHash = "".Encrypt(), Email = "my.mail@domain.com", Position = new GeoPosition(48.363889, 14.519444), Role = "Finder" };
+                
+                // inserts user and updates input user object with assigned id
                 userDao.Insert(u);
+                return u;
             }
-            else {
-                throw new Exception("Error: A user with name " + defaultName + " is already in database.");
-            }
-            return u;
+            throw new Exception("Error: A user with name " + defaultName + " is already in database.");
         }
 
         public bool DeleteUser(int id) {
-            // TODO check for ownership of cache, logs, ratings
-            return userDao.DeleteById(id);
+            bool isDeleteable = (cacheDao.GetByOwner(id).Count == 0);
+            isDeleteable = isDeleteable && (logEntryDao.GetLogentriesForUser(id).Count == 0);
+            isDeleteable = isDeleteable && (ratingDao.GetRatingsForUser(id).Count == 0);
+
+            if (isDeleteable) {
+                return userDao.DeleteById(id);                
+            }           
+            throw new Exception("Error: Unable to delete selected user. User owns caches and/or log entries and/or rating entries.");
         }
 
-        private void ValidateUserInput(User u) {
-            if (u.Name == "") {
+        private void ValidateUser(User u) {
+            if (u.Name.Length < 1) {
                 throw new Exception("Error: User name must no be empty.");
             }
-
-            if (u.Password.Length < 3) {
-                throw new Exception("Error: Password is not adequate. (3 chars or more)");
-            }
-
-            if (u.Role == "") {
+           
+            if (u.Role.Length < 1) {
                 throw new Exception("Error: User role must not be empty.");
             }
 
-            if (u.Email == "") {
+            if (u.Email.Length < 1) {
                 throw new Exception("Error: User email address must not be empty.");
             }
-
+            
             if (u.Position.Latitude < 0 && u.Position.Longitude < 0) {
                 throw new Exception("Error: Position is invalid.");
             }

@@ -4,12 +4,13 @@ using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
     public interface ICacheManager {
+
+        // returns the currently authenticated user
+        User GetAuthenticatedUser();
+           
         // retrieve list of all existing caches
-        List<Cache> GetCacheList();
-
-        // retrieve filtered subset of all caches
-        List<Cache> GetFilteredCacheList(FilterCriterium criterium, FilterOperation operation, string filterValue);
-
+        //List<Cache> GetCacheList();
+       
         // retrieve filtered subset of all caches
         List<Cache> GetFilteredCacheList(DataFilter filter);
 
@@ -34,8 +35,9 @@ namespace Swk5.GeoCaching.BusinessLogic.CacheManager {
         // upload and associate a certain image with a cache
         Image UploadImage(int cacheId, Stream imageStream, string fileExtension);
 
+        // creates a new default cache at the provided position, owner should authenticated user
         Cache CreateNewPositionedCache(int ownerId, double latitude, double longitude);
-
+      
         // only updates exisiting cache
         bool UpdateExisitingCache(Cache c);
 
