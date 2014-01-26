@@ -20,7 +20,7 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetAllTest() {
-            const int ratingsCnt = 6735;
+            const int ratingsCnt = 6737;
             IList<Rating> actual = target.GetAll();
             Assert.AreEqual(ratingsCnt, actual.Count);
         }

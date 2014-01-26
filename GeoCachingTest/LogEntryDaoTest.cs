@@ -20,7 +20,7 @@ namespace GeoCachingTest {
 
         [TestMethod]
         public void GetAllTest() {
-            const int expected = 6952;
+            const int expected = 6956;
             IList<LogEntry> actual = target.GetAll();
             Assert.AreEqual(expected, actual.Count);
         }

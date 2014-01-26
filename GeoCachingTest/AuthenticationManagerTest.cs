@@ -10,31 +10,38 @@ namespace GeoCachingTest {
 
         [TestInitialize]
         public void Initialize() {
-            authManager = GeoCachingBLFactory.GetAuthentificationManager();
+            authManager = GeoCachingBLFactory.GetAuthenticationManager();
         }
 
         [TestMethod]
         public void AuthenticateUserTest() {
             const string username = "Sookie514";
             const string password = "test";
-            const bool priviligedRequired = false;
-
+            
             User expected = new User {
                 Id = 210,
                 Name = username,
-                Password = password.Encrypt(),
+                PasswordHash = password.Encrypt(),
                 Email = "Sookie514@domain.at",
                 Position = new GeoPosition(48.149303, 13.765459),
             };
 
-            User actual = authManager.AuthenticateUser(username, password, priviligedRequired);
+            User actual = authManager.AuthenticateUser(username, password, LoginMode.GeneralAccessible);
             Assert.AreEqual(expected, actual);
 
             Assert.AreEqual(expected, authManager.AuthenticatedUser);
             authManager.LogoutUser();
 
             Assert.IsNull(authManager.AuthenticatedUser);
+        }
 
+        [TestMethod]
+        public void NonAuthenticateUserTest ( ) {
+            const string username = "Sookie514";
+            const string password = "test";
+
+            // does not authenticate because user has no privilege
+            Assert.IsNull(authManager.AuthenticateUser(username, password, LoginMode.PrivilegeRequired));
         }
     }
 }

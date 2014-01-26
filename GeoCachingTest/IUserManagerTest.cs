@@ -17,14 +17,14 @@ namespace GeoCachingTest {
         }
         
         [TestMethod]
-        public void CreateNewDefaultUserTest() {
-            User expected = new User { Id = -1, Name = "<new user>", Password = "".Encrypt(), Email = "my.mail@domain.com", Position = new GeoPosition(47.123, 18.123), Role = "Finder" };
+        public void CreateNewDefaultUserTest(bool passwordChanged) {
+            User expected = new User { Id = -1, Name = "<new user>", PasswordHash = "".Encrypt(), Email = "my.mail@domain.com", Position = new GeoPosition(47.123, 18.123), Role = "Finder" };
             User actual = uManager.CreateNewDefaultUser();
-            Assert.AreEqual(expected.Password, actual.Password);
+            Assert.AreEqual(expected.PasswordHash, actual.PasswordHash);
             Assert.AreEqual(expected.Position, actual.Position);
 
             actual.Role = "Superuser";
-            Assert.IsTrue(uManager.UpdateExistingUser(actual));
+            Assert.IsTrue(uManager.UpdateExistingUser(actual, passwordChanged));
 
             Assert.IsTrue(uManager.DeleteUser(actual.Id));
         }
@@ -32,7 +32,7 @@ namespace GeoCachingTest {
         [TestMethod]
         public void GetUserListTest() {            
             List<User> actual = uManager.GetUserList();
-            Assert.AreEqual(240, actual.Count);
+            Assert.AreEqual(241, actual.Count);
         }
 
         [TestMethod]
