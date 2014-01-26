@@ -25,6 +25,17 @@ public interface GeoCachingServiceSoap {
 
     /**
      * 
+     * @return
+     *     returns boolean
+     */
+    @WebMethod(operationName = "IsServiceAvailable", action = "http://GeoCaching.Services/IsServiceAvailable")
+    @WebResult(name = "IsServiceAvailableResult", targetNamespace = "http://GeoCaching.Services/")
+    @RequestWrapper(localName = "IsServiceAvailable", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.IsServiceAvailable")
+    @ResponseWrapper(localName = "IsServiceAvailableResponse", targetNamespace = "http://GeoCaching.Services/", className = "at.wea5.geocaching.webserviceproxy.IsServiceAvailableResponse")
+    public boolean isServiceAvailable();
+
+    /**
+     * 
      * @param username
      * @param password
      * @return

@@ -27,8 +27,8 @@ import at.wea5.geocaching.Util;
  *         &lt;element name="CacheName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="FromPosition" type="{http://GeoCaching.Services/}GeoPosition"/>
  *         &lt;element name="ToPosition" type="{http://GeoCaching.Services/}GeoPosition"/>
- *         &lt;element name="FromCreationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="ToCreationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
+ *         &lt;element name="FromDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
+ *         &lt;element name="ToDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *         &lt;element name="FromCacheSize" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="ToCacheSize" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="FromCacheDifficulty" type="{http://www.w3.org/2001/XMLSchema}double"/>
@@ -49,8 +49,8 @@ import at.wea5.geocaching.Util;
     "cacheName",
     "fromPosition",
     "toPosition",
-    "fromCreationDate",
-    "toCreationDate",
+    "fromDate",
+    "toDate",
     "fromCacheSize",
     "toCacheSize",
     "fromCacheDifficulty",
@@ -67,12 +67,12 @@ public class DataFilter {
     protected GeoPosition fromPosition;
     @XmlElement(name = "ToPosition", required = true)
     protected GeoPosition toPosition;
-    @XmlElement(name = "FromCreationDate", required = true)
+    @XmlElement(name = "FromDate", required = true)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fromCreationDate;
-    @XmlElement(name = "ToCreationDate", required = true)
+    protected XMLGregorianCalendar fromDate;
+    @XmlElement(name = "ToDate", required = true)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar toCreationDate;
+    protected XMLGregorianCalendar toDate;
     @XmlElement(name = "FromCacheSize")
     protected int fromCacheSize;
     @XmlElement(name = "ToCacheSize")
@@ -161,75 +161,74 @@ public class DataFilter {
     }
 
     /**
-     * Ruft den Wert der fromCreationDate-Eigenschaft ab.
+     * Ruft den Wert der fromDate-Eigenschaft ab.
      * 
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getFromCreationDate() {
-        return fromCreationDate;
+    public XMLGregorianCalendar getFromDate() {
+        return fromDate;
     }
 
     /**
-     * Legt den Wert der fromCreationDate-Eigenschaft fest.
+     * Legt den Wert der fromDate-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setFromCreationDate(XMLGregorianCalendar value) {
-        this.fromCreationDate = value;
+    public void setFromDate(XMLGregorianCalendar value) {
+        this.fromDate = value;
     }
 
     /**
-     * Ruft den Wert der toCreationDate-Eigenschaft ab.
+     * Ruft den Wert der toDate-Eigenschaft ab.
      * 
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getToCreationDate() {
-        return toCreationDate;
+    public XMLGregorianCalendar getToDate() {
+        return toDate;
     }
 
-    // -------------------- manually added getter/setter for better data-format handling
-    
-    public Date getFromJavaDate() {        
-        return fromCreationDate.toGregorianCalendar().getTime();
-    }
-    
-    public void setFromJavaDate(Date value) throws DatatypeConfigurationException {        
-        this.fromCreationDate = Util.convertToXML(value);
-    }
-
-    public Date getToJavaDate() {
-        return toCreationDate.toGregorianCalendar().getTime();
+    /**
+     * Legt den Wert der toDate-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+    public void setToDate(XMLGregorianCalendar value) {
+        this.toDate = value;
     }
 
-    public void setToJavaDate(Date value) throws DatatypeConfigurationException {
-        this.toCreationDate = Util.convertToXML(value);
-    }
+// -------------------- manually added getter/setter for better data-format handling
+
+public Date getFromJavaDate() {        
+    return fromDate.toGregorianCalendar().getTime();
+}
+
+public void setFromJavaDate(Date value) throws DatatypeConfigurationException {        
+    this.fromDate = Util.convertToXML(value);
+}
+
+public Date getToJavaDate() {
+    return toDate.toGregorianCalendar().getTime();
+}
+
+public void setToJavaDate(Date value) throws DatatypeConfigurationException {
+    this.toDate = Util.convertToXML(value);
+}
         
     // -------------------------------------------------------------------------------------------
     
     
-    
-    /**
-     * Legt den Wert der toCreationDate-Eigenschaft fest.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public void setToCreationDate(XMLGregorianCalendar value) {
-        this.toCreationDate = value;
-    }
-
     /**
      * Ruft den Wert der fromCacheSize-Eigenschaft ab.
      * 

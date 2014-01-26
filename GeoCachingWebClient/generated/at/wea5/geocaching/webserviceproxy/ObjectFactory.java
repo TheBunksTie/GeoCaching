@@ -214,6 +214,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link IsServiceAvailable }
+     * 
+     */
+    public IsServiceAvailable createIsServiceAvailable() {
+        return new IsServiceAvailable();
+    }
+
+    /**
      * Create an instance of {@link GetMostLoggedCachesResponse }
      * 
      */
@@ -283,6 +291,14 @@ public class ObjectFactory {
      */
     public GetCacheDistributionBySizeResponse createGetCacheDistributionBySizeResponse() {
         return new GetCacheDistributionBySizeResponse();
+    }
+
+    /**
+     * Create an instance of {@link IsServiceAvailableResponse }
+     * 
+     */
+    public IsServiceAvailableResponse createIsServiceAvailableResponse() {
+        return new IsServiceAvailableResponse();
     }
 
     /**

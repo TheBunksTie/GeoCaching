@@ -19,8 +19,9 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="Data" type="{http://GeoCaching.Services/}ArrayOfStatisticData" minOccurs="0"/>
  *         &lt;element name="Caption" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="ColumnCaption2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="ColumnCaption3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="NrColumnRequired" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="Column2Caption" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="Column3Caption" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,8 +34,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "StatisticDataset", propOrder = {
     "data",
     "caption",
-    "columnCaption2",
-    "columnCaption3"
+    "nrColumnRequired",
+    "column2Caption",
+    "column3Caption"
 })
 public class StatisticDataset {
 
@@ -42,10 +44,12 @@ public class StatisticDataset {
     protected ArrayOfStatisticData data;
     @XmlElement(name = "Caption")
     protected String caption;
-    @XmlElement(name = "ColumnCaption2")
-    protected String columnCaption2;
-    @XmlElement(name = "ColumnCaption3")
-    protected String columnCaption3;
+    @XmlElement(name = "NrColumnRequired")
+    protected boolean nrColumnRequired;
+    @XmlElement(name = "Column2Caption")
+    protected String column2Caption;
+    @XmlElement(name = "Column3Caption")
+    protected String column3Caption;
 
     /**
      * Ruft den Wert der data-Eigenschaft ab.
@@ -96,51 +100,67 @@ public class StatisticDataset {
     }
 
     /**
-     * Ruft den Wert der columnCaption2-Eigenschaft ab.
+     * Ruft den Wert der nrColumnRequired-Eigenschaft ab.
+     * 
+     */
+    public boolean isNrColumnRequired() {
+        return nrColumnRequired;
+    }
+
+    /**
+     * Legt den Wert der nrColumnRequired-Eigenschaft fest.
+     * 
+     */
+    public void setNrColumnRequired(boolean value) {
+        this.nrColumnRequired = value;
+    }
+
+    /**
+     * Ruft den Wert der column2Caption-Eigenschaft ab.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getColumnCaption2() {
-        return columnCaption2;
+    public String getColumn2Caption() {
+        return column2Caption;
     }
 
     /**
-     * Legt den Wert der columnCaption2-Eigenschaft fest.
+     * Legt den Wert der column2Caption-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setColumnCaption2(String value) {
-        this.columnCaption2 = value;
+    public void setColumn2Caption(String value) {
+        this.column2Caption = value;
     }
 
     /**
-     * Ruft den Wert der columnCaption3-Eigenschaft ab.
+     * Ruft den Wert der column3Caption-Eigenschaft ab.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getColumnCaption3() {
-        return columnCaption3;
+    public String getColumn3Caption() {
+        return column3Caption;
     }
 
     /**
-     * Legt den Wert der columnCaption3-Eigenschaft fest.
+     * Legt den Wert der column3Caption-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setColumnCaption3(String value) {
-        this.columnCaption3 = value;
+    public void setColumn3Caption(String value) {
+        this.column3Caption = value;
     }
 
 }

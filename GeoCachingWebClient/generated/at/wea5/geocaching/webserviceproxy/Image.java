@@ -1,10 +1,17 @@
 
 package at.wea5.geocaching.webserviceproxy;
 
+import java.io.ByteArrayInputStream;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 
 /**
@@ -47,6 +54,23 @@ public class Image {
     @XmlElement(name = "FileName")
     protected String fileName;
 
+    // -------------- manually added getter for rendering of images out of a byte array
+    
+    public StreamedContent getImage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+            return new DefaultStreamedContent();
+        } 
+        else {
+            try {
+                
+                return new DefaultStreamedContent(new ByteArrayInputStream(this.imageData), "image/jpg");
+            } 
+            catch (Exception e) {}
+        }
+        return new DefaultStreamedContent();
+    }
+    
     /**
      * Ruft den Wert der imageData-Eigenschaft ab.
      * 

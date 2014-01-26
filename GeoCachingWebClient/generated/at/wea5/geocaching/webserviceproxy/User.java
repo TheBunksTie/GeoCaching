@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="Id" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="Name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="Password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="PasswordHash" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Position" type="{http://GeoCaching.Services/}GeoPosition"/>
  *         &lt;element name="Role" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "User", propOrder = {
     "id",
     "name",
-    "password",
+    "passwordHash",
     "email",
     "position",
     "role"
@@ -46,8 +46,8 @@ public class User {
     protected int id;
     @XmlElement(name = "Name")
     protected String name;
-    @XmlElement(name = "Password")
-    protected String password;
+    @XmlElement(name = "PasswordHash")
+    protected String passwordHash;
     @XmlElement(name = "Email")
     protected String email;
     @XmlElement(name = "Position", required = true)
@@ -96,27 +96,27 @@ public class User {
     }
 
     /**
-     * Ruft den Wert der password-Eigenschaft ab.
+     * Ruft den Wert der passwordHash-Eigenschaft ab.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
     /**
-     * Legt den Wert der password-Eigenschaft fest.
+     * Legt den Wert der passwordHash-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setPassword(String value) {
-        this.password = value;
+    public void setPasswordHash(String value) {
+        this.passwordHash = value;
     }
 
     /**
