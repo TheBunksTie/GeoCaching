@@ -1,6 +1,9 @@
 package at.wea5.geocaching.business;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Enumeration;
+import java.util.logging.Logger;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -8,22 +11,41 @@ import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 
+import at.wea5.geocaching.Settings;
 import at.wea5.geocaching.webserviceproxy.DataFilter;
 import at.wea5.geocaching.webserviceproxy.GeoCachingService;
 import at.wea5.geocaching.webserviceproxy.GeoCachingServiceSoap;
-import at.wea5.geocaching.webserviceproxy.GeoPosition;
 
 public abstract class ManagerBase {
+    
 //------------------------------------ constructor ------------------------------------
-    protected ManagerBase() {
-        GeoCachingService factory = new GeoCachingService();
-        geoCachingWsProxy = factory.getGeoCachingServiceSoap();
+    protected ManagerBase() {       
         
-        defaultFilter = geoCachingWsProxy.computeDefaultFilter();
+        try {            
+            // dynamically conenct to configured ws and create proxy        
+            Service factory = Service.create(new URL(Settings.getWsWsdlPath()), new QName(Settings.getWsNamespaceUri(), Settings.getWsServiceName()));            
+            geoCachingWsProxy = factory.getPort(GeoCachingServiceSoap.class);
+            
+            // check if ws itself has connection to its databackend            
+            if (geoCachingWsProxy.isServiceAvailable()) {
+
+                // get default values for filter
+                activeFilter = geoCachingWsProxy.computeDefaultFilter();
+                isServiceAvailable = true;
+
+            }
+            else {
+                setErrorMessage("WebService is unavailable.");
+            }            
+        } 
+        catch (MalformedURLException e) {
+            log.severe(e.getMessage());
+            setErrorMessage("WebService is unavailable.");            
+        }
         
-        // copy values from defaultFilter to active filter
-        activeFilter = defaultFilter;        
     }
 
 //-------------------------------------- public ---------------------------------------
@@ -89,47 +111,15 @@ public abstract class ManagerBase {
         error.addErrorMessage(message);
     }
     
-    protected void loadDefaultFilter() {
-        defaultFilter = geoCachingWsProxy.computeDefaultFilter();        
-        
-        activeFilter = defaultFilter;
-        //setFilterToDefault();
+    protected DataFilter getDefaultFilter() {
+        return geoCachingWsProxy.computeDefaultFilter();               
     }
-    
-    protected void setFilterToDefault() {
-        activeFilter.setFromCacheDifficulty(defaultFilter.getFromCacheDifficulty());
-        activeFilter.setToCacheDifficulty(defaultFilter.getToCacheDifficulty());
         
-        activeFilter.setFromTerrainDifficulty(defaultFilter.getFromTerrainDifficulty());
-        activeFilter.setToTerrainDifficulty(defaultFilter.getToTerrainDifficulty());
-        
-        activeFilter.setFromCacheSize(defaultFilter.getFromCacheSize());
-        activeFilter.setToCacheSize(defaultFilter.getToCacheSize());
-        
-        GeoPosition from = new GeoPosition();
-        from.setLatitude(defaultFilter.getFromPosition().getLatitude());
-        from.setLongitude(defaultFilter.getFromPosition().getLongitude());
-        
-        activeFilter.setFromPosition(from);
-        
-        GeoPosition to = new GeoPosition();
-        to.setLatitude(defaultFilter.getToPosition().getLatitude());
-        to.setLongitude(defaultFilter.getToPosition().getLongitude());
-        
-        activeFilter.setToPosition(to);
-    }
-    
 //-------------------------------------- members --------------------------------------
-    //private static final Logger log = Logger.getLogger(ManagerBase.class.getName());
-    
-    // TODO make configurable via context initializer and static 
-    private static final String serviceAddr  = "http://localhost:2037/GeoCachingService.asmx";
-    private static final String wsdl         = serviceAddr + "?wsdl";
-    private static final String namespaceURI = "http://GeoCaching.Services//";
-    private static final String serviceName  = "GeoCachingWebService";
-    
-    protected GeoCachingServiceSoap geoCachingWsProxy = null;
-    protected DataFilter activeFilter = new DataFilter();
-    protected DataFilter defaultFilter;
 
+    protected GeoCachingServiceSoap geoCachingWsProxy = null;
+    protected DataFilter activeFilter;
+    protected boolean isServiceAvailable = false;
+    
+    private static final Logger log = Logger.getLogger(ManagerBase.class.getName());
 }

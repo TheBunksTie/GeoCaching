@@ -4,6 +4,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import at.wea5.geocaching.Settings;
+
 
 /**
  * This class gets initialized when the web application is started.
@@ -12,18 +14,21 @@ import javax.servlet.ServletContextListener;
  */
 public class ContextListenerInitializer implements ServletContextListener {
     
-    public void contextInitialized(ServletContextEvent contextEvent) {
-          ServletContext sc = contextEvent.getServletContext();
-          
-          // TODO define required parameters
-          String dsn = sc.getInitParameter("DB_DSN");
-          String user = sc.getInitParameter("DB_USER");
-          String password = sc.getInitParameter("DB_PASSWORD");
-          String delegateClass = sc.getInitParameter("Shop_DELEGATE");
-          
-          // TODO implement service locator
-          //ServiceLocator.getInstance().init(dsn, user, password, delegateClass);
-    }
+public void contextInitialized(ServletContextEvent contextEvent) {
+      ServletContext sc = contextEvent.getServletContext();
+      
+      // retrieve required parameters from web.xml (mainly WS-Configuration)
+      String serviceHost = sc.getInitParameter("WS_HOST");
+      String servicePort = sc.getInitParameter("WS_PORT");
+      String serviceFile = sc.getInitParameter("WS_SERVICE_FILE");
+      String nameSpaceURI = sc.getInitParameter("WS_NAMESPACE_URI");
+      String serviceName = sc.getInitParameter("WS_SERVICE_NAME");
+      
+      String wsdlUrl = "http://" + serviceHost + ":" + servicePort + "/" + serviceFile + "?wsdl";
+      
+      // pass on option to settings class
+      Settings.setWsDetails(wsdlUrl, nameSpaceURI, serviceName);
+}
 
     
     public void contextDestroyed(ServletContextEvent arg0) {

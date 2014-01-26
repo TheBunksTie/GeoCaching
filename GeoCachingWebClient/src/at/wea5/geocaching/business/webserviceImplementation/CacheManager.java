@@ -33,28 +33,28 @@ public class CacheManager extends ManagerBase {
 //------------------------------------ constructor ------------------------------------
     
     public CacheManager() {
-        // loads default filter
+        // tries to connect to configured webservice and loads default filter
         super();
         
+        
         // load whole cache list        
+        loadCacheSizes();
         loadCaches();
-        fillMapModel();
+        fillMapModel();     
     }
 
 //-------------------------------------- public ---------------------------------------
           
-    public String showDetailsFromMap() {
+    public String getMapCenter() {        
         try {
-            // read id of requested cache and retrieve all details via webservice
-            int cacheId = ((Cache)currentMarker.getData()).getId();
-            return showDetails(cacheId);
+            User u = getCurrentUser(); 
+            return u.getPosition().getLatitude() + "," + u.getPosition().getLongitude();
         }
-        catch (Exception e) {            
-            log.severe(e.getMessage());
-            setErrorMessage("Unable to show requested details for cache.");            
-        }
-        return Settings.CacheView;
-    }    
+        catch (Exception e) {
+            // default coordinates are the ones if Hagenberg
+            return "48.363889,14.519444";
+        }       
+    }
     
     public String showDetailsFromList() {
         try {
@@ -69,10 +69,10 @@ public class CacheManager extends ManagerBase {
              
     public String getFilteredCacheList() {        
         
-        // reset filter to default values
-        //setFilterToDefault();
+        // reset filter to default values and afterwards check 
+        // for any user-provided filter restrictions
         
-        activeFilter = defaultFilter;
+        activeFilter = getDefaultFilter();
         
         try {
             // process requested filters            
@@ -90,24 +90,26 @@ public class CacheManager extends ManagerBase {
             }
             
             if (cacheDifficultyFiltered) {
-                // get passed paramters from session context
+                // get passed parameters from session context
                 activeFilter.setFromCacheDifficulty(Double.parseDouble(getRequestParameterValue("cacheDifficultyFrom")));
                 activeFilter.setToCacheDifficulty(Double.parseDouble(getRequestParameterValue("cacheDifficultyTo")));
             }
             
             if (terrainDifficultyFiltered) {
-                // get passed paramters from session context
+                // get passed parameters from session context
                 activeFilter.setFromTerrainDifficulty(Double.parseDouble(getRequestParameterValue("terrainDifficultyFrom")));
                 activeFilter.setToTerrainDifficulty(Double.parseDouble(getRequestParameterValue("terrainDifficultyTo")));
             }
             
             if (sizeFiltered) {
-                // get passed paramters from session context
+                // get passed parameters from session context
+                //log.severe(getRequestParameterValue("sizeFrom"));
                 activeFilter.setFromCacheSize(Integer.parseInt(getRequestParameterValue("sizeFrom")));
                 activeFilter.setToCacheSize(Integer.parseInt(getRequestParameterValue("sizeTo")));
             }
             
             loadCaches();
+            fillMapModel();
         }
         catch (NumberFormatException ne) {            
             setErrorMessage("One (or more) of the entered filter values is invalid.");            
@@ -118,14 +120,7 @@ public class CacheManager extends ManagerBase {
         }                
         return Settings.CacheView;
     }
-    
-    public String resetFilter() {        
-        loadDefaultFilter();        
-        loadCaches();
         
-        return Settings.CacheView;
-    }
-    
     public String rateCurrentCache() {
         try {            
             // check entered rating value
@@ -210,13 +205,15 @@ public class CacheManager extends ManagerBase {
     }
     
     public void onMarkerSelect(OverlaySelectEvent event) {  
-        currentMarker = (Marker) event.getOverlay();  
-    }  
-    
-    
-    public MapModel getMapModel() {
-        return mapModel;
+        currentMarker = (Marker) event.getOverlay();
         
+        // also set currentCache for display of information
+        int cacheId = ((Cache)currentMarker.getData()).getId();
+        currentCache = geoCachingWsProxy.getDetailedCache(cacheId);
+    }  
+        
+    public MapModel getMapModel() {
+        return mapModel;        
     }
     
     public Marker getCurrentMarker() {  
@@ -231,8 +228,11 @@ public class CacheManager extends ManagerBase {
         return currentCache;
     }
          
+    public List<CacheSizeItem> getCacheSizeList() {
+        return cacheSizes;
+    }
+    
     public List<Cache> getCacheList() {
-        // TODO check if running
         return caches;
     }
     
@@ -283,7 +283,27 @@ public class CacheManager extends ManagerBase {
     public boolean getCacheFound() {
         return cacheFound;
     }
-        
+    
+    public String getFromSizeFilter() {
+        return Integer.toString(activeFilter.getFromCacheSize());
+    }
+    
+    public void setFromSizeFilter(String id) {
+        activeFilter.setFromCacheSize(Integer.parseInt(id));
+    }
+    
+    public String getToSizeFilter() {
+        return Integer.toString(activeFilter.getToCacheSize());
+    }
+     
+    public void setToSizeFilter(String id) {
+        activeFilter.setToCacheSize(Integer.parseInt(id));
+    }
+    
+    public boolean getIsImageListEmpty() {
+        return (currentCache.getImages().getImage().size() == 0);
+    }
+    
 //------------------------------------- private ---------------------------------------
     
     private String showDetails(int id) {        
@@ -315,8 +335,17 @@ public class CacheManager extends ManagerBase {
         }
     }
     
-    private void loadCaches() {        
-        caches.clear();        
+    private void loadCacheSizes() {
+        cacheSizes.clear();
+        
+        int i = 1;
+        for (String size : geoCachingWsProxy.getCacheSizeList().getString()) {
+            cacheSizes.add(new CacheSizeItem(size, Integer.toString(i)));
+            i++;
+        }       
+    }
+    
+    private void loadCaches() {    
         caches = geoCachingWsProxy.getFilteredCacheList(activeFilter).getCache();
     }
        
@@ -329,11 +358,12 @@ public class CacheManager extends ManagerBase {
         }
         
     }
-    
+        
 //-------------------------------------- members --------------------------------------
         
     private CacheDetails currentCache;
-    private List<Cache> caches = new ArrayList<Cache>();
+    private List<Cache> caches;
+    private List<CacheSizeItem> cacheSizes = new ArrayList<CacheSizeItem>(); 
     
     private Marker currentMarker;
     private MapModel mapModel;
@@ -345,6 +375,5 @@ public class CacheManager extends ManagerBase {
     
     private boolean cacheFound;
     
-    private static final Logger log = Logger.getLogger(CacheManager.class.getName());
-    
+    private static final Logger log = Logger.getLogger(CacheManager.class.getName());    
 }

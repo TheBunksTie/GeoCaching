@@ -23,11 +23,7 @@ public class AuthenticationManager extends ManagerBase {
 //------------------------------------ constructor ------------------------------------
 
 //-------------------------------------- public ---------------------------------------
-    
-    public String getUsername() {
-        return userdata.getName();
-    }
-    
+       
     public boolean getLoggedIn() {
         return (userdata != null);
     }
@@ -44,7 +40,7 @@ public class AuthenticationManager extends ManagerBase {
             if (userdata != null) {
                 FacesContext.getCurrentInstance().getExternalContext().getSession(true);
                                 
-                return "HomeEvent";
+                return Settings.HomeView;
             }
             else {
                 // back to login page and display error message

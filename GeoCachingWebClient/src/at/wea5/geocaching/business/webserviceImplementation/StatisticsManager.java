@@ -20,7 +20,7 @@ public class StatisticsManager extends ManagerBase {
 
 //------------------------------------ constructor ------------------------------------
     public StatisticsManager() {
-        // loads default filter
+        // tries to connectn to configured webservice and loads default filter
         super();
         
         // load most famous caches as default statistic
@@ -112,12 +112,7 @@ public class StatisticsManager extends ManagerBase {
         
         return Settings.StatisticsView;
     }
-    
-    public String resetFilter() {
-        loadDefaultFilter();
-        return Settings.StatisticsView;
-    }  
-    
+        
     public int getNrOfData() {
         return currentDataset.getData().getStatisticData().size();               
     }
@@ -200,11 +195,7 @@ public class StatisticsManager extends ManagerBase {
         private AvailableDatasets(int code) {
             this.code = code;
         }
-              
-        public int toCode() {
-            return code;
-        }
-        
+                      
         public String toStringCode() {
             return Integer.toString(code);
         }
