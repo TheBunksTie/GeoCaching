@@ -37,8 +37,10 @@ namespace Swk5.GeoCaching.DomainModel {
     }
 
     public enum StatisticalOperation {
-        CachesFoundByUser,
-        CachesHiddenByUser,
+        UsersByFoundCaches,
+        UsersByHiddenCaches,
+        CachesByRating,
+        CachesByLogEntrNr,
         CacheDistributionBySize,
         CacheDistributionByCacheDifficulty,
         CacheDistributionByTerrainDifficulty
@@ -46,11 +48,17 @@ namespace Swk5.GeoCaching.DomainModel {
 
     public static class StatisticalOperationExtension {
         public static string UiCaption(this StatisticalOperation operation) {
-            if (operation == StatisticalOperation.CachesFoundByUser) {
+            if (operation == StatisticalOperation.UsersByFoundCaches) {
                 return "Users ordered by number of found caches";
             }
-            if (operation == StatisticalOperation.CachesHiddenByUser) {
+            if (operation == StatisticalOperation.UsersByHiddenCaches) {
                 return "Users ordered by number of hidden caches";
+            }
+            if ( operation == StatisticalOperation.CachesByRating) {
+                return "Best rated caches";
+            }
+            if ( operation == StatisticalOperation.CachesByLogEntrNr) {
+                return "Most logged caches";
             }
 
             if (operation == StatisticalOperation.CacheDistributionBySize) {
