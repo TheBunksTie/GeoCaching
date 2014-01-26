@@ -21,9 +21,10 @@ namespace GeoCaching.Services {
 
         public GeoCachingService() {
             try {
-                authenticationManager = GeoCachingBLFactory.GetAuthentificationManager();
+                authenticationManager = GeoCachingBLFactory.GetAuthenticationManager();
                 cacheManager = GeoCachingBLFactory.GetCacheManager();
                 statisticsManager = GeoCachingBLFactory.GetStatisticsManager();
+                backendRunning = true;
             }
             catch {
                 // in case of any exception when creating "connection" to backend, set flag 
@@ -32,95 +33,175 @@ namespace GeoCaching.Services {
             }
         }
 
+        // -------------------------------- Service Available ----------------------------
+        [WebMethod]
+        public bool IsServiceAvailable() {
+            return backendRunning;
+        }
+
         // -------------------------------- Authentication -------------------------------
 
         [WebMethod]
         public User AuthenticateUser(string username, string password) {
-            return backendRunning ? authenticationManager.AuthenticateUser(username, password, false) : null;
+            try {
+                return backendRunning ? authenticationManager.AuthenticateUser(username, password, LoginMode.GeneralAccessible): null;
+            }
+            catch {                
+                return null;
+            }             
         }
 
         // ------------------------------------- Caches ----------------------------------
 
         [WebMethod]
         public List<Cache> GetFilteredCacheList(DataFilter filter) {
-            return backendRunning ? cacheManager.GetFilteredCacheList(filter) : null;
+            try {
+                return backendRunning ? cacheManager.GetFilteredCacheList(filter) : null;
+            }
+            catch {
+                return null;
+            }
         }
 
         [WebMethod]
         public DataFilter ComputeDefaultFilter() {
-            return backendRunning ? cacheManager.GetDefaultFilter() : null;
+            try {
+                return backendRunning ? cacheManager.GetDefaultFilter(): null;
+            }
+            catch {
+                return null;
+            }            
         }
 
         [WebMethod]
         public List<string> GetCacheSizeList() {
-            return backendRunning ? cacheManager.GetCacheSizeList() : null;
+            try {
+                return backendRunning ? cacheManager.GetCacheSizeList() : null;
+            }
+            catch {
+                return null;
+            }            
         }
 
         [WebMethod]
         public CacheDetails GetDetailedCache(int cacheId) {
-            return backendRunning
-                ? new CacheDetails {
-                    Cache = cacheManager.GetCacheById(cacheId),
-                    Images = cacheManager.GetImagesForCache(cacheId),
-                    LogEntries = cacheManager.GetLogEntriesforCache(cacheId),
-                    Rating = cacheManager.GetAverageRatingForCache(cacheId)
-                }
-                : null;
+            try {
+                return backendRunning
+                    ? new CacheDetails {
+                        Cache = cacheManager.GetCacheById(cacheId),
+                        Images = cacheManager.GetImagesForCache(cacheId),
+                        LogEntries = cacheManager.GetLogEntriesforCache(cacheId),
+                        Rating = cacheManager.GetAverageRatingForCache(cacheId)
+                    }
+                    : null;
+            }
+            catch {
+                return null;
+            }
         }
 
         // ----------------------------------- Logentries ---------------------------------
 
         [WebMethod]
         public bool AddLogEntryForCache(User requestingUser, LogEntry logEntry) {
-            return backendRunning && authenticationManager.ReauthenticateUser(requestingUser) &&
-                   cacheManager.AddLogEntryForCache(logEntry);
+            try {
+                return backendRunning && authenticationManager.ReauthenticateUser(requestingUser) &&
+                       cacheManager.AddLogEntryForCache(logEntry);
+            }
+            catch {
+                return false;
+            }
         }
 
         // ------------------------------------ Ratings  ----------------------------------
 
         [WebMethod]
         public bool AddRatingForCache(User requestingUser, Rating rating) {
-            return backendRunning && authenticationManager.ReauthenticateUser(requestingUser) &&
-                   cacheManager.AddRatingForCache(rating);
+            try {
+                return backendRunning && authenticationManager.ReauthenticateUser(requestingUser) &&
+                       cacheManager.AddRatingForCache(rating);
+            }
+            catch {
+                return false;
+            }
         }
-        
+
         // ------------------------------ Statistics: Top Lists ----------------------------
-        
+
         [WebMethod]
         public StatisticDataset GetUserByFoundCaches(DataFilter filter) {
-            return backendRunning ? statisticsManager.GetFoundCachesByUser(filter) : null;
+            try {
+                return backendRunning ? statisticsManager.GetUsersByFoundCaches(filter) : null;
+            }
+            catch  {                
+                return null;
+            }            
         }
 
         [WebMethod]
         public StatisticDataset GetUserByHiddenCaches(DataFilter filter) {
-            return backendRunning ? statisticsManager.GetHiddenCachesByUser(filter) : null;
+            try {
+                return backendRunning ? statisticsManager.GetUsersByHiddenCaches(filter) : null;
+            }
+            catch {
+                return null;
+            }
+            
         }
 
         [WebMethod]
-        public StatisticDataset GetBestRatedCache ( DataFilter filter ) {
-            return backendRunning ? statisticsManager.GetBestRatedCaches(filter) : null;
+        public StatisticDataset GetBestRatedCache(DataFilter filter) {
+            try {
+                return backendRunning ? statisticsManager.GetCachesByRating(filter) : null;
+            }
+            catch {
+                return null;
+            }
+            
         }
 
         [WebMethod]
-        public StatisticDataset GetMostLoggedCaches ( DataFilter filter ) {
-            return backendRunning ? statisticsManager.GetMostLoggedCaches(filter) : null;
+        public StatisticDataset GetMostLoggedCaches(DataFilter filter) {
+            try {
+                return backendRunning ? statisticsManager.GetCachesByLogCount(filter) : null;
+            }
+            catch {
+                return null;
+            }
+            
         }
 
         // ---------------------------- Statistics: Distributions --------------------------
 
         [WebMethod]
         public StatisticDataset GetCacheDistributionBySize(DataFilter filter) {
-            return backendRunning ? statisticsManager.GetCacheDistributionBySize(filter) : null;
+            try {
+                return backendRunning ? statisticsManager.GetCacheDistributionBySize(filter) : null;
+            }
+            catch {
+                return null;
+            }            
         }
 
         [WebMethod]
         public StatisticDataset GetCacheDistributionByCacheDifficulty(DataFilter filter) {
-            return backendRunning ? statisticsManager.GetCacheDistributionByCacheDifficulty(filter) : null;
+            try {
+                return backendRunning ? statisticsManager.GetCacheDistributionByCacheDifficulty(filter) : null;
+            }
+            catch {
+                return null;
+            }
+            
         }
 
         [WebMethod]
         public StatisticDataset GetCacheDistributionByTerrainDifficulty(DataFilter filter) {
-            return backendRunning ? statisticsManager.GetCacheDistributionByTerrainDifficulty(filter) : null;
-        }       
+            try {
+                return backendRunning ? statisticsManager.GetCacheDistributionByTerrainDifficulty(filter) : null;
+            }
+            catch {
+                return null;
+            }            
+        }
     }
 }
