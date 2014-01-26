@@ -29,8 +29,8 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         }
 
         protected void AddGeneralFilterParameters(IDbCommand cmd, DataFilter filter) {
-            Database.DefineParameter(cmd, "begin", DbType.DateTime, filter.FromCreationDate);
-            Database.DefineParameter(cmd, "end", DbType.DateTime, filter.ToCreationDate);
+            Database.DefineParameter(cmd, "begin", DbType.DateTime, filter.FromDate);
+            Database.DefineParameter(cmd, "end", DbType.DateTime, filter.ToDate);
             Database.DefineParameter(cmd, "latFrom", DbType.Double, filter.FromPosition.Latitude);
             Database.DefineParameter(cmd, "latTo", DbType.Double, filter.ToPosition.Latitude);
             Database.DefineParameter(cmd, "longFrom", DbType.Double, filter.FromPosition.Longitude);

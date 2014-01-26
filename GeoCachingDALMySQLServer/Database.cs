@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Globalization;
 using MySql.Data.MySqlClient;
 using Swk5.GeoCaching.DAL.Common;
-using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.DAL.MySQLServer {
     public class Database : IDatabase {
@@ -85,12 +82,15 @@ namespace Swk5.GeoCaching.DAL.MySQLServer {
 
             try {
                 conn = GetOpenConnection();
-                cmd.Connection = conn;
-                return Double.Parse(cmd.ExecuteScalar().ToString());
-            }
+                if (conn != null) {
+                    cmd.Connection = conn;
+                    return Double.Parse(cmd.ExecuteScalar().ToString());
+                }
+            }           
             finally {
                 ConnectionUtils.ReleaseConnection(conn);
             }
+            return -1;
         }
 
         public string LocalImageRepository {

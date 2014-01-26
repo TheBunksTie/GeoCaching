@@ -46,7 +46,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                 "WHERE id = @id;");
             Database.DefineParameter(cmd, "id", DbType.Int32, image.Id);
 
-            success = Database.ExecuteNonQuery(cmd) == 1;
+            success = (Database.ExecuteNonQuery(cmd) == 1);
 
             if (success) {
                 // delete phsysical represenation of file

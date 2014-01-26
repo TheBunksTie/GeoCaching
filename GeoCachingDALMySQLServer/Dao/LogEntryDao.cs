@@ -12,13 +12,13 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
         public List<LogEntry> GetAll() {
             return GetLogEntryListFor(Database.CreateCommand(
                 "SELECT l.id, l.cacheId, l.creatorId, u.name, l.creationDate, l.found, l.comment " +
-                "FROM cache_log l INNER JOIN user u ON l.creatorId = user.id;"));
+                "FROM cache_log l INNER JOIN user u ON l.creatorId = u.id;"));
         }
 
         public LogEntry GetById(int id) {
             IDbCommand cmd = Database.CreateCommand(
-                "SELECT l.id, l.cacheId, l.creatorId, l.creationDate, l.found, l.comment " +
-                "FROM cache_log l " +
+                "SELECT l.id, l.cacheId, l.creatorId, u.name, l.creationDate, l.found, l.comment " +
+                "FROM cache_log l INNER JOIN user u ON l.creatorId = u.id " +
                 "WHERE l.id = @id;");
             Database.DefineParameter(cmd, "id", DbType.Int32, id);
 

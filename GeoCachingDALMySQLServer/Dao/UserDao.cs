@@ -60,7 +60,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                 "INSERT INTO user (name, password, email, latitude, longitude, roleCode) " +
                 "VALUES (@name, @password, @email, @latitude, @longitude, @roleCode);");
             Database.DefineParameter(cmd, "name", DbType.String, user.Name);
-            Database.DefineParameter(cmd, "password", DbType.String, user.Password);
+            Database.DefineParameter(cmd, "password", DbType.String, user.PasswordHash);
             Database.DefineParameter(cmd, "email", DbType.String, user.Email);
             Database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
             Database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
@@ -84,7 +84,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                 "UPDATE user SET name = @name, password = @password, email = @email, latitude =  @latitude, longitude = @longitude, roleCode = @roleCode " +
                 "WHERE id = @id;");
             Database.DefineParameter(cmd, "name", DbType.String, user.Name);
-            Database.DefineParameter(cmd, "password", DbType.String, user.Password);
+            Database.DefineParameter(cmd, "password", DbType.String, user.PasswordHash);
             Database.DefineParameter(cmd, "email", DbType.String, user.Email);
             Database.DefineParameter(cmd, "latitude", DbType.Double, user.Position.Latitude);
             Database.DefineParameter(cmd, "longitude", DbType.Double, user.Position.Longitude);
@@ -128,7 +128,7 @@ namespace Swk5.GeoCaching.DAL.MySQLServer.Dao {
                     users.Add(new User {
                         Id = ( int ) reader["id"],
                         Name = reader["name"].ToString(),
-                        Password = reader["password"].ToString(),
+                        PasswordHash = reader["password"].ToString(),
                         Email = reader["email"].ToString(),
                         Position = new GeoPosition(( double ) reader["latitude"], ( double ) reader["longitude"]),
                         Role = reader["roleDescription"].ToString()

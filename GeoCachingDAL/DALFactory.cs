@@ -11,15 +11,9 @@ namespace Swk5.GeoCaching.DAL.Common {
         private static readonly string LocalImageStorage;
 
         static DalFactory() {
-            // TODO: add error handling
-            try {
-                AssemblyName = ConfigurationManager.AppSettings["DALAssembly"];
-                LocalImageStorage = ConfigurationManager.AppSettings["LocalImageStorage"];
-                DalAssembly = Assembly.Load(AssemblyName);
-            }
-            catch (Exception e) {
-                Console.WriteLine(e.Message);
-            }
+            AssemblyName = ConfigurationManager.AppSettings["DALAssembly"];
+            LocalImageStorage = ConfigurationManager.AppSettings["LocalImageStorage"];
+            DalAssembly = Assembly.Load(AssemblyName);            
         }
 
         public static IDatabase CreateDatabase() {
