@@ -60,9 +60,14 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         }
 
         private void DeleteUser() {
-            userManager.DeleteUser(CurrentUser.Id);
-            Users.Remove(CurrentUser);
-            CurrentUser = null;
+            try {
+                userManager.DeleteUser(CurrentUser.Id);
+                Users.Remove(CurrentUser);
+                CurrentUser = null;
+            }
+            catch (Exception e) {
+                MessageBox.Show(e.Message, "User manager error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }            
         }
 
         private async void LoadUsers() {

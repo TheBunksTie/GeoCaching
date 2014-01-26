@@ -13,11 +13,12 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
 
         private readonly IUserManager userManager;
         private ICommand updateCommand;
+        private bool passwordChanged = false;
 
         public UserVM(IUserManager userManager, DomainModel.User user) {
             this.userManager = userManager;
             this.user = user;
-            passwordRepitition = user.Password;
+            passwordRepitition = user.PasswordHash;
         }
 
         // TODO bug when modifying name of existing user to another existing name
@@ -30,9 +31,8 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         public string Name {
             get { return user.Name; }
             set {
-                if (value.Length > 3 && user.Name != value) {
+                if (user.Name != value) {
                     user.Name = value;
-
                     RaisePropertyChangedEvent(vm => vm.Name);
                 }                
             }
@@ -84,11 +84,11 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         }
 
         public string Password {
-            get { return user.Password; }
+            get { return user.PasswordHash; }
             set {
-                if ( user.Password != value ) {
-                    user.Password = value;
-
+                if (user.PasswordHash != value ) {
+                    user.PasswordHash = value;
+                    passwordChanged = true;
                     RaisePropertyChangedEvent(vm => vm.Password);
                 }
             }
@@ -97,29 +97,23 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.User {
         public string PasswordRepetition {
             get { return passwordRepitition; }
             set {
-                if ( passwordRepitition != value ) {
+                if (passwordRepitition != value ) {
                     passwordRepitition = value;
-
+                    passwordChanged = true;
                     RaisePropertyChangedEvent(vm => vm.PasswordRepetition);
                 }
             }
         }
 
         public ICommand UpdateCommand {
-            get {
-                if (updateCommand == null) {
-                    updateCommand = new RelayCommand(param => UpdateUser());
-                }
-
-                return updateCommand;
-            }
+            get { return updateCommand ?? (updateCommand = new RelayCommand(param => UpdateUser())); }
         }
 
         private void UpdateUser() {
 
-            if (Password.Equals(PasswordRepetition)) {
+            if (!passwordChanged || Password.Equals(PasswordRepetition)) {
                 try {
-                    userManager.UpdateExistingUser(user);
+                    userManager.UpdateExistingUser(user, passwordChanged);
                 }
                 catch (Exception e) {
                     MessageBox.Show(e.Message, "User manager error", MessageBoxButton.OK, MessageBoxImage.Error);

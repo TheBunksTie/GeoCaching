@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace Swk5.GeoCaching.Desktop.View.Cache {
+﻿namespace Swk5.GeoCaching.Desktop.View.Cache {
     /// <summary>
-    /// Interaction logic for CacheDetailsEditor.xaml
+    ///     Interaction logic for CacheDetailsEditor.xaml
     /// </summary>
     public partial class CacheDetailsEditor {
-        public CacheDetailsEditor ( ) {
+        public CacheDetailsEditor() {
             InitializeComponent();
         }
     }

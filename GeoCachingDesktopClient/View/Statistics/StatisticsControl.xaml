@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600">
+    
+ 
     <UserControl.Resources>
         <Style TargetType="StackPanel">
             <Setter Property="Orientation" Value="Horizontal" />
@@ -39,7 +41,7 @@
         <StackPanel Grid.Row="0">
             <TextBlock Text="Select Analysis:" Margin="0" />
             <ComboBox MinWidth="300" Margin="5,0" ItemsSource="{Binding Path=AvailableStatistics}"
-                      SelectedItem="{Binding Path=CurrentStatistic}">
+                      SelectedItem="{Binding Path=RequestedStatistic}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Path=Caption}" />
@@ -48,8 +50,9 @@
             </ComboBox>
             <Button Width="90"  Margin="20,0" Command="{Binding Path=GetStatisticsCommand}">Get Statistics</Button>
         </StackPanel>
+        
         <StackPanel Grid.Row="1">
-            <CheckBox Content="Filter by region:" IsChecked="{Binding Path=RegionFilterRequested}"/>
+            <CheckBox Content="filter by region:" IsChecked="{Binding Path=RegionFilterRequested}"/>
             <TextBlock Text="from lat." />
             <TextBox IsEnabled="{Binding Path=RegionFilterRequested}" Text="{Binding Path=Filter.FromLatitude}" />
             <TextBlock Text="long." />
@@ -59,15 +62,18 @@
             <TextBlock Text="long." />
             <TextBox IsEnabled="{Binding Path=RegionFilterRequested}" Text="{Binding Path=Filter.ToLongitude}" />
         </StackPanel>
+        
         <StackPanel Grid.Row="2">
-            <CheckBox Content="Filter by date:" IsChecked="{Binding Path=DateFilterRequested}" />
+            <CheckBox Content="filter by date:" IsChecked="{Binding Path=DateFilterRequested}" />
             <TextBlock Text="from" />
             <DatePicker IsEnabled="{Binding Path=DateFilterRequested}" SelectedDate="{Binding Path=Filter.FromDate}" />
             <TextBlock Text="to" Margin="90,0,5,0" />
             <DatePicker IsEnabled="{Binding Path=DateFilterRequested}" SelectedDate="{Binding Path=Filter.ToDate}" />
         </StackPanel>
-        <DataGrid Grid.Row="3" Margin="5,10,5,5" ItemsSource="{Binding Path=StatisticsData}"
+        
+        <DataGrid Grid.Row="3" Margin="5,10,5,5" DataContext="{Binding Path=CurrentStatisticData}" ItemsSource="{Binding Path=Data}"
             CanUserReorderColumns="True" CanUserResizeColumns="True" 
-            CanUserResizeRows="False" CanUserSortColumns="True" />
+            CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="True">                      
+        </DataGrid>
     </Grid>
 </UserControl>

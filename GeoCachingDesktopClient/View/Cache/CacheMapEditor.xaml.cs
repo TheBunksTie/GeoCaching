@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Maps.MapControl.WPF;
 using Swk5.GeoCaching.BusinessLogic;
@@ -13,7 +12,9 @@ namespace Swk5.GeoCaching.Desktop.View.Cache {
     /// </summary>
     public partial class CacheMapEditor {
         private readonly ICacheManager cacheManager = GeoCachingBLFactory.GetCacheManager();
-        private CacheCollectionVM cacheCollectionVm;
+        private CacheCollectionVM cacheCollectionVm;        
+        private readonly DomainModel.User authenticatedUser;
+
 
         public CacheMapEditor() {
             InitializeComponent();
@@ -22,8 +23,11 @@ namespace Swk5.GeoCaching.Desktop.View.Cache {
                 cacheCollectionVm = new CacheCollectionVM(cacheManager);
                 DataContext = cacheCollectionVm;
             };
+            authenticatedUser = GeoCachingBLFactory.GetAuthenticationManager().AuthenticatedUser;
+
+            CacheMap.Loaded += (s, e) => { CacheMap.Center = new Location(authenticatedUser.Position.Latitude, authenticatedUser.Position.Longitude); };
         }
-        
+
         private void OnPushPinDoubleClick(object sender, MouseButtonEventArgs e) {
             try {
                 // get cache id information from property tag of clicked pin
@@ -45,10 +49,10 @@ namespace Swk5.GeoCaching.Desktop.View.Cache {
 
         private void OnCacheMapRightClicked(object sender, MouseButtonEventArgs e) {
             // transform clicked coordinated to geo location
-            Location clickedLocation = (( Map ) sender).ViewportPointToLocation(new Point(e.GetPosition(CacheMap).X, e.GetPosition(CacheMap).Y));
-
-            // TODO retrieve Id of currently authenticated user for ownership of cache
-            cacheCollectionVm.CurrentCache = new CacheVM(cacheManager, cacheManager.CreateNewPositionedCache(1, clickedLocation.Latitude, clickedLocation.Longitude));
+            Location clickedLocation =
+                (( Map ) sender).ViewportPointToLocation(new Point(e.GetPosition(CacheMap).X, e.GetPosition(CacheMap).Y));
+                       
+            cacheCollectionVm.CurrentCache = new CacheVM(cacheManager, cacheManager.CreateNewPositionedCache(authenticatedUser.Id, clickedLocation.Latitude, clickedLocation.Longitude));
             cacheCollectionVm.Caches.Add(cacheCollectionVm.CurrentCache);
         }
     }

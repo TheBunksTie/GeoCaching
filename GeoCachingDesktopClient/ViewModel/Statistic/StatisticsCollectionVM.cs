@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Swk5.GeoCaching.BusinessLogic.StatisticsManager;
+using Swk5.GeoCaching.Desktop.ViewModel.Filter;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
@@ -10,20 +10,18 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
         private readonly DataFilter defaultFilter;
         private readonly FilterVM filterVM;
         private readonly IStatisticsManager statisticsManager;
+        private StatisticDataset currentStatisticData;
 
-        private StatisticVM currentStatistic;
         private bool dateFilterRequested;
 
         private ICommand getStatisticsCommand;
 
         private bool regionFilterRequested;
-        private List<StatisticData> statisticsData;
+        private StatisticVM requestedStatistic;
 
         public StatisticsCollectionVM(IStatisticsManager statisticsManager) {
             this.statisticsManager = statisticsManager;
             defaultFilter = statisticsManager.GetDefaultFilter();
-
-            statisticsData = new List<StatisticData>();
 
             // initialise filter with default values
             filterVM = new FilterVM(defaultFilter);
@@ -32,12 +30,12 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
 
         public ObservableCollection<StatisticVM> AvailableStatistics { get; private set; }
 
-        public StatisticVM CurrentStatistic {
-            get { return currentStatistic; }
+        public StatisticVM RequestedStatistic {
+            get { return requestedStatistic; }
             set {
-                if (currentStatistic != value) {
-                    currentStatistic = value;
-                    RaisePropertyChangedEvent(vm => vm.CurrentStatistic);
+                if (requestedStatistic != value) {
+                    requestedStatistic = value;
+                    RaisePropertyChangedEvent(vm => vm.RequestedStatistic);
                 }
             }
         }
@@ -62,8 +60,14 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
             }
         }
 
-        public List<StatisticData> StatisticsData {
-            get { return statisticsData; }
+        public StatisticDataset CurrentStatisticData {
+            get { return currentStatisticData; }
+            private set {
+                if (currentStatisticData != value) {
+                    currentStatisticData = value;
+                    RaisePropertyChangedEvent(vm => vm.CurrentStatisticData);
+                }
+            }
         }
 
         public ICommand GetStatisticsCommand {
@@ -76,47 +80,45 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
 
         private void LoadAvailableStatistics() {
             AvailableStatistics = new ObservableCollection<StatisticVM> {
-                new StatisticVM(StatisticalOperation.CachesFoundByUser),
-                new StatisticVM(StatisticalOperation.CachesHiddenByUser),
+                new StatisticVM(StatisticalOperation.UsersByFoundCaches),
+                new StatisticVM(StatisticalOperation.UsersByHiddenCaches),
+                new StatisticVM(StatisticalOperation.CachesByRating),
+                new StatisticVM(StatisticalOperation.CachesByLogEntrNr),
                 new StatisticVM(StatisticalOperation.CacheDistributionBySize),
                 new StatisticVM(StatisticalOperation.CacheDistributionByCacheDifficulty),
-                new StatisticVM(StatisticalOperation.CacheDistributionByTerrainDifficulty)
+                new StatisticVM(StatisticalOperation.CacheDistributionByTerrainDifficulty)                
             };
 
-            CurrentStatistic = AvailableStatistics.First();
+            RequestedStatistic = AvailableStatistics.First();
         }
-
-        //private DataFilter LoadDefaultFilter() {
-        //    return new DataFilter {
-        //        FromCreationDate = statisticsManager.GetEarliestCacheCreationDate(),
-        //        ToCreationDate = statisticsManager.GetLatestCacheCreationDate(),
-        //        FromPosition = statisticsManager.GetLowestCachePosition(),
-        //        ToPosition = statisticsManager.GetHighestCachePosition()
-        //    };
-        //}
 
         private void GetStatistics() {
             // prepare filter object depending on user-selected options
             PrepareFilter();
 
-            switch (CurrentStatistic.Operation) {
-                case StatisticalOperation.CachesFoundByUser:
-                    statisticsData = statisticsManager.GetFoundCachesByUser(Filter.Current).Data;
+            switch (RequestedStatistic.Operation) {
+                case StatisticalOperation.UsersByFoundCaches:
+                    CurrentStatisticData = statisticsManager.GetUsersByFoundCaches(Filter.Current);
                     break;
-                case StatisticalOperation.CachesHiddenByUser:
-                    statisticsData = statisticsManager.GetHiddenCachesByUser(Filter.Current).Data;
+                case StatisticalOperation.UsersByHiddenCaches:
+                    CurrentStatisticData = statisticsManager.GetUsersByHiddenCaches(Filter.Current);
+                    break;
+                case StatisticalOperation.CachesByRating:
+                    CurrentStatisticData = statisticsManager.GetCachesByRating(Filter.Current);
+                    break;
+                case StatisticalOperation.CachesByLogEntrNr:
+                    CurrentStatisticData = statisticsManager.GetCachesByLogCount(Filter.Current);
                     break;
                 case StatisticalOperation.CacheDistributionBySize:
-                    statisticsData = statisticsManager.GetCacheDistributionBySize(Filter.Current).Data;
+                    CurrentStatisticData = statisticsManager.GetCacheDistributionBySize(Filter.Current);
                     break;
                 case StatisticalOperation.CacheDistributionByCacheDifficulty:
-                    statisticsData = statisticsManager.GetCacheDistributionByCacheDifficulty(Filter.Current).Data;
+                    CurrentStatisticData = statisticsManager.GetCacheDistributionByCacheDifficulty(Filter.Current);
                     break;
                 case StatisticalOperation.CacheDistributionByTerrainDifficulty:
-                    statisticsData = statisticsManager.GetCacheDistributionByTerrainDifficulty(Filter.Current).Data;
+                    CurrentStatisticData = statisticsManager.GetCacheDistributionByTerrainDifficulty(Filter.Current);
                     break;
             }
-            RaisePropertyChangedEvent(vm => vm.StatisticsData);
         }
 
         private void PrepareFilter() {
@@ -129,11 +131,9 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Statistic {
             }
 
             if (!DateFilterRequested) {
-                Filter.FromDate = defaultFilter.FromCreationDate;
-                Filter.ToDate = defaultFilter.ToCreationDate;
+                Filter.FromDate = defaultFilter.FromDate;
+                Filter.ToDate = defaultFilter.ToDate;
             }
         }
     }
-
-    // TODO display number of results for each statistical query
 }

@@ -7,6 +7,24 @@
              xmlns:src="clr-namespace:Swk5.GeoCaching.Desktop.View.Cache"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="600">
+    
+    <UserControl.Resources>
+        <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="3,1" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="MinWidth" Value="50" />
+            <Setter Property="Margin" Value="5,1" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5,1" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
@@ -16,9 +34,12 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <m:Map Grid.Row="0" CredentialsProvider="myCreds" Name="CacheMap" Center="48.123, 13.9" ZoomLevel="10"
+            <m:Map Grid.Row="0" CredentialsProvider="Am60_h9SH9HUXfFEph9Td-lwd6n4xWRoLUfj2vSKLkMNOMqZgS_hiFGV0HWROjUF" Name="CacheMap"  ZoomLevel="10"
                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                            Margin="4" MouseDoubleClick="OnCacheMapClicked" MouseRightButtonDown="OnCacheMapRightClicked">
                 <m:MapItemsControl ItemsSource="{Binding Path=Caches}">
@@ -29,35 +50,35 @@
                     </m:MapItemsControl.ItemTemplate>
                 </m:MapItemsControl>
             </m:Map>
-            
-            <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <TextBlock Text="Filter caches:" />
-                <ComboBox Margin="5,0" ItemsSource="{Binding Path=FilterCriteria}"
-                          SelectedItem="{Binding Path=CurrentFilterCriterium}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=Caption}" />                            
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                
-                <ComboBox Name="FilterLimiterBox" Margin="5,0" ItemsSource="{Binding Path=FilterOperations}"
-                          SelectedItem="{Binding Path=CurrentFilterOperation}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=Caption}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                
-                <ComboBox Name="FilterValueBox" Margin="5,0" ItemsSource="{Binding Path=FilterValues}"
-                          SelectedItem="{Binding Path=CurrentFilterValue}">
-                </ComboBox>
-                
-                <Button Command="{Binding Path=ActualizeCommand}" Margin="5,0">Actualize</Button>
 
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <CheckBox Content="filter by cache difficulty:" IsChecked="{Binding Path=DifficultyFilterRequested}"/>
+                <TextBlock Text="from" />
+                <TextBox IsEnabled="{Binding Path=DifficultyFilterRequested}" Text="{Binding Path=Filter.FromCacheDifficulty}"/>
+                <TextBlock Text="to" />
+                <TextBox IsEnabled="{Binding Path=DifficultyFilterRequested}" Text="{Binding Path=Filter.ToCacheDifficulty}" />
             </StackPanel>
 
+            <StackPanel Grid.Row="2" Orientation="Horizontal" >
+                <CheckBox Content="filter by terrain difficulty:" IsChecked="{Binding Path=TerrainFilterRequested}"/>
+                <TextBlock Text="from" />
+                <TextBox IsEnabled="{Binding Path=TerrainFilterRequested}" Text="{Binding Path=Filter.FromTerrainDifficulty}" />
+                <TextBlock Text="to" />
+                <TextBox IsEnabled="{Binding Path=TerrainFilterRequested}" Text="{Binding Path=Filter.ToTerrainDifficulty}" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <CheckBox Content="filter by cache size:" IsChecked="{Binding Path=SizeFilterRequested}"/>
+                <TextBlock Text="from" />
+                <ComboBox IsEnabled="{Binding Path=SizeFilterRequested}" ItemsSource="{Binding Path=SizeList}" SelectedItem="{Binding Path=Filter.FromCacheSizeString}"/>                
+                <TextBlock Text="to" />
+                <ComboBox IsEnabled="{Binding Path=SizeFilterRequested}" ItemsSource="{Binding Path=SizeList}" SelectedItem="{Binding Path=Filter.ToCacheSizeString}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Orientation="Horizontal">                
+                <TextBlock Text="Shown caches" />
+                <TextBlock Text="{Binding Path=Caches.Count}" />
+                <Button Command="{Binding ActualizeCommand}" Margin="3,1" Content="Actualize Map" Width="150"/>
+            </StackPanel>
         </Grid>
            
         <src:CacheDetailsEditor Grid.Column="1" />

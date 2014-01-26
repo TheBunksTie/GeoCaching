@@ -4,7 +4,7 @@
         xmlns:cache1="clr-namespace:Swk5.GeoCaching.Desktop.View.Cache"
         xmlns:statistics="clr-namespace:Swk5.GeoCaching.Desktop.View.Statistics"
         xmlns:user="clr-namespace:Swk5.GeoCaching.Desktop.View.User"
-        Title="GeoCac#ing Desktop v0.1" Height="700" Width="900"
+        Title="GeoCac#ing Desktop" Height="700" Width="900"
         ResizeMode="CanMinimize">
     
     <Grid>

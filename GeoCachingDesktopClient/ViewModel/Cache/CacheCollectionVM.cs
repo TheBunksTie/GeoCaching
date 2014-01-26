@@ -1,48 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Swk5.GeoCaching.BusinessLogic.CacheManager;
-using Swk5.GeoCaching.Desktop.ViewModel.Cache.Filter;
+using Swk5.GeoCaching.Desktop.ViewModel.Filter;
 using Swk5.GeoCaching.DomainModel;
 
 namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
     public class CacheCollectionVM : AbstractViewModelBase<CacheCollectionVM> {
         private readonly ICacheManager cacheManager;
 
-        private CacheVM currentCache;
+        private readonly DataFilter defaultFilter;
+        private readonly FilterVM filterVM;
+        private ICommand actualizeCommand;        
         private ICommand deleteCommand;
-        private ICommand actualizeCommand;
-
-        private FilterCriteriumVM criterium;
-        private FilterOperationVM operation;
-        private string filterValue;
+        private CacheVM currentCache;
+      
+        private bool difficultyFilterRequested;
+        private bool sizeFilterRequested;
+        private bool terrainFilterRequested;
 
         public CacheCollectionVM(ICacheManager cacheManager) {
             this.cacheManager = cacheManager;
 
+            // load list of cache sizes from db
+            SizeList = cacheManager.GetCacheSizeList();
+                       
+            // load default filter
+            defaultFilter = cacheManager.GetDefaultFilter();
+
+            // initialise active filter with default values and pass just loaded list of cache size to filter
+            filterVM = new FilterVM(defaultFilter) {
+                CacheSizeList = SizeList
+            };
+
             Caches = new ObservableCollection<CacheVM>();
-            LoadCaches();
-
-            SizeList = new List<string>();
-            LoadCacheSizeList();
-
-            LoadFilterCriteria();
-            LoadFilterOperations();            
-            LoadFilterValues();
+            LoadCaches(Filter.Current);
         }
 
         // contains the list of all caches from db
         public ObservableCollection<CacheVM> Caches { get; private set; }
-
-        public ObservableCollection<FilterCriteriumVM> FilterCriteria { get; private set; }
-        public ObservableCollection<FilterOperationVM> FilterOperations { get; private set; }
-        public ObservableCollection<string> FilterValues { get; private set; }
-
         public List<string> SizeList { get; private set; }
 
         public CacheVM CurrentCache {
@@ -55,32 +55,41 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
             }
         }
 
-        public FilterCriteriumVM CurrentFilterCriterium {
-            get { return criterium; }
-            set {
-                if (criterium != value) {
-                    criterium = value;
-                    RaisePropertyChangedEvent(vm => vm.CurrentFilterCriterium);
-                }
-            }
+        public string AuthenticatedUserPositionString {
+            get { return cacheManager.GetAuthenticatedUser().Position.ToString(); }
         }
-       
-        public FilterOperationVM CurrentFilterOperation {
-            get { return operation; }
+
+
+        public FilterVM Filter {
+            get { return filterVM; } 
+        }
+
+        public bool DifficultyFilterRequested {
+            get { return difficultyFilterRequested; }
             set {
-                if (operation != value) {
-                    operation= value;
-                    RaisePropertyChangedEvent(vm => vm.CurrentFilterOperation);
+                if (difficultyFilterRequested != value) {
+                    difficultyFilterRequested = value;
+                    RaisePropertyChangedEvent(vm => vm.DifficultyFilterRequested);
                 }
             }
         }
 
-        public string CurrentFilterValue {
-            get { return filterValue; }
+        public bool TerrainFilterRequested {
+            get { return terrainFilterRequested; }
             set {
-                if (filterValue != value) {
-                    filterValue = value;
-                    RaisePropertyChangedEvent(vm => vm.CurrentFilterValue);
+                if (terrainFilterRequested != value) {
+                    terrainFilterRequested = value;
+                    RaisePropertyChangedEvent(vm => vm.TerrainFilterRequested);
+                }
+            }
+        }
+
+        public bool SizeFilterRequested {
+            get { return sizeFilterRequested; }
+            set {
+                if (sizeFilterRequested != value) {
+                    sizeFilterRequested = value;
+                    RaisePropertyChangedEvent(vm => vm.SizeFilterRequested);
                 }
             }
         }
@@ -90,7 +99,7 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
         }
 
         public ICommand ActualizeCommand {
-            get { return actualizeCommand ?? ( actualizeCommand = new RelayCommand(param => ActualizeVisibleCaches()) ); }
+            get { return actualizeCommand ?? (actualizeCommand = new RelayCommand(param => ActualizeVisibleCaches())); }
         }
 
         public void SetCurrentCacheById(int id) {
@@ -108,75 +117,36 @@ namespace Swk5.GeoCaching.Desktop.ViewModel.Cache {
             }
         }
 
-        private async void LoadCacheSizeList() {
-            SizeList.Clear();
-
-            IEnumerator<string> e = cacheManager.GetCacheSizeList().GetEnumerator();
-            while (await Task.Factory.StartNew(() => e.MoveNext())) {
-                SizeList.Add(e.Current);
-            }
-        }
-
-        private async void LoadCaches() {
+        private async void LoadCaches(DataFilter filter) {
             Caches.Clear();
 
-            IEnumerator<DomainModel.Cache> e = cacheManager.GetCacheList().GetEnumerator();
+            IEnumerator<DomainModel.Cache> e = cacheManager.GetFilteredCacheList(filter).GetEnumerator();
             while (await Task.Factory.StartNew(() => e.MoveNext())) {
                 Caches.Add(new CacheVM(cacheManager, e.Current));
             }
         }
 
-        private void LoadFilterValues() {
-            FilterValues = new ObservableCollection<string>();
-            int maxValue = 5;
-
-            if (CurrentFilterCriterium.Criterium == FilterCriterium.Size) {
-                maxValue = 6;
-                
-            }
-            for ( int i = 1; i <= maxValue; i++ ) {
-                FilterValues.Add(i.ToString(CultureInfo.InvariantCulture));
-            }
-
-            CurrentFilterValue = FilterValues.First();
+        private void ActualizeVisibleCaches() {
+            // prepare filter object depending on user-selected options
+            PrepareFilter();
+            LoadCaches(Filter.Current);
         }
 
-        private void LoadFilterCriteria() {
-            FilterCriteria = new ObservableCollection<FilterCriteriumVM> {
-                new FilterCriteriumVM(FilterCriterium.Size),
-                new FilterCriteriumVM(FilterCriterium.CacheDifficulty),
-                new FilterCriteriumVM(FilterCriterium.TerrainDifficulty)
-            };
-
-            CurrentFilterCriterium = FilterCriteria.First();
-        }
-
-        private void LoadFilterOperations() {
-            FilterOperations = new ObservableCollection<FilterOperationVM> {
-                new FilterOperationVM(FilterOperation.AboveEquals),
-                new FilterOperationVM(FilterOperation.Above),                                
-                new FilterOperationVM(FilterOperation.Exact),
-                new FilterOperationVM(FilterOperation.Below),
-                new FilterOperationVM(FilterOperation.BelowEquals)
-            };
-
-            CurrentFilterOperation = FilterOperations.First();            
-        }
-        
-        private async void ActualizeVisibleCaches ( ) {
-            try {
-                Caches.Clear();
-
-                IEnumerator<DomainModel.Cache> e = cacheManager.GetFilteredCacheList(CurrentFilterCriterium.Criterium, CurrentFilterOperation.Operation, CurrentFilterValue).GetEnumerator();
-                while ( await Task.Factory.StartNew(( ) => e.MoveNext()) ) {
-                    Caches.Add(new CacheVM(cacheManager, e.Current));
-                }            
+        private void PrepareFilter() {
+            if (!TerrainFilterRequested) {
+                Filter.FromTerrainDifficulty = defaultFilter.FromTerrainDifficulty;
+                Filter.ToTerrainDifficulty = defaultFilter.ToTerrainDifficulty;
             }
-            catch (Exception e) {
-                // in case of error load whole list again
-                LoadCaches();
-                MessageBox.Show(e.Message, "Cache manager error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }           
+
+            if (!DifficultyFilterRequested) {
+                Filter.FromCacheDifficulty = defaultFilter.FromCacheDifficulty;
+                Filter.ToCacheDifficulty = defaultFilter.ToCacheDifficulty;
+            }
+
+            if (!SizeFilterRequested) {
+                Filter.FromCacheSize = defaultFilter.FromCacheSize;
+                Filter.ToCacheSize = defaultFilter.ToCacheSize;
+            }
         }
     }
 }
