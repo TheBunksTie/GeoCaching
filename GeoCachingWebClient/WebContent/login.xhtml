@@ -11,8 +11,7 @@
 	    <h1>Login</h1>
 	    
 	    <h:outputText value="Please provide your credentials to log into the GeoCaching System." rendered="#{!AuthenticationManager.loggedIn}" />
-<!-- 	    <br /> -->
-	    
+	    	    
 	    <h:form id="loginForm" rendered="#{!AuthenticationManager.loggedIn}">
 	       <h:panelGrid columns="2" rendered="#{!AuthenticationManager.loggedIn}">
 	           <h:outputLabel for="username">Username: </h:outputLabel>

@@ -10,6 +10,11 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
   
+ <error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/error.html</location>
+ </error-page>
+   
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -30,6 +35,11 @@
     <description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>
     <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
     <param-value>client</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>javax.faces.validator.DISABLE_DEFAULT_BEAN_VALIDATOR</param-name>
+    <param-value>true</param-value>
   </context-param>
   
 <!--    <context-param> -->
@@ -88,6 +98,32 @@
     <param-value>true</param-value>
   </context-param>
   
+  <!-- SOAP-WS configuration -->
+   <context-param>
+        <param-name>WS_HOST</param-name>
+        <param-value>localhost</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>WS_PORT</param-name>
+        <param-value>2037</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>WS_SERVICE_FILE</param-name>
+        <param-value>GeoCachingService.asmx</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>WS_NAMESPACE_URI</param-name>
+        <param-value>http://GeoCaching.Services/</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>WS_SERVICE_NAME</param-name>
+        <param-value>GeoCachingService</param-value>
+    </context-param>
+      
   <listener id="ServiceLocator">
     <display-name>InitializeContextListener</display-name>
     <listener-class>at.wea5.geocaching.presentation.ContextListenerInitializer</listener-class>

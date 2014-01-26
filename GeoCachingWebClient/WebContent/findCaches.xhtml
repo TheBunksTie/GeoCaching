@@ -15,21 +15,37 @@
 	       <li><h3>Available Filters</h3></li>
 	       <li>
                <h:selectBooleanCheckbox id="positionFilter" value="#{CacheManager.positionFiltered}"/>
-               <h:outputLabel class="checkboxLabel" for="positionFilter" >Filter by cache position</h:outputLabel>
+               <h:outputLabel class="checkboxLabel" for="positionFilter" >filter by cache position</h:outputLabel>
                
-               <h:outputLabel class="inputLabel" for="latitudeFrom">from</h:outputLabel>[
+               <h:outputLabel class="inputLabel" for="latitudeFrom">from</h:outputLabel>
                <h:inputText class="filterInput" id="latitudeFrom" value="#{CacheManager.filter.fromPosition.latitude}" />;               
-               <h:inputText class="filterInput" id="longitudeFrom" value="#{CacheManager.filter.fromPosition.longitude}" />]
+               <h:inputText class="filterInput" id="longitudeFrom" value="#{CacheManager.filter.fromPosition.longitude}" />
                
-               <h:outputLabel class="inputLabel" for="latitudeTo">to</h:outputLabel>[
+               <h:outputLabel class="inputLabel" for="latitudeTo">to</h:outputLabel>
                <h:inputText class="filterInput" id="latitudeTo" value="#{CacheManager.filter.toPosition.latitude}" />;
-               <h:inputText class="filterInput" id="longitudeTo" value="#{CacheManager.filter.toPosition.longitude}" />]
-           </li>           
+               <h:inputText class="filterInput" id="longitudeTo" value="#{CacheManager.filter.toPosition.longitude}" />
+           </li>
+           
+           <!-- row for finding caches by size -->           
+	       <li>
+               <h:selectBooleanCheckbox id="sizeFilter" value="#{CacheManager.sizeFiltered}" />
+               <h:outputLabel class="checkboxLabel" for="sizeFilter">filter by size </h:outputLabel>               
+               <h:outputLabel class="inputLabel" for="sizeFrom">from</h:outputLabel>
+               
+               <h:selectOneMenu id="sizeFrom" value="#{CacheManager.fromSizeFilter}">
+                   <f:selectItems value="#{CacheManager.cacheSizeList}" var="cacheSize" itemLabel="#{cacheSize.size}" itemValue="#{cacheSize.id}" />
+               </h:selectOneMenu>
+                              
+               <h:outputLabel class="inputLabel" for="sizeTo">to</h:outputLabel>
+               <h:selectOneMenu id="sizeTo" value="#{CacheManager.toSizeFilter}">               
+                   <f:selectItems value="#{CacheManager.cacheSizeList}" var="cacheSize" itemLabel="#{cacheSize.size}" itemValue="#{cacheSize.id}" />
+               </h:selectOneMenu>
+           </li>	       
 	       
 	       <!-- row for finding caches by cache difficulty -->
 	       <li>
 	           <h:selectBooleanCheckbox id="cacheDifficultyFilter" value="#{CacheManager.cacheDifficultyFiltered}"/>
-	           <h:outputLabel class="checkboxLabel" for="cacheDifficultyFilter">Filter by cache difficulty</h:outputLabel>	          
+	           <h:outputLabel class="checkboxLabel" for="cacheDifficultyFilter">filter by cache difficulty</h:outputLabel>	          
 	           
 	           <h:outputLabel class="inputLabel" for="cacheDifficultyFrom">from</h:outputLabel>	           	           
 	           <h:inputText class="filterInput" id="cacheDifficultyFrom" value="#{CacheManager.filter.fromCacheDifficulty}"/>	           
@@ -37,46 +53,41 @@
 	           <h:outputLabel class="inputLabel" for="cacheDifficultyTo">to</h:outputLabel>	           
 	           <h:inputText class="filterInput" id="cacheDifficultyTo" value="#{CacheManager.filter.toCacheDifficulty}" />
 	       </li>
-	        <li>
-	           <!-- row for finding caches by terrain difficulty -->
+           
+           <!-- row for finding caches by terrain difficulty -->
+	       <li>
                <h:selectBooleanCheckbox id="terrainDifficultyFilter" value="#{CacheManager.terrainDifficultyFiltered}"  />               
-               <h:outputLabel class="checkboxLabel" for="terrainDifficultyFilter">Filter by terrain difficulty</h:outputLabel>
+               <h:outputLabel class="checkboxLabel" for="terrainDifficultyFilter">filter by terrain difficulty</h:outputLabel>
                
                <h:outputLabel class="inputLabel" for="terrainDifficultyFrom">from</h:outputLabel>                              
                <h:inputText class="filterInput" id="terrainDifficultyFrom" value="#{CacheManager.filter.fromTerrainDifficulty}" />
                
                <h:outputLabel class="inputLabel" for="terrainDifficultyTo">to</h:outputLabel>               
                <h:inputText class="filterInput" id="terrainDifficultyTo" value="#{CacheManager.filter.toTerrainDifficulty}" />
-           </li>
-            <li>
-               <!-- row for finding caches by size -->
-               <h:selectBooleanCheckbox id="sizeFilter" value="#{CacheManager.sizeFiltered}" />
-               <h:outputLabel class="checkboxLabel" for="sizeFilter">Filter by size </h:outputLabel>               
-               <h:outputLabel class="inputLabel" for="sizeFrom">from</h:outputLabel>
-               
-               <h:inputText class="filterInput" id="sizeFrom" value="#{CacheManager.filter.fromCacheSize}" />               
-               <h:outputLabel class="inputLabel" for="sizeTo">to</h:outputLabel>
-               <h:inputText class="filterInput" id="sizeTo" value="#{CacheManager.filter.toCacheSize}" />
-           </li>
+           </li>           
            <li>
                <h:commandButton class="button formbutton" value="Get Caches" action="#{CacheManager.getFilteredCacheList}"/>
-               <h:outputText value="&#160;" />
-               <h:commandButton class="button formbutton" value="Reset Filter" action="#{CacheManager.resetFilter}"/>
            </li>           
 	     </ul>               
         </h:form>
         
         <div class="map">
-            <h2>Caches on map</h2>
+            <h2>Map view</h2>
             <f:view contentType="text/html">
             <h:form id="cacheDetailsForm">    
-			    <p:gmap center="48.190257,14.227417" zoom="10" type="ROADMAP" model="#{CacheManager.mapModel}" 
+			    <p:gmap center="#{CacheManager.mapCenter}" zoom="10" type="ROADMAP" model="#{CacheManager.mapModel}" 
 			            navigationControl="false" style="width:600px;height:400px">  	  
 			        <p:ajax event="overlaySelect" listener="#{CacheManager.onMarkerSelect}" />  		  
 			        <p:gmapInfoWindow>  
 			            <p:outputPanel style="text-align:center;display:block;margin:auto:">  	  	                   
-		                    <h:outputText value="#{CacheManager.currentMarker.title}" />	                     
-                            <h:commandButton class="button" value="Details" type="submit" action="#{CacheManager.showDetailsFromMap}" />                             	  
+		                    <ul>
+		                      <li><h4><h:outputText value="#{CacheManager.currentCache.cache.name}" /></h4></li>
+		                      <li><h:outputText value="Size: #{CacheManager.currentCache.cache.size}" /></li>
+		                      <li><h:outputText value="Difficulty: #{CacheManager.currentCache.cache.cacheDifficulty}" /></li>
+		                      <li><h:outputText value="Terrain: #{CacheManager.currentCache.cache.terrainDifficulty}" /></li>
+		                      <li><h:outputText value="Rating: #{CacheManager.currentCache.rating}" /></li>		                          
+	                       </ul>
+	                       <h:commandButton class="button" value="Details" type="submit" action="#{Settings.getCacheDetailsView}" />
 			            </p:outputPanel>  	  
 			        </p:gmapInfoWindow>  
 			    </p:gmap>  	  	       	
@@ -85,7 +96,7 @@
         </div>
 	    
         <div class="searchResult">    
-	        <h2>Search results (<h:outputText value="#{CacheManager.nrOfSearchResults}" />)</h2>
+	        <h2>Found caches (<h:outputText value="#{CacheManager.nrOfSearchResults}" />)</h2>
 	        
             <!-- output for empty result list -->
 	        <h:outputText rendered="#{CacheManager.resultListEmpty}"><h3>Sorry, no matching caches found.</h3></h:outputText>
@@ -93,7 +104,7 @@
 	           <p:dataTable id="searchResultTable" var="cache" value="#{CacheManager.cacheList}"  
                  styleClass="searchResultTable"
                  paginator="true" rows="30"  
-                 paginatorTemplate="{CurrentPageReport} {PageLinks} {RowsPerPageDropdown}"  
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                  rowsPerPageTemplate="30, 50, 100" rendered="#{!CacheManager.resultListEmpty}">
                     
                 <p:column id="nameColumn" headerText="Name">                          

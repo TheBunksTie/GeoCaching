@@ -30,12 +30,7 @@
 	<ui:fragment rendered="#{AuthenticationManager.loggedIn}">
 	    <div class="status">       
 	        <ul>
-	           <li>Welcome. Your are logged in as "<h:outputText value="#{AuthenticationManager.username}" />".</li>
-	           <li>
-<!-- 	               <h:form> -->
-<!--                        <h:commandButton class="button rowbutton" value="Logout" action="#{AuthenticationManager.logoutUser}" /> -->
-<!--                    </h:form>                  -->
-	           </li>
+	           <li>Welcome. Your are logged in as "<h:outputText value="#{AuthenticationManager.currentUser.name}" />".</li>
 	        </ul>	       	            
 	    </div>
     </ui:fragment>

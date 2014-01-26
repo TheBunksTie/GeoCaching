@@ -19,7 +19,7 @@
 	                 <f:selectItem itemValue="1" itemLabel="Top list of caches by rating " />
 	                 <f:selectItem itemValue="2" itemLabel="Top list of caches by logging" />
 	                 <f:selectItem itemValue="3" itemLabel="Top list of of users by found caches" />
-	                 <f:selectItem itemValue="4" itemLabel=" Top list of users by hidden caches" />	        
+	                 <f:selectItem itemValue="4" itemLabel="Top list of users by hidden caches" />	        
 		             <f:selectItem itemValue="5" itemLabel="Distribution of caches by size" />
 	                 <f:selectItem itemValue="6" itemLabel="Distribution of caches by cache difficulty" />
 	                 <f:selectItem itemValue="7" itemLabel="Distribution of caches by terrain difficulty"/>
@@ -33,7 +33,7 @@
              <li><h3>Available Filters</h3></li>              
 	         <li class="statFilterRow">
                  <h:selectBooleanCheckbox id="positionFilter" value="#{StatisticsManager.positionFiltered}"/>
-                 <h:outputLabel class="checkboxLabel" for="positionFilter" >Filter by cache position</h:outputLabel>
+                 <h:outputLabel class="checkboxLabel" for="positionFilter" >filter by cache position</h:outputLabel>
                
                  <h:outputLabel class="inputLabel" for="latitudeFrom">from</h:outputLabel>[
                  <h:inputText class="filterInput" id="latitudeFrom" value="#{StatisticsManager.filter.fromPosition.latitude}" />;               
@@ -45,7 +45,7 @@
              </li>
              <li class="statFilterRow">
                 <h:selectBooleanCheckbox id="dateFilter" value="#{StatisticsManager.dateFiltered}"/>
-                <h:outputLabel class="checkboxLabel" for="positionFilter" >Filter by date</h:outputLabel>
+                <h:outputLabel class="checkboxLabel" for="positionFilter" >filter by date</h:outputLabel>
                
                 <h:outputLabel class="inputLabel" for="dateFrom">from</h:outputLabel>               
                 <p:calendar styleClass="filterInput" id="dateFrom" value="#{StatisticsManager.filter.fromJavaDate}" />                              
@@ -55,8 +55,6 @@
              </li>                     	     	      
              <li>
                 <h:commandButton class="button formbutton" value="Get Statistic" action="#{StatisticsManager.getRequestedStatistics}"/>
-                <h:outputText value="&#160;" />
-                <h:commandButton class="button formbutton" value="Reset Filter" action="#{StatisticsManager.resetFilter}"/>
              </li>           
 	    </ul>
         </h:form>
@@ -70,7 +68,7 @@
 	           <p:dataTable id="searchResultTable" var="dataRow" value="#{StatisticsManager.statisticDataset.data.statisticData}"  
                  styleClass="searchResultTable"
                  paginator="true" rows="30"  
-                 paginatorTemplate="{CurrentPageReport} {PageLinks} {RowsPerPageDropdown}"  
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                  rowsPerPageTemplate="30, 50, 100" rendered="#{!StatisticsManager.isCurrentDatasetEmpty}">
                     
                     <p:column id="column1" headerText="Nr.">                          
@@ -78,12 +76,12 @@
 	               </p:column>
 	                
                    <!-- name column -->
-                   <p:column id="column2" headerText="#{StatisticsManager.statisticDataset.columnCaption2}">                          
+                   <p:column id="column2" headerText="#{StatisticsManager.statisticDataset.column2Caption}">                          
                         <h:outputText value="#{dataRow.name}"/>
                    </p:column>
 	               
 	               <!-- value column -->
-	               <p:column id="column3" headerText="#{StatisticsManager.statisticDataset.columnCaption3}">                          
+	               <p:column id="column3" headerText="#{StatisticsManager.statisticDataset.column3Caption}">                          
                         <h:outputText value="#{dataRow.value}"/>
                    </p:column>
 	               

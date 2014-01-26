@@ -60,7 +60,9 @@
 			</p:column>		
 			</p:row>
 	    </p:panelGrid>
+        
         <br />
+        
         <p:panelGrid rendered="#{CacheManager.currentCacheAvailable}" styleClass="descriptionTable">
 	        <f:facet name="header">
 	             <p:row>
@@ -69,38 +71,23 @@
 	        </f:facet>
             <p:row>
                  <p:column>
-                    <h:outputText value="#{CacheManager.currentCache.cache.description}" />
+                    <h:outputText escape="false" value="#{CacheManager.currentCache.cache.description}" />
                 </p:column>
             </p:row>                    
-        </p:panelGrid>
-        <br />
-       <p:dataTable value="#{CacheManager.currentCache.images.image}" var="picture">
-       <!-- terrain difficulty column -->
-            <p:column>
-                <f:facet name="header">
-                <h:outputText>Cache ID</h:outputText>
-                </f:facet>
-          
-                <h:outputText value="#{picture.cacheId}"/>                                                                                     
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                <h:outputText>Image</h:outputText>
-                </f:facet>
-<!--                 <h:outputText value="#{picture.fileName}" /> -->
-                 <p:graphicImage value="#{picture.image}" />                                                                                     
-            </p:column>
-       </p:dataTable>
-<!--        <p:galleria value="#{CacheManager.currentCache.images.image}" var="picture" panelWidth="500" panelHeight="313" showCaption="false"> -->
-<!--            <p:graphicImage value="#{picture.image}" /> -->
-<!--        </p:galleria> -->
+       </p:panelGrid>
+       
+       <br />
+       
+       <p:galleria rendered="#{!CacheManager.isImageListEmpty}" value="#{CacheManager.currentCache.images.image}" var="picture" panelWidth="500" panelHeight="313" showCaption="false">
+           <p:graphicImage value="#{picture.image}" />
+       </p:galleria>
                 
         	       
         <h:form id="rateForm" rendered="#{AuthenticationManager.loggedIn}">
                 <div class="rating">
                 <h2>Rate this cache</h2>
                 <h:outputLabel class="ratingLabel" for="cacheRating">Your rating:</h:outputLabel>                 
-                <h:inputText class="filterInput" id="cacheRating" />
+                <h:inputText class="filterInput" id="cacheRating" /><br />
                 <h:commandButton class="button formbutton" value="Rate" action="#{CacheManager.rateCurrentCache}" />
            </div>
         </h:form>        
@@ -134,11 +121,5 @@
             </h:form>
             
         </div>
-        	  	  	    
-	    	    
-
-<!-- 	    <h:outputText rendered="#{AuthenticationManager.loggedIn}">You are already logged in. Please log out before new login.</h:outputText> -->
-	    
-	    
 	</ui:define>
 </ui:composition>
